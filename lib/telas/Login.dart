@@ -123,6 +123,7 @@ class _MyCustomFormState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           // Padding(
@@ -144,7 +145,7 @@ class _MyCustomFormState extends State<Login> {
                 padding: const EdgeInsets.all(0),
                 child: Image.asset(
                   'assets/logo.png',
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -152,6 +153,10 @@ class _MyCustomFormState extends State<Login> {
           //
           // Form
           //
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: 
+            
           Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -186,18 +191,20 @@ class _MyCustomFormState extends State<Login> {
                   ),
                 ),
                 Padding(
-                  // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  padding: const EdgeInsets.all(2.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: RaisedButton(
                     onPressed: getReq,
                     color: Colors.lightBlueAccent,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Login', style: TextStyle(fontSize: 20)),
+
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                      child: Text('Login', style: TextStyle(fontSize: 20, color: Colors.white) ),
                     ),
+                  
                   ),
                 ),
               ]),
+          ),
 
           //
           // Form
