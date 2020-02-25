@@ -26,11 +26,11 @@ class Login extends StatefulWidget {
 // Define a corresponding State class.
 // This class holds the data related to the Form.
 class _MyCustomFormState extends State<Login> {
-
   @override
   void initState() {
     super.initState();
   }
+
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
   final myController = TextEditingController(text: 'test4567@example.com');
@@ -40,6 +40,25 @@ class _MyCustomFormState extends State<Login> {
   // final myController2 = TextEditingController(text: '');
 
   Future<String> getReq() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            // Retrieve the text the that user has entered by using the
+            content: Container(
+                padding: EdgeInsetsDirectional.only(top: 50),
+                height: 150,
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text(
+                      "Aguarde...",
+                    )
+                  ],
+                )));
+      },
+    );
+
     // cloud
     var url = 'https://ae-teste.herokuapp.com';
 
@@ -82,6 +101,7 @@ class _MyCustomFormState extends State<Login> {
       await jwt.setString('id', res['id'].toString());
       print('sucesso3');
 
+      Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       print('erro');
@@ -99,7 +119,7 @@ class _MyCustomFormState extends State<Login> {
     //           // TextEditingController.
     //           content: Text(
     //         "A senha e confirmação se diferem",
-    //       ));  
+    //       ));
     //     },
     //   );
     // }
@@ -108,7 +128,6 @@ class _MyCustomFormState extends State<Login> {
     // // if (!Platform.isIOS && !Platform.isAndroid) {
     // // }
   }
-  
 
   @override
   void dispose() {
@@ -117,7 +136,6 @@ class _MyCustomFormState extends State<Login> {
     myController2.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -132,10 +150,10 @@ class _MyCustomFormState extends State<Login> {
           //     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 42),
           //   ),
           // ),
-          Transform.scale(  
+          Transform.scale(
             scale: 1,
             child: Container(
-              height: MediaQuery.of(context).size.height / 4 ,
+              height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.topCenter,
               // padding: new EdgeInsets.all(2.0),
@@ -144,7 +162,7 @@ class _MyCustomFormState extends State<Login> {
                 padding: const EdgeInsets.all(0),
                 child: Image.asset(
                   'assets/logo.png',
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -152,52 +170,57 @@ class _MyCustomFormState extends State<Login> {
           //
           // Form
           //
-          Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: myController,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(50.0),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      controller: myController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
                         ),
+                        labelText: 'E-mail',
                       ),
-                      labelText: 'E-mail',
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: TextField(
-                    controller: myController2,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(
-                          const Radius.circular(50.0),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(
+                      controller: myController2,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
                         ),
+                        labelText: 'Senha',
                       ),
-                      labelText: 'Senha',
                     ),
                   ),
-                ),
-                Padding(
-                  // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  padding: const EdgeInsets.all(2.0),
-                  child: RaisedButton(
-                    onPressed: getReq,
-                    color: Colors.lightBlueAccent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Login', style: TextStyle(fontSize: 20)),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: RaisedButton(
+                      onPressed: getReq,
+                      color: Colors.lightBlueAccent,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 25),
+                        child: Text('Login',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
+                      ),
                     ),
                   ),
-                ),
-              ]),
+                ]),
+          ),
 
           //
           // Form

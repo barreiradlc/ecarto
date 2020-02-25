@@ -5,6 +5,7 @@ import 'package:e_carto/Parcial/MateriaisList.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 
+import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 
 import 'package:http/http.dart' as http;
@@ -69,9 +70,9 @@ class DetailItems extends State<DetailItemScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
 
-                    autor['name'] != null?
+                    autor['name'] != null ?
                       ListTile(
-                        title: Text('Nome:' + autor.name),
+                        title: Text('Nome:' + autor['name']),
                       ) :  Container(),
 
                     autor['phone'] != null
@@ -82,20 +83,21 @@ class DetailItems extends State<DetailItemScreen> {
 
                     autor['email'] != null
                         ? ListTile(
+                            onTap: () => launch('mailto:' + autor['email']),
                             title: Text('Email: ' + autor['email']),
                           )
                         :  Container(),
 
                     autor['instagram'] != null
                         ? ListTile(
-                            title: Text('Instagram:'),
+                            title: Text('Instagram:' + autor['instagram']),
                           )
                         :  Container(),
 
                     autor['pinterest'] != null
                         ? ListTile(
                             onTap: () => print('object'),
-                            title: Text('Pinterest:'),
+                            title: Text('Pinterest:' + autor['pinterest']),
                           )
                         : Container()
                   ],
@@ -108,6 +110,7 @@ class DetailItems extends State<DetailItemScreen> {
     Future<String> contatarAutor(id) async {
       void_getJWT().then((token) async {
         print(token);
+        print(item.title);
         print(id.toString());
         Dio dio = new Dio();
         // dio.options.headers['content-Type'] = 'application/json';
@@ -122,6 +125,9 @@ class DetailItems extends State<DetailItemScreen> {
         setState(() {
           autor = response.data;
         });
+
+        alertAutor();
+
       });
 
       // var response = await http.get(Uri.encodeFull(host + '/usuario/' + id.toString()),
@@ -144,7 +150,6 @@ class DetailItems extends State<DetailItemScreen> {
 
       // print(response.body);
 
-      alertAutor();
 
       return "Sucesso";
     }
