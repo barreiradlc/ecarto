@@ -11,32 +11,9 @@ class CarouselList extends StatefulWidget {
 
 class CarouselLisState extends State<CarouselList> {
   String uri = 'https://ae-teste.herokuapp.com';
-
- 
-
   
   Widget build(BuildContext context) {
-    // print(widget.steps);
-    // return CarouselSlider(
-    //     height: double.infinity - 200,
-    //     enableInfiniteScroll: false,
-    //     items: [1,2,3,4,5].map((i) {
-    //       return Builder(
-    //         builder: (BuildContext context) {
-    //           return Container(
-    //             width: MediaQuery.of(context).size.width,
-    //             margin: EdgeInsets.symmetric(horizontal: 5.0),
-    //             decoration: BoxDecoration(
-    //               color: Colors.amber
-    //             ),
-    //             child: Text('text $i', style: TextStyle(fontSize: 16.0),)
-    //           );
-    //         },
-    //       );
-    //     }).toList(),
-    //   );
-      
-
+    
       return CarouselSlider(
       height: double.infinity,
       

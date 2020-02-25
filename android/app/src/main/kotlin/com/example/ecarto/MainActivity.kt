@@ -1,4 +1,4 @@
-package com.example.ecarto
+package br.com.art.ecarto
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import './Tabs.dart';
 
 import 'package:universal_html/prefer_universal/html.dart' as web;
@@ -8,17 +13,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 
 import '../Funcoes/UserData.dart';
-// Tabs(),
-
-void main() => runApp(Home());
 
 class Home extends StatelessWidget {
-  
-
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: RaisedButton(onPressed: () => { drawerScaff.build(context) })),
-      // drawer: drawerScaff,
       body: HomeState(),
     );
   }
@@ -30,45 +28,54 @@ class HomeState extends StatefulWidget {
 }
 
 class CollapsingList extends State<HomeState> {
-  String jwt = 'testeJWT';
-  String username = '';
+  var materiais;
+  var artes;
+  bool loading = true;
+  String token = 'testeJWT';
+  String login = '';
 
   var myPref = web.window.localStorage['mypref'];
 
+  getData() async {
+    
+    final authJwt = await SharedPreferences.getInstance();
+
+    String token = await authJwt.getString("jwt");
+    String login = await authJwt.getString("username");
+
+    var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
+        headers: {"Authorization": token});
+
+    var responseMateriais = await http.get(Uri.encodeFull(host + '/material'),
+        headers: {"Authorization": token});
+
+    setState(() {
+      this.token = token;
+      this.login = login;
+      // this.loading = false;
+      artes = jsonDecode(responseArtes.body);
+      materiais = jsonDecode(responseMateriais.body);
+      loading = false;
+    });
+
+    print('itens');
+    print(artes);
+    print(materiais);
+    print('itens');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      getData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<String> _getJWT() async {
-      final authJwt = await SharedPreferences.getInstance();
-      String jwt = authJwt.getString("jwt");
-      String username = authJwt.getString("username");
-      setState(() {
-        this.jwt = jwt;
-        this.username = username;
-      });
-      print(username);
-      // this.jwt = jwt2;
-      return jwt;
-    }
-
+    // _getJWT();
     double height = MediaQuery.of(context).size.height;
-
-    if (this.username == '') {
-      _getJWT();
-    }
-
-    @override
-    void initState() {
-      _getJWT();
-      super.initState();
-      // Add listeners to this class
-      getUser().then((username) {
-        print(username);
-        setState(() {
-          this.username = username;
-        });
-      });
-    }
-
     // return CustomScrollView(
     //   slivers: <Widget>[
     //     // makeHeader(myPref),
@@ -85,9 +92,14 @@ class CollapsingList extends State<HomeState> {
     //   ],
     // );
 
+    if (loading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return CustomScrollView(
       slivers: <Widget>[
-
         // SliverAppBar(
         //   title: Text(
         //     'Seja bem vindo(a): ' + this.username + "!",
@@ -112,7 +124,7 @@ class CollapsingList extends State<HomeState> {
           itemExtent: height,
           delegate: SliverChildListDelegate(
             [
-              Tabs(),
+              Tabs(this.token, this.login, artes, materiais),
               // Container(color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0)),
             ],
           ),

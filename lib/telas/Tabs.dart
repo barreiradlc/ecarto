@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,55 +11,49 @@ import './Home/Artes.dart';
 
 import '../Funcoes/UserData.dart';
 
-void main() {
-  runApp(Tabs());
-}
-
 class Tabs extends StatefulWidget {
+  var tema = 0;
+  final token;
+  final login;
+  final artes;
+  final materiais;
+  Tabs(this.token, this.login, this.artes, this.materiais);
+
   @override
   TabsState createState() => new TabsState();
 }
 
 class TabsState extends State<Tabs> {
+  bool loading = true;
   var bg = AssetImage("assets/logo.png");
-
+  var materiais;
+  var artes;
   String username = '';
 
   @override
-  Widget build(BuildContext context) {
-    Future<String> _getJWT() async {
-      final authJwt = await SharedPreferences.getInstance();
-      String username = authJwt.getString("username");
+  void initState() {
+    super.initState();
+    if (mounted) {
       setState(() {
-        this.username = username;
+        loading = false;
       });
-      print(username);
+      print('widget.materiais');
+      print(widget.artes);
+      print(widget.materiais);
+      print('widget.materiais');
+      // await getData();
     }
+  }
 
-    if (this.username == '') {
-      _getJWT();
-      print(this.username);
-    }
-
-    @override
-    void initState() {
-      _getJWT();
-      super.initState();
-      // Add listeners to this class
-      getUser().then((username) {
-        print(username);
-        setState(() {
-          username = username;
-        });
-      });
-    }
-
+  @override
+  Widget build(BuildContext context) {
     var drawerScaff = Drawer(
+      elevation: 5,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text("Bem Vindo " + this.username),
+            child: Text("Bem Vindo ${widget.login}"),
             decoration: BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
@@ -88,31 +86,48 @@ class TabsState extends State<Tabs> {
       ),
     );
 
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        drawer: drawerScaff,
-        appBar: AppBar(
-          bottom: tabs(),
-          // automaticallyImplyLeading: false,
-          // title: RaisedButton(onPressed: () => { drawerScaff.build(context) }),
-        ),
-        body: TabBarView(
-          children: [
-            Wikis(),
-            Artes(),
-            Materiais(),
-          ],
-        ),
-      ),
-    );
+    if (loading) {
+      return Center(
+          child: CircularProgressIndicator(
+        backgroundColor: Colors.amber,
+      ));
+    }
+
+    return Theme(
+        data: ThemeData(primaryColor: Colors.green),
+        child: DefaultTabController(
+          
+            length: 2,
+            child: Scaffold(
+              drawer: drawerScaff,
+              appBar: AppBar(
+                
+                
+
+                
+                bottom: tabs(),
+                // automaticallyImplyLeading: false,
+                // title: RaisedButton(onPressed: () => { drawerScaff.build(context) }),
+              ),
+              
+              body: TabBarView(
+                
+                children: [
+                  // Wikis(),
+                  Artes(widget.artes),
+                  Materiais(widget.materiais),
+                ],
+              ),
+            )));
   }
 }
 
 Widget tabs() {
   return TabBar(
+    indicatorColor: Colors.white,
+    onTap: (index) => {print('pokebola vai $index')},
     tabs: [
-      Tab(icon: Icon(Icons.collections_bookmark), child: Text('Wikis')),
+      // Tab(icon: Icon(Icons.collections_bookmark), child: Text('Wikis')),
       Tab(icon: Icon(Icons.brush), child: Text('Artes')),
       Tab(icon: Icon(Icons.extension), child: Text('Materiais')),
     ],

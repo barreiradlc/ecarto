@@ -110,6 +110,7 @@ class DetailItems extends State<DetailItemScreen> {
     Future<String> contatarAutor(id) async {
       void_getJWT().then((token) async {
         print(token);
+        print(item.title);
         print(id.toString());
         Dio dio = new Dio();
         // dio.options.headers['content-Type'] = 'application/json';
