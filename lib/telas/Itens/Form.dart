@@ -21,9 +21,8 @@ class FormItemPage extends StatefulWidget {
 }
 
 class _FormItemPageState extends State<FormItemPage> {
-
   bool isSwitched = true;
-
+  bool loading = true;
   var label = 'novo';
   var labelArte = 'Nova Arte';
   var labelMaterial = 'Novo Material';
@@ -120,10 +119,14 @@ class _FormItemPageState extends State<FormItemPage> {
 
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context).settings.arguments;
-    print(item);
+
+    if(loading){
       setState(() {
         isSwitched = item == "arte" ? true : false;
+        loading = false;
       });
+    }
+    // print(item);
 
     return Theme(
         data: new ThemeData(
@@ -281,38 +284,45 @@ class _FormItemPageState extends State<FormItemPage> {
                           ),
                           // autofocus: true,
                         )),
-                    // Container(
-                    //     padding: EdgeInsets.symmetric(vertical: 20),
-                    //     child: Row(
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //       children: <Widget>[
-                    //         Text("Material",
-                    //             style: TextStyle(
-                    //                 color: isSwitched
-                    //                     ? Colors.black38
-                    //                     : Colors.blue)),
-                    //         Switch(
-                    //           value: isSwitched,
-                    //           onChanged: (value) {
-                    //             setState(() {
-                    //               isSwitched = value;
-                    //             });
-                    //           },
-                    //           activeTrackColor: Colors.lightGreenAccent,
-                    //           activeColor: Colors.green,
-                    //           inactiveTrackColor: Colors.lightBlueAccent,
-                    //           inactiveThumbColor: Colors.blue,
-                    //         ),
-                    //         Text(
-                    //           "Arte",
-                    //           style: TextStyle(
-                    //               color: isSwitched
-                    //                   ? Colors.green
-                    //                   : Colors.black38),
-                    //         ),
-                    //       ],
-                    //     )),
+                    Container(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text("Material",
+                                style: TextStyle(
+                                    color: isSwitched
+                                        ? Colors.black38
+                                        : Colors.blue)),
+                            Switch(
+                              value: isSwitched,
+                              
+                              onChanged: (value) {
+                                
+                                print('val');
+                                print(value);
+                                print(isSwitched);
+                                print('val');
+                                
+                                setState(() {
+                                  isSwitched = value;
+                                });
+                              },
+                              activeTrackColor: Colors.lightGreenAccent,
+                              activeColor: Colors.green,
+                              inactiveTrackColor: Colors.lightBlueAccent,
+                              inactiveThumbColor: Colors.blue,
+                            ),
+                            Text(
+                              "Arte",
+                              style: TextStyle(
+                                  color: isSwitched
+                                      ? Colors.green
+                                      : Colors.black38),
+                            ),
+                          ],
+                        )),
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
