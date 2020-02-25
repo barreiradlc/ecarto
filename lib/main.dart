@@ -70,6 +70,8 @@ class MyApp extends State<Geral> {
   Widget build(BuildContext context) {
     if (this.homePage != '') {
       return MaterialApp(
+        
+        color: Colors.lightBlue,
         theme: ThemeData(
           primarySwatch: Colors.green,
           // See https://github.com/flutter/flutter/wiki/Desktop-shells#fonts
