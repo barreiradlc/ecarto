@@ -25,9 +25,18 @@ class DetailItemScreen extends StatefulWidget {
 class DetailItems extends State<DetailItemScreen> {
   var autor;
   var jwt;
+  var id;
+
   @override
   void initState() {
     super.initState();
+
+    void_getID().then((id) {
+      setState(() {
+        id = id;
+      });
+    });
+
     void_getJWT().then((jwt) {
       print(jwt);
       setState(() {
@@ -46,11 +55,91 @@ class DetailItems extends State<DetailItemScreen> {
 
     var thumb;
     var passoAPasso;
+    var botAcao;
+
     thumb = Image.asset('assets/logo.png');
 
     if (item.thumbnail != null) {
       thumb = Image.network(host + item.thumbnail,
           fit: BoxFit.cover, alignment: Alignment.center);
+    }
+
+    deleteAction(idItem) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return Container(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    AlertDialog(
+                      buttonPadding: EdgeInsets.all(40),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text('Deseja realmente remover?'),
+                          // Text('$idItem'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              RaisedButton(
+                                  padding: EdgeInsets.all(5),
+                                  onPressed: () => print('remoção'),
+                                  child: Text('Remover')),
+                              RaisedButton(
+                                  padding: EdgeInsets.all(5),
+                                  onPressed: () => print('cancelar'),
+                                  child: Text('Cancelar'))
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ));
+          });
+    }
+
+    editAction(idItem) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return Container(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    AlertDialog(
+                      buttonPadding: EdgeInsets.all(40),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Text('Deseja realmente remover?'),
+                          // Text('$idItem'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              RaisedButton(
+                                  padding: EdgeInsets.all(5),
+                                  onPressed: () => print('remoção'),
+                                  child: Text('Remover')),
+                              RaisedButton(
+                                  padding: EdgeInsets.all(5),
+                                  onPressed: () => print('cancelar'),
+                                  child: Text('Cancelar'))
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ));
+          });
     }
 
     alertAutor() {
@@ -69,31 +158,27 @@ class DetailItems extends State<DetailItemScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-
-                    autor['name'] != null ?
-                      ListTile(
-                        title: Text('Nome:' + autor['name']),
-                      ) :  Container(),
-
+                    autor['name'] != null
+                        ? ListTile(
+                            title: Text('Nome:' + autor['name']),
+                          )
+                        : Container(),
                     autor['phone'] != null
                         ? ListTile(
                             title: Text('Telefone:' + autor['phone']),
                           )
-                        :  Container(),
-
+                        : Container(),
                     autor['email'] != null
                         ? ListTile(
                             onTap: () => launch('mailto:' + autor['email']),
                             title: Text('Email: ' + autor['email']),
                           )
-                        :  Container(),
-
+                        : Container(),
                     autor['instagram'] != null
                         ? ListTile(
                             title: Text('Instagram:' + autor['instagram']),
                           )
-                        :  Container(),
-
+                        : Container(),
                     autor['pinterest'] != null
                         ? ListTile(
                             onTap: () => print('object'),
@@ -127,7 +212,6 @@ class DetailItems extends State<DetailItemScreen> {
         });
 
         alertAutor();
-
       });
 
       // var response = await http.get(Uri.encodeFull(host + '/usuario/' + id.toString()),
@@ -149,7 +233,6 @@ class DetailItems extends State<DetailItemScreen> {
       // print(response.body);
 
       // print(response.body);
-
 
       return "Sucesso";
     }
@@ -176,6 +259,40 @@ class DetailItems extends State<DetailItemScreen> {
 
     // print(item.steps[0]);
 
+    botAcao = Container(
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        RaisedButton(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[Icon(Icons.edit), Text("Editar ")],
+            ),
+            onPressed: () => editAction(item.user_id)),
+        RaisedButton(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[Icon(Icons.delete), Text("Excluir ")],
+            ),
+            onPressed: () => deleteAction(item.user_id))
+      ],
+    ));
+
+    print('id');
+    print(id);
+
+    if (item.user_id == id) {
+      botAcao = Container(
+          child: RaisedButton(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[Icon(Icons.chat), Text("Contatar autor")],
+              ),
+              onPressed: () => contatarAutor(item.user_id)));
+    }
+
     // Use the item to create the UI.
     return Scaffold(
       appBar: AppBar(
@@ -192,17 +309,7 @@ class DetailItems extends State<DetailItemScreen> {
               padding: EdgeInsets.all(25),
               child: Text(item.description), //
             ),
-            Container(
-                child: RaisedButton(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.chat),
-                        Text("Contatar autor")
-                      ],
-                    ),
-                    onPressed: () => contatarAutor(item.user_id))),
+            botAcao,
             // MateriaisList(),
             // passoAPasso,
             Container(
