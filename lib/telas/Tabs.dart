@@ -97,20 +97,14 @@ class TabsState extends State<Tabs> {
     return Theme(
         data: ThemeData(primaryColor: Colors.green),
         child: DefaultTabController(
-          
             length: 2,
             child: Scaffold(
               drawer: drawerScaff,
               appBar: AppBar(
-                
-                
-
-                
                 bottom: tabs(),
                 // automaticallyImplyLeading: false,
                 // title: RaisedButton(onPressed: () => { drawerScaff.build(context) }),
               ),
-              
               body: TabBarView(
                 children: [
                   // Wikis(),
