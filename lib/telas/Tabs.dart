@@ -53,7 +53,7 @@ class TabsState extends State<Tabs> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text("Bem Vindo ${widget.login}"),
+            child: Text("Bem Vindo(a); ${widget.login}"),
             decoration: BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(
