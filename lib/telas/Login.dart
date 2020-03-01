@@ -95,11 +95,9 @@ class _MyCustomFormState extends State<Login> {
       //   print("mobile");
       // }
       await jwt.setString('jwt', res['token']);
-      print('sucesso1');
       await jwt.setString('username', res['username']);
-      print('sucesso2');
-      await jwt.setString('id', res['id'].toString());
-      print('sucesso3');
+      await jwt.setInt('id', res['id']);
+      
 
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/home');

@@ -10,9 +10,9 @@ Future<String> void_getJWT() async {
   return jwt;
 }
 
-Future<String> void_getID() async {
+Future<int> void_getID() async {
   final authid = await SharedPreferences.getInstance();
-  String id = authid.getString("id");
+  int id = authid.getInt("id");
   return id;
 }
 

@@ -33,6 +33,7 @@ class CollapsingList extends State<HomeState> {
   bool loading = true;
   String token = 'testeJWT';
   String login = '';
+  int id;
 
   var myPref = web.window.localStorage['mypref'];
 
@@ -42,6 +43,7 @@ class CollapsingList extends State<HomeState> {
 
     String token = await authJwt.getString("jwt");
     String login = await authJwt.getString("username");
+    int id = await authJwt.getInt("id");
 
     var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
         headers: {"Authorization": token});
@@ -52,6 +54,7 @@ class CollapsingList extends State<HomeState> {
     setState(() {
       this.token = token;
       this.login = login;
+      this.id = id;
       // this.loading = false;
       artes = jsonDecode(responseArtes.body);
       materiais = jsonDecode(responseMateriais.body);
@@ -124,7 +127,7 @@ class CollapsingList extends State<HomeState> {
           itemExtent: height,
           delegate: SliverChildListDelegate(
             [
-              Tabs(this.token, this.login, artes, materiais),
+              Tabs(this.id, this.token, this.login, artes, materiais),
               // Container(color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0)),
             ],
           ),

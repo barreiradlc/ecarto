@@ -13,11 +13,12 @@ import '../Funcoes/UserData.dart';
 
 class Tabs extends StatefulWidget {
   var tema = 0;
+  final id;
   final token;
   final login;
   final artes;
   final materiais;
-  Tabs(this.token, this.login, this.artes, this.materiais);
+  Tabs(this.id, this.token, this.login, this.artes, this.materiais);
 
   @override
   TabsState createState() => new TabsState();
@@ -111,7 +112,6 @@ class TabsState extends State<Tabs> {
               ),
               
               body: TabBarView(
-                
                 children: [
                   // Wikis(),
                   Artes(widget.artes),

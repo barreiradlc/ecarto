@@ -109,12 +109,14 @@ class _FormItemPageState extends State<FormItemPage> {
   @override
   void initState() {
     super.initState();
+
     void_getJWT().then((jwt) {
       setState(() {
         this.jwt = jwt;
       });
       // this.getData();
     });
+  
   }
 
   Widget build(BuildContext context) {
