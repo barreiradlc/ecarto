@@ -14,6 +14,7 @@ import './telas/Cadastro.dart';
 // import  './telas/Camera.dart';
 import 'package:e_carto/telas/Home/ExtractArgumentsScreen.dart';
 
+import 'telas/Perfil/FormPerfilPage.dart';
 import './Funcoes/UserData.dart';
 import 'telas/DetailItemScreen.dart';
 import 'telas/Itens/Form.dart';
@@ -59,6 +60,7 @@ class MyApp extends State<Geral> {
   var item = new DetailItemScreen();
   var estoque = new EstoquePage();
   var perfil = new Perfil();
+  var formperfil = new FormPerfilPage();
 
   var formItem = new FormItemPage();
   var formWiki = new FormWikiPage();
@@ -88,6 +90,7 @@ class MyApp extends State<Geral> {
           '/item': (context) => item,
           '/estoque': (context) => estoque,
           '/perfil': (context) => perfil,
+          '/formperfil': (context) => formperfil,
 
           '/itens/form': (context) => formItem,
 

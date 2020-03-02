@@ -54,6 +54,10 @@ class _FormItemPageState extends State<FormItemPage> {
     
 
 
+  Future<String> reqEdit() async {
+
+  }
+
   Future<String> req() async {
     Dio dio = new Dio();
     var response;
@@ -121,6 +125,17 @@ class _FormItemPageState extends State<FormItemPage> {
 
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context).settings.arguments;
+    bool edit;
+
+    if(item is String){
+      print('create');
+    } else {
+      print('edit');
+
+    }
+    print('item');
+    print(item);
+    print('item');
 
     if(loading){
       setState(() {

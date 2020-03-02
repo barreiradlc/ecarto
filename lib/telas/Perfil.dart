@@ -27,6 +27,7 @@ class _PerfilState extends State<Perfil> {
         print(token);
 
         print('aki');
+        print(id);
         Dio dio = new Dio();
         // dio.options.headers['content-Type'] = 'application/json';
         dio.options.headers["authorization"] = token;
@@ -38,7 +39,7 @@ class _PerfilState extends State<Perfil> {
         print('response.data');
 
         setState(() {
-          id = id;
+          this.id = id;
           profile = response.data[0];
           loading = false;
           status = [response.data[2], response.data[1]];
@@ -54,8 +55,14 @@ class _PerfilState extends State<Perfil> {
     super.initState();
     var p = getPerfil();
 
-    print(p);
-    print(profile);
+    void_getID().then((id) {
+      print('ID USER');
+      print(id);
+      print('ID USER');
+      setState(() {
+        id = id;
+      });
+    });
   }
 
   @override
@@ -75,7 +82,8 @@ class _PerfilState extends State<Perfil> {
           ));
     }
 
-    print(status[0]);
+    print(profile['id']);
+    print(this.id);
 
     return new Stack(
       children: <Widget>[
@@ -181,13 +189,14 @@ class _PerfilState extends State<Perfil> {
                   ),
                   new Row(
                     children: <Widget>[
-                      rowCell(343, 'POSTS'),
-                      rowCell(673826, 'FOLLOWERS'),
-                      rowCell(275, 'FOLLOWING'),
+                      rowCell(status[0]['Material'], 'MATERIAIS'),
+                      rowCell(status[1]['Artes'], 'ARTES')
                     ],
                   ),
                   new Divider(height: _height / 30, color: Colors.white),
-                  new Padding(
+
+                  id.toString() != profile['id'].toString() ?
+                  Padding(
                     padding: new EdgeInsets.only(
                         left: _width / 8, right: _width / 8),
                     child: new FlatButton(
@@ -201,6 +210,26 @@ class _PerfilState extends State<Perfil> {
                             width: _width / 30,
                           ),
                           new Text('FOLLOW')
+                        ],
+                      )),
+                      color: Colors.blue[50],
+                    ),
+                  )
+                  :
+                  Padding(
+                    padding: new EdgeInsets.only(
+                        left: _width / 8, right: _width / 8),
+                    child: new FlatButton(
+                      onPressed: () {},
+                      child: new Container(
+                          child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Icon(Icons.person),
+                          new SizedBox(
+                            width: _width / 30,
+                          ),
+                          new Text('EDITAR PERFIL')
                         ],
                       )),
                       color: Colors.blue[50],
@@ -220,7 +249,7 @@ class _PerfilState extends State<Perfil> {
             '$count',
             style: new TextStyle(color: Colors.white),
           ),
-          new Text('a',
+          new Text(type ,
               style: new TextStyle(
                   color: Colors.white, fontWeight: FontWeight.normal))
         ],

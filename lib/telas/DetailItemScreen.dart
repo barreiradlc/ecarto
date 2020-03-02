@@ -32,6 +32,9 @@ class DetailItems extends State<DetailItemScreen> {
     super.initState();
 
     void_getID().then((id) {
+      print('ID USER');
+      print(id);
+      print('ID USER');
       setState(() {
         id = id;
       });
@@ -75,7 +78,7 @@ class DetailItems extends State<DetailItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     AlertDialog(
-                      buttonPadding: EdgeInsets.all(40),
+                      // buttonPadd ing: EdgeInsets.all(40),
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -114,7 +117,7 @@ class DetailItems extends State<DetailItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     AlertDialog(
-                      buttonPadding: EdgeInsets.all(40),
+                      // buttonPadding: EdgeInsets.all(40),
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -192,16 +195,16 @@ class DetailItems extends State<DetailItemScreen> {
           });
     }
 
-    Future<String> contatarAutor(id) async {
+    Future<String> contatarAutor(userId) async {
       void_getJWT().then((token) async {
         print(token);
-        print(item.title);
-        print(id.toString());
+        // print(item.title); 
+        print(userId);
         Dio dio = new Dio();
         // dio.options.headers['content-Type'] = 'application/json';
         dio.options.headers["authorization"] = token;
         // dio.options.headers["authorization"] = "token ${token}";
-        var response = await dio.get(host + '/usuario/' + id.toString());
+        var response = await dio.get(host + '/usuario/' + userId.toString());
         // print(response);
         print('response.data');
         print(response.data);
@@ -282,7 +285,7 @@ class DetailItems extends State<DetailItemScreen> {
     print('id');
     print(id);
 
-    if (item.user_id == id) {
+    if (item.user_id != id) {
       botAcao = Container(
           child: RaisedButton(
               child: Row(
