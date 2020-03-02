@@ -1,3 +1,4 @@
+import 'package:e_carto/Construtores/UserArguments.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
@@ -21,6 +22,7 @@ class _PerfilState extends State<Perfil> {
   var status;
   var id;
 
+ 
   Future<String> getPerfil() async {
     void_getJWT().then((token) async {
       void_getID().then((id) async {
@@ -220,7 +222,23 @@ class _PerfilState extends State<Perfil> {
                     padding: new EdgeInsets.only(
                         left: _width / 8, right: _width / 8),
                     child: new FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/formperfil',
+                          arguments: UserArguments(
+                            profile['id'],
+                            profile['name'],
+                            profile['username'],
+                            profile['email'],
+                            profile['phone'],
+                            profile['instagram'],
+                            profile['pinterest'],
+                            profile['about'],
+                            profile['avatar'],
+                          )      
+                        );
+                      }, 
                       child: new Container(
                           child: new Row(
                         mainAxisAlignment: MainAxisAlignment.center,

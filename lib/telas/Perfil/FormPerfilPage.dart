@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 import 'package:e_carto/Construtores/StepsConstructor.dart';
+import 'package:e_carto/Construtores/UserArguments.dart';
 
 import 'package:e_carto/Funcoes/UserData.dart';
 import 'package:e_carto/telas/Camera.dart';
@@ -28,10 +29,22 @@ class FormPerfilPageState extends State<FormPerfilPage> {
   var labelMaterial = 'Novo Material';
 
   File _image;
-
-  var nome = TextEditingController(text: '');
   var preco = TextEditingController(text: '0');
-  var descricao = TextEditingController(text: '');
+
+  // var nome = TextEditingController(text: '');
+  // var email = TextEditingController(text: '');
+  // var descricao = TextEditingController(text: '');
+
+  var id = TextEditingController(text: '');
+  var name = TextEditingController(text: '');
+  var nome = TextEditingController(text: '');
+  var username = TextEditingController(text: '');
+  var email = TextEditingController(text: '');
+  var phone = TextEditingController(text: '');
+  var instagram = TextEditingController(text: '');
+  var pinterest = TextEditingController(text: '');
+  var about = TextEditingController(text: '');
+  var avatar = TextEditingController(text: '');
 
   String jwt;
 
@@ -51,12 +64,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     });
   }
 
-    
-
-
-  Future<String> reqEdit() async {
-
-  }
+  Future<String> reqEdit() async {}
 
   Future<String> req() async {
     Dio dio = new Dio();
@@ -67,7 +75,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
 
     FormData formData = FormData.fromMap({
       'title': nome.text,
-      'description': descricao.text,
+      'description': about.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
       'price': int.parse(preco.text),
       // 'avatar': await MultipartFile.fromFile(_image,   )
@@ -76,7 +84,6 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     });
 
     // print(formData);
-
 
     response = await dio.post(
       host + endpoint,
@@ -110,36 +117,44 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     // print(response.body);
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    void_getJWT().then((jwt) {
-      setState(() {
-        this.jwt = jwt;
-      });
-      // this.getData();
-    });
-  
-  }
-
   Widget build(BuildContext context) {
-    final item = ModalRoute.of(context).settings.arguments;
+    final UserArguments item = ModalRoute.of(context).settings.arguments;
+
+    @override
+    void initState() {
+      super.initState();
+
+      void_getJWT().then((jwt) {
+        setState(() {
+          this.jwt = jwt;
+        });
+
+        // this.getData();
+      });
+    }
+
     bool edit;
 
-    if(item is String){
+    if (item is String) {
       print('create');
     } else {
       print('edit');
- 
     }
     print('item');
-    print(item);
+    print(item.avatar['url']);
     print('item');
 
-    if(loading){
+    if (loading) {
       setState(() {
-        isSwitched = item == "arte" ? true : false;
+        id.text = item.id.toString();
+        name.text = item.name;
+        username.text = item.username;
+        email.text = item.email;
+        phone.text = item.phone;
+        instagram.text = item.instagram;
+        pinterest.text = item.pinterest;
+        about.text = item.about;
+        avatar.text = item.avatar['url'];
         loading = false;
       });
     }
@@ -152,8 +167,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
         ),
         child: Scaffold(
             appBar: AppBar(
-              title: Text(isSwitched ? labelArte : labelMaterial),
-              backgroundColor: isSwitched ? Colors.green : Colors.blue,
+              title: Text('Editar Perfil'),
+              backgroundColor: Colors.blue,
             ),
 
             // primary: : isSwitched ? Colors.green : Colors.blue,
@@ -256,12 +271,36 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                             height: 200,
                             fit: BoxFit.cover,
                           ),
+
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(25),
+                      child: Text('Dados pessoais'),
+                    )),
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
                           // cursorColor: isSwitched ? Colors.green : Colors.blue,
                           cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: nome,
+                          controller: username,
+
+                          // obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(5.0),
+                              ),
+                            ),
+                            labelText: 'Login',
+                          ),
+                          // autofocus: true,
+                        )),
+                    Container(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: TextField(
+                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          controller: name,
 
                           // obscureText: true,
                           decoration: InputDecoration(
@@ -272,15 +311,16 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                             ),
                             labelText: 'Nome',
                           ),
-                          autofocus: true,
+                          // autofocus: true,
                         )),
+                    
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           minLines: 3,
-                          controller: descricao,
+                          controller: about,
                           // obscureText: true,
                           decoration: InputDecoration(
                             // fillColor: isSwitched ? Colors.green : Colors.blue,
@@ -301,92 +341,81 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                           ),
                           // autofocus: true,
                         )),
+                    Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(25),
+                      child: Text('Dados de contato'),
+                    )),
                     Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text("Material",
-                                style: TextStyle(
-                                    color: isSwitched
-                                        ? Colors.black38
-                                        : Colors.blue)),
-                            Switch(
-                              value: isSwitched,
-                              
-                              onChanged: (value) {
-                                
-                                print('val');
-                                print(value);
-                                print(isSwitched);
-                                print('val');
-                                
-                                setState(() {
-                                  isSwitched = value;
-                                });
-                              },
-                              activeTrackColor: Colors.lightGreenAccent,
-                              activeColor: Colors.green,
-                              inactiveTrackColor: Colors.lightBlueAccent,
-                              inactiveThumbColor: Colors.blue,
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: TextField(
+                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          controller: email,
+
+                          // obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(5.0),
+                              ),
                             ),
-                            Text(
-                              "Arte",
-                              style: TextStyle(
-                                  color: isSwitched
-                                      ? Colors.green
-                                      : Colors.black38),
-                            ),
-                          ],
+                            labelText: 'Email',
+                          ),
+                          // autofocus: true,
                         )),
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
                           // cursorColor: isSwitched ? Colors.green : Colors.blue,
                           cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: preco,
+                          controller: phone,
 
                           // obscureText: true,
                           decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
                             border: OutlineInputBorder(
                               borderRadius: const BorderRadius.all(
                                 const Radius.circular(5.0),
                               ),
                             ),
-                            labelText: 'Preço',
-                            prefixText: 'R\$: ',
+                            labelText: 'Telefone',
                           ),
-                          // keyboardAppearance: ,
-                          keyboardType: TextInputType.number,
-
-                          autofocus: false,
+                          // autofocus: true,
                         )),
-                    // Text("Adicionar imagem:"),
+                    Container(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: TextField(
+                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          controller: phone,
 
+                          // obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                const Radius.circular(5.0),
+                              ),
+                            ),
+                            labelText: 'Instagram',
+                          ),
+                          // autofocus: true,
+                        )),
                     // alignment: Alignment(1.0, 1.0),
                     RaisedButton(
-                        color: isSwitched ? Colors.green : Colors.blue,
+                        color: Colors.blue,
                         padding: EdgeInsets.all(15),
                         onPressed: req,
                         child: Center(
-
                           child: Row(
-
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              Icon(
-                                Icons.add_circle_outline,
-                                color: Colors.white,
-                              ),
+
                               Padding(
                                 padding: EdgeInsets.all(5),
                               ),
-                              Text(isSwitched ? labelArte : labelMaterial, style: TextStyle(color: Colors.white))
+                              Text('Editar Perfil',
+                                  style: TextStyle(color: Colors.white))
                             ],
                           ),
                         ))
