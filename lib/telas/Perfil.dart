@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:e_carto/Construtores/UserArguments.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +95,7 @@ class _PerfilState extends State<Perfil> {
           color: Colors.blue,
         ),
         new Image.network(
-          imgUrl,
+          profile['avatar']['url'] != null ? profile['avatar']['url'] : imgUrl,
           fit: BoxFit.fill,
         ),
         new BackdropFilter(
@@ -126,7 +128,7 @@ class _PerfilState extends State<Perfil> {
                   ),
                   new CircleAvatar(
                     radius: _width < _height ? _width / 4 : _height / 4,
-                    backgroundImage: NetworkImage(imgUrl),
+                    backgroundImage: NetworkImage(profile['avatar']['url'] != null ? profile['avatar']['url'] : imgUrl),
                   ),
                   new SizedBox(
                     height: _height / 25.0,
@@ -177,7 +179,7 @@ class _PerfilState extends State<Perfil> {
                     padding: new EdgeInsets.only(
                         top: _height / 30, left: _width / 8, right: _width / 8),
                     child: new Text(
-                      'Sobre mim... ',
+                      profile['about'] != null ? profile['about'] : 'Sobre mim... ',
                       style: new TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: _width / 25,
@@ -202,7 +204,9 @@ class _PerfilState extends State<Perfil> {
                     padding: new EdgeInsets.only(
                         left: _width / 8, right: _width / 8),
                     child: new FlatButton(
-                      onPressed: () {},
+                      onPressed: () { 
+                        print('a implementar'); 
+                      },
                       child: new Container(
                           child: new Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -259,6 +263,8 @@ class _PerfilState extends State<Perfil> {
       ],
     );
   }
+
+
 
   Widget rowCell(int count, String type) => new Expanded(
           child: new Column(

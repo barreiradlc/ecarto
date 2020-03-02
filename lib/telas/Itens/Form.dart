@@ -59,6 +59,25 @@ class _FormItemPageState extends State<FormItemPage> {
   }
 
   Future<String> req() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            // Retrieve the text the that user has entered by using the
+            content: Container(
+                padding: EdgeInsetsDirectional.only(top: 50),
+                height: 150,
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text(
+                      "Aguarde...",
+                    )
+                  ],
+                )));
+      },
+    );
+
     Dio dio = new Dio();
     var response;
     var endpoint = '/items';
@@ -95,6 +114,8 @@ class _FormItemPageState extends State<FormItemPage> {
     // var id = int.parse(res['id']);
 
     // print(id);
+
+    Navigator.pop(context);
 
     if (res['id'] != null) {
       await Navigator.pushNamed(context, '/home');

@@ -34,7 +34,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
   // var nome = TextEditingController(text: '');
   // var email = TextEditingController(text: '');
   // var descricao = TextEditingController(text: '');
-
+  var dropdownValue;
   var id = TextEditingController(text: '');
   var name = TextEditingController(text: '');
   var nome = TextEditingController(text: '');
@@ -67,25 +67,61 @@ class FormPerfilPageState extends State<FormPerfilPage> {
   Future<String> reqEdit() async {}
 
   Future<String> req() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            // Retrieve the text the that user has entered by using the
+            content: Container(
+                padding: EdgeInsetsDirectional.only(top: 50),
+                height: 150,
+                child: Column(
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    Text(
+                      "Aguarde...",
+                    )
+                  ],
+                )));
+      },
+    );
+
     Dio dio = new Dio();
     var response;
-    var endpoint = '/items';
+    var endpoint = '/users/${id.text.toString()}';
 
-    // print(jwt);
+    print(jwt);
+    print(endpoint);
 
     FormData formData = FormData.fromMap({
-      'title': nome.text,
-      'description': about.text,
-      'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
-      'price': int.parse(preco.text),
+      'name': name.text,
+      'username': username.text,
+      'email': email.text,
+      'phone': int.parse(phone.text),
+      'instagram': instagram.text,
+      // 'pinterest': pinterest.text,
+      'about': about.text,
+
+      // 'title': nome.text,
+      // 'description': about.text,
+      // 'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
+      // 'price': int.parse(preco.text),
       // 'avatar': await MultipartFile.fromFile(_image,   )
-      'avatar': await MultipartFile.fromFile(_image.path,
-          filename: nome.text + ".png"),
+
+      // 'avatar': await MultipartFile.fromFile(_image.path,
+      //     filename: nome.text + ".png"),
     });
 
-    // print(formData);
+    if (_image != null) {
+      formData.files.add(MapEntry(
+          'avatar',
+          await MultipartFile.fromFile(_image.path,
+              filename: nome.text + ".png")));
+    }
 
-    response = await dio.post(
+    print(formData.fields);
+
+    response = await dio.put(
       host + endpoint,
       data: formData,
       options: Options(headers: {
@@ -102,9 +138,10 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     // var id = int.parse(res['id']);
 
     // print(id);
+    Navigator.pop(context);
 
     if (res['id'] != null) {
-      await Navigator.pushNamed(context, '/home');
+      await Navigator.pushNamed(context, '/perfil');
     }
 
     // http.Response response = await http.post(Uri.encodeFull(url + endpoint),
@@ -117,21 +154,21 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     // print(response.body);
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    void_getJWT().then((jwt) {
+      setState(() {
+        this.jwt = jwt;
+      });
+
+      // this.getData();
+    });
+  }
+
   Widget build(BuildContext context) {
     final UserArguments item = ModalRoute.of(context).settings.arguments;
-
-    @override
-    void initState() {
-      super.initState();
-
-      void_getJWT().then((jwt) {
-        setState(() {
-          this.jwt = jwt;
-        });
-
-        // this.getData();
-      });
-    }
 
     bool edit;
 
@@ -162,8 +199,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
 
     return Theme(
         data: new ThemeData(
-          primaryColor: isSwitched ? Colors.green : Colors.blue,
-          // primaryColorDark: isSwitched ? Colors.green : Colors.blue,
+          primaryColor: Colors.blue,
+          // primaryColorDark: Colors.blue,
         ),
         child: Scaffold(
             appBar: AppBar(
@@ -171,8 +208,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
               backgroundColor: Colors.blue,
             ),
 
-            // primary: : isSwitched ? Colors.green : Colors.blue,
-            // backgroundColor: isSwitched ? Colors.green : Colors.blue,
+            // primary: : Colors.blue,
+            // backgroundColor: Colors.blue,
             body: ListView(
               children: <Widget>[
                 Container(
@@ -277,129 +314,124 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                       padding: EdgeInsets.all(25),
                       child: Text('Dados pessoais'),
                     )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: username,
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
-                              ),
-                            ),
-                            labelText: 'Login',
-                          ),
-                          // autofocus: true,
-                        )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: name,
+                    formTextInput('Login', username, null, null),
+                    formTextInput('Nome ', name, null, null),
+                    // Container(
+                    //     padding: EdgeInsets.only(bottom: 10),
+                    //     child: TextField(
+                    //       // cursorColor: Colors.blue,
+                    //       cursorColor: Colors.blue,
+                    //       controller: username,
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
-                              ),
-                            ),
-                            labelText: 'Nome',
-                          ),
-                          // autofocus: true,
-                        )),
-                    
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          minLines: 3,
-                          controller: about,
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            // fillColor: isSwitched ? Colors.green : Colors.blue,
-                            filled: true,
-                            focusColor: isSwitched ? Colors.green : Colors.blue,
-                            // hoverColor: isSwitched ? Colors.green : Colors.blue,
-                            // hoverColor: isSwitched ? Colors.green : Colors.blue,
+                    //       // obscureText: true,
+                    //       decoration: InputDecoration(
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: const BorderRadius.all(
+                    //             const Radius.circular(5.0),
+                    //           ),
+                    //         ),
+                    //         labelText: 'Login',
+                    //       ),
+                    //       // autofocus: true,
+                    //     )),
+                    // Container(
+                    //     padding: EdgeInsets.only(bottom: 10),
+                    //     child: TextField(
+                    //       // cursorColor: Colors.blue,
+                    //       cursorColor: Colors.blue,
+                    //       controller: name,
 
-                            // disabledBorder: InputBorder.none ,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
-                              ),
-                            ),
-                            alignLabelWithHint: true,
-                            labelText: 'Descrição',
-                          ),
-                          // autofocus: true,
-                        )),
+                    //       // obscureText: true,
+                    //       decoration: InputDecoration(
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: const BorderRadius.all(
+                    //             const Radius.circular(5.0),
+                    //           ),
+                    //         ),
+                    //         labelText: 'Nome',
+                    //       ),
+                    //       // autofocus: true,
+                    //     )),
+
+                    // Container(
+                    //     padding: EdgeInsets.only(bottom: 10),
+                    //     child: TextField(
+                    //       keyboardType: TextInputType.multiline,
+                    //       maxLines: null,
+                    //       minLines: 3,
+                    //       controller: about,
+                    //       // obscureText: true,
+                    //       decoration: InputDecoration(
+                    //         // fillColor: Colors.blue,
+                    //         filled: true,
+                    //         focusColor: Colors.blue,
+                    //         // hoverColor: Colors.blue,
+                    //         // hoverColor: Colors.blue,
+
+                    //         // disabledBorder: InputBorder.none ,
+                    //         fillColor: Colors.white,
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: const BorderRadius.all(
+                    //             const Radius.circular(5.0),
+                    //           ),
+                    //         ),
+                    //         alignLabelWithHint: true,
+                    //         labelText: 'Descrição',
+                    //       ),
+                    //       // autofocus: true,
+                    //     )),
+                    formTextInput('Descrição', about, null, 3),
+
                     Center(
                         child: Padding(
                       padding: EdgeInsets.all(25),
                       child: Text('Dados de contato'),
                     )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: email,
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
-                              ),
-                            ),
-                            labelText: 'Email',
-                          ),
-                          // autofocus: true,
-                        )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: phone,
+                    formTextInput('Email', email, null, null),
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
-                              ),
-                            ),
-                            labelText: 'Telefone',
-                          ),
-                          // autofocus: true,
-                        )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          controller: phone,
+                    formTextInput('Telefone', phone, null, null),
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
-                              ),
-                            ),
-                            labelText: 'Instagram',
-                          ),
-                          // autofocus: true,
-                        )),
+                    formTextInput(
+                        'Instagram', instagram, 'https://instagram.com/', null),
+
+                    // Container(
+                    //     padding: EdgeInsets.only(bottom: 10),
+                    //     child: TextField(
+                    //       // cursorColor: Colors.blue,
+                    //       cursorColor: Colors.blue,
+                    //       controller: phone,
+
+                    //       // obscureText: true,
+                    //       decoration: InputDecoration(
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: const BorderRadius.all(
+                    //             const Radius.circular(5.0),
+                    //           ),
+                    //         ),
+                    //         labelText: 'Telefone',
+                    //       ),
+                    //       // autofocus: true,
+                    //     )),
+                    // Container(
+                    //     padding: EdgeInsets.only(bottom: 10),
+                    //     child: TextField(
+                    //       // cursorColor: Colors.blue,
+                    //       cursorColor: Colors.blue,
+                    //       controller: phone,
+
+                    //       // obscureText: true,
+                    //       decoration: InputDecoration(
+                    //         border: OutlineInputBorder(
+                    //           borderRadius: const BorderRadius.all(
+                    //             const Radius.circular(5.0),
+                    //           ),
+                    //         ),
+                    //         labelText: 'Instagram',
+                    //       ),
+                    //       // autofocus: true,
+                    //     )),
                     // alignment: Alignment(1.0, 1.0),
                     RaisedButton(
                         color: Colors.blue,
@@ -410,7 +442,6 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-
                               Padding(
                                 padding: EdgeInsets.all(5),
                               ),
@@ -424,6 +455,63 @@ class FormPerfilPageState extends State<FormPerfilPage> {
               ],
             )));
   }
+
+  // Widget countryPhoneSelector() => Container(
+  //         child: DropdownButton<String>(
+  //       value: dropdownValue,
+  //       icon: Icon(Icons.arrow_downward),
+  //       iconSize: 24,
+  //       elevation: 16,
+  //       style: TextStyle(color: Colors.deepPurple),
+  //       underline: Container(
+  //         height: 2,
+  //         color: Colors.deepPurpleAccent,
+  //       ),
+  //       onChanged: (String newValue) {
+  //         setState(() {
+  //           dropdownValue = newValue;
+  //         });
+  //       },
+  //       items: <String>['One', 'Two', 'Free', 'Four']
+  //           .map<DropdownMenuItem<String>>((String value) {
+  //         return DropdownMenuItem<String>(
+  //           value: value,
+  //           child: Text(value),
+  //         );
+  //       }).toList(),
+  //     ));
+
+  Widget formTextInput(
+          String label, TextEditingController type, prefix, lines) =>
+      Container(
+          padding: EdgeInsets.only(bottom: 10),
+          child: Stack(
+            children: <Widget>[
+              // opc != null ? opc() : Container(),
+              TextField(
+                keyboardType: lines != null
+                    ? TextInputType.multiline
+                    : TextInputType.text,
+                maxLines: null,
+                minLines: lines != null ? lines : 1,
+                // cursorColor: Colors.blue,
+                cursorColor: Colors.blue,
+                controller: type,
+
+                // obscureText: true,
+                decoration: InputDecoration(
+                  prefixText: prefix != '' ? prefix : '',
+                  border: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(
+                      const Radius.circular(5.0),
+                    ),
+                  ),
+                  labelText: label,
+                ),
+                // autofocus: true,
+              )
+            ],
+          ));
 }
 
 class UploadFileInfo {}

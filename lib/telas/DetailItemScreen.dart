@@ -163,31 +163,45 @@ class DetailItems extends State<DetailItemScreen> {
                   children: <Widget>[
                     autor['name'] != null
                         ? ListTile(
-                            title: Text('Nome:' + autor['name']),
+                            title: Text(
+                              autor['name'],
+                              style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black45),
+                            ),
                           )
                         : Container(),
                     autor['phone'] != null
                         ? ListTile(
+                            onTap: () => launch(
+                                "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
                             title: Text('Telefone:' + autor['phone']),
                           )
                         : Container(),
                     autor['email'] != null
                         ? ListTile(
-                            onTap: () => launch('mailto:' + autor['email']),
+                            onTap: () => launch("mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
                             title: Text('Email: ' + autor['email']),
                           )
                         : Container(),
                     autor['instagram'] != null
                         ? ListTile(
+                            onTap: () => launch(
+                                "https://instagram.com/${autor['instagram']}"),
                             title: Text('Instagram:' + autor['instagram']),
                           )
                         : Container(),
-                    autor['pinterest'] != null
-                        ? ListTile(
-                            onTap: () => print('object'),
-                            title: Text('Pinterest:' + autor['pinterest']),
-                          )
-                        : Container()
+
+                    // Center(
+                    //     child: Container(
+                    //         child: ListTile(
+                    //   onLongPress: 
+                    //     () => Navigator.pop(context) 
+                    //   ,
+                    //   title: Text('Fechar'),
+                    // )))
+
                   ],
                 )),
               ),
@@ -198,7 +212,7 @@ class DetailItems extends State<DetailItemScreen> {
     Future<String> contatarAutor(userId) async {
       void_getJWT().then((token) async {
         print(token);
-        // print(item.title); 
+        // print(item.title);
         print(userId);
         Dio dio = new Dio();
         // dio.options.headers['content-Type'] = 'application/json';
