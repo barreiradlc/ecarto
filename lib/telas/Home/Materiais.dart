@@ -1,4 +1,4 @@
-import 'package:e_carto/Construtores/WikisContructor.dart';
+import 'package:e_carto/Construtores/ItemsConstructor.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -68,7 +68,7 @@ class MateriaiState extends State<Materiais> {
                           widget.materiais[index]['description'],
                           widget.materiais[index]['avatar']['url'],
                           DateTime.parse(widget.materiais[index]['updated_at']),
-                          null,
+                          widget.materiais[index]['nature'],
                           widget.materiais[index]['user_id'],
                           // widget.materiais[index]['steps'],
                           ),
@@ -124,17 +124,17 @@ class MateriaiState extends State<Materiais> {
                   ))));
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        // When the user presses the button, show an alert dialog containing
-        // the text that the user has entered into the text field.
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          Navigator.pushNamed(context, '/itens/form', arguments: "material");
-        },
-        tooltip: 'Criar Material',
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   // When the user presses the button, show an alert dialog containing
+      //   // the text that the user has entered into the text field.
+      //   foregroundColor: Colors.white,
+      //   backgroundColor: Colors.blue,
+      //   onPressed: () {
+      //     Navigator.pushNamed(context, '/itens/form', arguments: "material");
+      //   },
+      //   tooltip: 'Criar Material',
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }

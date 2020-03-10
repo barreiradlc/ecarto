@@ -51,6 +51,9 @@ class FormPerfilPageState extends State<FormPerfilPage> {
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
+    print('image');
+    print(image);
+
     setState(() {
       _image = image;
     });
@@ -141,7 +144,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     Navigator.pop(context);
 
     if (res['id'] != null) {
-      await Navigator.pushNamed(context, '/perfil');
+      await Navigator.pushReplacementNamed(context, '/perfil');
     }
 
     // http.Response response = await http.post(Uri.encodeFull(url + endpoint),
@@ -150,6 +153,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     //       'description': descricao.text,
     //       'avatar': _image
     //     });
+
 
     // print(response.body);
   }

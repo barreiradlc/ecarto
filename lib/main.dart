@@ -70,41 +70,41 @@ class MyApp extends State<Geral> {
 
   @override
   Widget build(BuildContext context) {
-    if (this.homePage != '') {
-      return MaterialApp(
-        
-        color: Colors.lightBlue,
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          // See https://github.com/flutter/flutter/wiki/Desktop-shells#fonts
-          fontFamily: 'Roboto',
-        ),
-        initialRoute: this.homePage,
-        routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
-          '/home': (context) => inicio,
 
-          // When navigating to the "/second" route, build the SecondScreen widget.
-
-          '/details': (context) => detalhes,
-          '/item': (context) => item,
-          '/estoque': (context) => estoque,
-          '/perfil': (context) => perfil,
-          '/formperfil': (context) => formperfil,
-
-          '/itens/form': (context) => formItem,
-
-          '/wiki/form': (context) => formWiki,
-          '/steps/form': (context) => formSteps,
-          
-          '/login': (context) => login,
-          '/cadastro': (context) => cadastro,
-          // '/camera': (context) => camera,
-        },
-        debugShowCheckedModeBanner: false,
-      );
-    } else {
+    if (this.homePage == '') {
       return CircularProgressIndicator();
     }
+
+    return MaterialApp(
+      color: Colors.lightBlue,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        // See https://github.com/flutter/flutter/wiki/Desktop-shells#fonts
+        fontFamily: 'Roboto',
+      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: this.homePage,
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/home': (context) => inicio,
+
+        // When navigating to the "/second" route, build the SecondScreen widget.
+
+        '/details': (context) => detalhes,
+        '/item': (context) => item,
+        '/estoque': (context) => estoque,
+        '/perfil': (context) => perfil,
+        '/formperfil': (context) => formperfil,
+
+        '/itens/form': (context) => formItem,
+
+        '/wiki/form': (context) => formWiki,
+        '/steps/form': (context) => formSteps,
+        
+        '/login': (context) => login,
+        '/cadastro': (context) => cadastro,
+        // '/camera': (context) => camera,
+      },
+    );
   }
 }

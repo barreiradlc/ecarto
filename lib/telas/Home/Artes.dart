@@ -1,4 +1,4 @@
-import 'package:e_carto/Construtores/WikisContructor.dart';
+import 'package:e_carto/Construtores/ItemsConstructor.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -40,6 +40,8 @@ class ArteState extends State<Artes> {
       );
     }
 
+    print(widget.artes);
+
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(title),
@@ -74,7 +76,7 @@ class ArteState extends State<Artes> {
                             widget.artes[index]['description'],
                             widget.artes[index]['avatar']['url'],
                             DateTime.parse(widget.artes[index]['updated_at']),
-                            null,
+                            widget.artes[index]['nature'],
                             widget.artes[index]['user_id']
                             // widget.artes[index]['steps'],
                             ),
@@ -133,17 +135,17 @@ class ArteState extends State<Artes> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        // When the user presses the button, show an alert dialog containing
-        // the text that the user has entered into the text field.
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.green,
-        onPressed: () {
-          Navigator.pushNamed(context, '/itens/form', arguments: "arte");
-        },
-        tooltip: 'Criar Arte',
-        child: Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   // When the user presses the button, show an alert dialog containing
+      //   // the text that the user has entered into the text field.
+      //   foregroundColor: Colors.white,
+      //   backgroundColor: Colors.green,
+      //   onPressed: () {
+      //     Navigator.pushNamed(context, '/itens/form', arguments: "arte");
+      //   },
+      //   tooltip: 'Criar Arte',
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }

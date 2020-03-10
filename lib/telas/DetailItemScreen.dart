@@ -1,4 +1,4 @@
-import 'package:e_carto/Construtores/WikisContructor.dart';
+import 'package:e_carto/Construtores/ItemsConstructor.dart';
 import 'package:e_carto/Funcoes/UserData.dart';
 import 'package:e_carto/Parcial/Carousel.dart';
 import 'package:e_carto/Parcial/MateriaisList.dart';
@@ -36,7 +36,7 @@ class DetailItems extends State<DetailItemScreen> {
       print(id);
       print('ID USER');
       setState(() {
-        id = id;
+        this.id = id;
       });
     });
 
@@ -59,6 +59,9 @@ class DetailItems extends State<DetailItemScreen> {
     var thumb;
     var passoAPasso;
     var botAcao;
+
+    print('item');
+    print(item.nature);
 
     thumb = Image.asset('assets/logo.png');
 
@@ -274,7 +277,7 @@ class DetailItems extends State<DetailItemScreen> {
     //           style: TextStyle(color: Colors.white)));
     // }
 
-    // print(item.steps[0]);
+    print(item.nature);
 
     botAcao = Container(
         child: Row(
@@ -298,6 +301,7 @@ class DetailItems extends State<DetailItemScreen> {
 
     print('id');
     print(id);
+    print(this.id);
 
     if (item.user_id != id) {
       botAcao = Container(
@@ -310,11 +314,14 @@ class DetailItems extends State<DetailItemScreen> {
               onPressed: () => contatarAutor(item.user_id)));
     }
 
-    // Use the item to create the UI.
-    return Scaffold(
+     return Theme(
+        data: new ThemeData(
+        primaryColor: item.nature == 'ARTE' ? Colors.green : Colors.blue),
+        child: Scaffold(
       appBar: AppBar(
         title: Text(item.title),
       ),
+
       body: Padding(
           padding: EdgeInsets.all(0),
           child: new ListView(children: <Widget>[
@@ -335,6 +342,7 @@ class DetailItems extends State<DetailItemScreen> {
               child: Text("Última atualização em: " + update), //
             )
           ])),
+     )
     );
   }
 
@@ -360,7 +368,7 @@ class DetailItems extends State<DetailItemScreen> {
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(12.0),
               ),
-              child: CarouselList(item.steps),
+              // child: CarouselList(item.steps),
             ),
             Container(
               width: double.infinity,

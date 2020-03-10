@@ -7,11 +7,8 @@ import 'package:http/http.dart' as http;
 import './Tabs.dart';
 
 import 'package:universal_html/prefer_universal/html.dart' as web;
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'dart:math' as math;
-
 import '../Funcoes/UserData.dart';
 
 class Home extends StatelessWidget {
@@ -45,10 +42,6 @@ class CollapsingList extends State<HomeState> {
     String login = await authJwt.getString("username");
     int id = await authJwt.getInt("id");
 
-    print('save ID');
-    print(id);
-    print('save ID');
-
     var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
         headers: {"Authorization": token});
 
@@ -59,16 +52,10 @@ class CollapsingList extends State<HomeState> {
       this.token = token;
       this.login = login;
       this.id = id;
-      // this.loading = false;
       artes = jsonDecode(responseArtes.body);
       materiais = jsonDecode(responseMateriais.body);
       loading = false;
     });
-
-    print('itens');
-    print(artes);
-    print(materiais);
-    print('itens');
   }
 
   @override
@@ -81,24 +68,8 @@ class CollapsingList extends State<HomeState> {
 
   @override
   Widget build(BuildContext context) {
-    // _getJWT();
     double height = MediaQuery.of(context).size.height;
-    // return CustomScrollView(
-    //   slivers: <Widget>[
-    //     // makeHeader(myPref),
-    //     makeHeader('Seja bem vindo(a): ' + this.username),
-
-    //     // makeHeader2('Camera'),
-
-    //     SliverGrid.count(
-    //       crossAxisCount: 1,
-    //       children: [
-    //         Tabs(),
-    //       ],
-    //     ),
-    //   ],
-    // );
-
+    
     if (loading) {
       return Center(
         child: CircularProgressIndicator(),
@@ -107,25 +78,6 @@ class CollapsingList extends State<HomeState> {
 
     return CustomScrollView(
       slivers: <Widget>[
-        // SliverAppBar(
-        //   title: Text(
-        //     'Seja bem vindo(a): ' + this.username + "!",
-        //     textAlign: TextAlign.start,
-        //     overflow: TextOverflow.ellipsis,
-        //     style:
-        //         TextStyle(fontWeight: FontWeight.bold, color: Colors.black45),
-        //   ),
-
-        //   // backgroundColor: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0),
-        //   backgroundColor: Colors.green,
-        //   expandedHeight: 200.0,
-        //   automaticallyImplyLeading: false,
-        //   flexibleSpace: FlexibleSpaceBar(
-        //     background: Container(
-        //       color: Colors.blue,
-        //     ),
-        //   ),
-        // ),
 
         SliverFixedExtentList(
           itemExtent: height,

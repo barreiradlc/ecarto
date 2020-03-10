@@ -39,14 +39,9 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   var artes;
   String username = '';
 
-
-
   void _setActiveTabIndex() {
-    print('_tabController.index');
-    print(_tabController.index);
-    print('_tabController.index');
     setState(() {
-      _activeTabIndex = _tabController.index == 0 ? true : false ; 
+      _activeTabIndex = _tabController.index == 0 ? true : false;
     });
   }
 
@@ -124,13 +119,11 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
       ));
     }
 
-    
-
     return Theme(
-
         data: ThemeData(
-          
-        primaryColor: _activeTabIndex  ? Colors.green : Colors.blue),
+            secondaryHeaderColor: Colors.white,
+            accentColor: Colors.white,
+            primaryColor: _activeTabIndex ? Colors.green : Colors.blue),
         child: Scaffold(
           drawer: drawerScaff,
           appBar: AppBar(
@@ -138,6 +131,17 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
               controller: _tabController,
               tabs: myTabs,
             ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            // When the user presses the button, show an alert dialog containing
+            // the text that the user has entered into the text field.
+            foregroundColor: Colors.white,
+            backgroundColor: _activeTabIndex ? Colors.green : Colors.blue,
+            onPressed: () {
+              Navigator.pushNamed(context, '/itens/form', arguments: _activeTabIndex ? "arte" : "material");
+            },
+            tooltip: _activeTabIndex ? "Criar Arte" : "Criar Material",
+            child: Icon(Icons.add),
           ),
           body: TabBarView(
             controller: _tabController,
