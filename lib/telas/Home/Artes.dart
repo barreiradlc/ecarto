@@ -77,8 +77,8 @@ class ArteState extends State<Artes> {
                             widget.artes[index]['avatar']['url'],
                             DateTime.parse(widget.artes[index]['updated_at']),
                             widget.artes[index]['nature'],
-                            widget.artes[index]['user_id']
-                            // widget.artes[index]['steps'],
+                            widget.artes[index]['user_id'],
+                            widget.artes[index]['id'],
                             ),
                       );
                       print('pokebola vai');

@@ -70,6 +70,7 @@ class MateriaiState extends State<Materiais> {
                           DateTime.parse(widget.materiais[index]['updated_at']),
                           widget.materiais[index]['nature'],
                           widget.materiais[index]['user_id'],
+                          widget.materiais[index]['id'],
                           // widget.materiais[index]['steps'],
                           ),
                     );

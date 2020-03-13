@@ -5,6 +5,7 @@ class ScreenArguments {
   final DateTime updated_at;
   var nature;
   final user_id;
+  final id;
 
 
   ScreenArguments(
@@ -13,6 +14,7 @@ class ScreenArguments {
     this.thumbnail, 
     this.updated_at,
     this.nature,
-    this.user_id
+    this.user_id,
+    this.id
   );
 }

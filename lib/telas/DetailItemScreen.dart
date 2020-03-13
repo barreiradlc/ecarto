@@ -5,6 +5,7 @@ import 'package:e_carto/Parcial/MateriaisList.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
 
@@ -70,11 +71,57 @@ class DetailItems extends State<DetailItemScreen> {
           fit: BoxFit.cover, alignment: Alignment.center);
     }
 
+    delete(id) async {
+      final authJwt = await SharedPreferences.getInstance();
+      String token = await authJwt.getString("jwt");
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              // Retrieve the text the that user has entered by using the
+              content: Container(
+                  padding: EdgeInsetsDirectional.only(top: 50),
+                  height: 150,
+                  child: Column(
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      Text(
+                        "Aguarde...",
+                      )
+                    ],
+                  )));
+        },
+      );
+
+
+      print(token);
+      var endpoint = '/items/${id}';
+
+      print(endpoint);
+      var response = await http.delete(host + endpoint,
+          headers: {"Authorization": token});
+
+      print(response);
+
+
+      print('###');
+      print(response.statusCode);
+      print(response.toString());
+      // var res = jsonDecode(response.body);
+      // print(res);
+      print('###');
+
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+
     deleteAction(idItem) {
       return showDialog(
           context: context,
           builder: (context) {
             return Container(
+                padding: EdgeInsets.symmetric(vertical:30, horizontal:10),
                 height: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,22 +129,24 @@ class DetailItems extends State<DetailItemScreen> {
                   children: <Widget>[
                     AlertDialog(
                       // buttonPadd ing: EdgeInsets.all(40),
+
                       content: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Text('Deseja realmente remover?'),
+
                           // Text('$idItem'),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               RaisedButton(
                                   padding: EdgeInsets.all(5),
-                                  onPressed: () => print('remoção'),
+                                  onPressed: () => delete(idItem),
                                   child: Text('Remover')),
                               RaisedButton(
                                   padding: EdgeInsets.all(5),
-                                  onPressed: () => print('cancelar'),
+                                  onPressed: () => Navigator.pop(context),
                                   child: Text('Cancelar'))
                             ],
                           )
@@ -184,7 +233,8 @@ class DetailItems extends State<DetailItemScreen> {
                         : Container(),
                     autor['email'] != null
                         ? ListTile(
-                            onTap: () => launch("mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
+                            onTap: () => launch(
+                                "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
                             title: Text('Email: ' + autor['email']),
                           )
                         : Container(),
@@ -199,12 +249,11 @@ class DetailItems extends State<DetailItemScreen> {
                     // Center(
                     //     child: Container(
                     //         child: ListTile(
-                    //   onLongPress: 
-                    //     () => Navigator.pop(context) 
+                    //   onLongPress:
+                    //     () => Navigator.pop(context)
                     //   ,
                     //   title: Text('Fechar'),
                     // )))
-
                   ],
                 )),
               ),
@@ -295,7 +344,7 @@ class DetailItems extends State<DetailItemScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[Icon(Icons.delete), Text("Excluir ")],
             ),
-            onPressed: () => deleteAction(item.user_id))
+            onPressed: () => deleteAction(item.id))
       ],
     ));
 
@@ -314,36 +363,34 @@ class DetailItems extends State<DetailItemScreen> {
               onPressed: () => contatarAutor(item.user_id)));
     }
 
-     return Theme(
+    return Theme(
         data: new ThemeData(
-        primaryColor: item.nature == 'ARTE' ? Colors.green : Colors.blue),
+            primaryColor: item.nature == 'ARTE' ? Colors.green : Colors.blue),
         child: Scaffold(
-      appBar: AppBar(
-        title: Text(item.title),
-      ),
-
-      body: Padding(
-          padding: EdgeInsets.all(0),
-          child: new ListView(children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: 15),
-              child: Container(height: 250.0, child: thumb),
-            ),
-            Padding(
-              padding: EdgeInsets.all(25),
-              child: Text(item.description), //
-            ),
-            botAcao,
-            // MateriaisList(),
-            // passoAPasso,
-            Container(
-              alignment: Alignment(1.0, 1.0),
-              padding: EdgeInsets.fromLTRB(5, 45, 5, 5),
-              child: Text("Última atualização em: " + update), //
-            )
-          ])),
-     )
-    );
+          appBar: AppBar(
+            title: Text(item.title),
+          ),
+          body: Padding(
+              padding: EdgeInsets.all(0),
+              child: new ListView(children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(bottom: 15),
+                  child: Container(height: 250.0, child: thumb),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Text(item.description), //
+                ),
+                botAcao,
+                // MateriaisList(),
+                // passoAPasso,
+                Container(
+                  alignment: Alignment(1.0, 1.0),
+                  padding: EdgeInsets.fromLTRB(5, 45, 5, 5),
+                  child: Text("Última atualização em: " + update), //
+                )
+              ])),
+        ));
   }
 
   void showFancyCustomDialog(BuildContext context) {
