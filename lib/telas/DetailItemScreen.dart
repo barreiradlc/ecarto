@@ -94,16 +94,14 @@ class DetailItems extends State<DetailItemScreen> {
         },
       );
 
-
       print(token);
       var endpoint = '/items/${id}';
 
       print(endpoint);
-      var response = await http.delete(host + endpoint,
-          headers: {"Authorization": token});
+      var response =
+          await http.delete(host + endpoint, headers: {"Authorization": token});
 
       print(response);
-
 
       print('###');
       print(response.statusCode);
@@ -121,7 +119,7 @@ class DetailItems extends State<DetailItemScreen> {
           context: context,
           builder: (context) {
             return Container(
-                padding: EdgeInsets.symmetric(vertical:30, horizontal:10),
+                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                 height: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,42 +157,20 @@ class DetailItems extends State<DetailItemScreen> {
     }
 
     editAction(idItem) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return Container(
-                height: 60,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    AlertDialog(
-                      // buttonPadding: EdgeInsets.all(40),
-                      content: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Text('Deseja realmente remover?'),
-                          // Text('$idItem'),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              RaisedButton(
-                                  padding: EdgeInsets.all(5),
-                                  onPressed: () => print('remoção'),
-                                  child: Text('Remover')),
-                              RaisedButton(
-                                  padding: EdgeInsets.all(5),
-                                  onPressed: () => print('cancelar'),
-                                  child: Text('Cancelar'))
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ));
-          });
+      Navigator.pushNamed(
+        context,
+        '/itens/form',
+        arguments: ScreenArguments(
+          item.title,
+          item.description,
+          item.thumbnail,
+          null, // DateTime.parse(widget.artes[index]['updated_at']),
+          item.nature,
+          item.user_id,
+          item.id,
+          item.price
+        ),
+      );
     }
 
     alertAutor() {

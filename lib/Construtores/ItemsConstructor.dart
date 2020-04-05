@@ -6,6 +6,7 @@ class ScreenArguments {
   var nature;
   final user_id;
   final id;
+  final price;
 
 
   ScreenArguments(
@@ -15,6 +16,7 @@ class ScreenArguments {
     this.updated_at,
     this.nature,
     this.user_id,
-    this.id
+    this.id,
+    this.price
   );
 }

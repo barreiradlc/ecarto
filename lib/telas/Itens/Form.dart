@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:wasm';
 
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
+import 'package:e_carto/Construtores/ItemsConstructor.dart';
 import 'package:e_carto/Construtores/StepsConstructor.dart';
 
 import 'package:e_carto/Funcoes/UserData.dart';
@@ -21,6 +23,8 @@ class FormItemPage extends StatefulWidget {
 }
 
 class _FormItemPageState extends State<FormItemPage> {
+  var item;
+  bool edit;
   bool isSwitched = true;
   bool loading = true;
   var label = 'novo';
@@ -38,6 +42,10 @@ class _FormItemPageState extends State<FormItemPage> {
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
+    print('image');
+    print(image);
+    print('image');
+
     setState(() {
       _image = image;
     });
@@ -51,11 +59,10 @@ class _FormItemPageState extends State<FormItemPage> {
     });
   }
 
-    
-
-
-  Future<String> reqEdit() async {
-
+  Future<String> removeImage() async {
+    setState(() {
+      _image = null;
+    });
   }
 
   Future<String> req() async {
@@ -88,23 +95,46 @@ class _FormItemPageState extends State<FormItemPage> {
       'title': nome.text,
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
-      'price': int.parse(preco.text),
+      'price': double.parse(preco.text),
       // 'avatar': await MultipartFile.fromFile(_image,   )
-      'avatar': await MultipartFile.fromFile(_image.path,
-          filename: nome.text + ".png"),
+      // 'avatar': await MultipartFile.fromFile(_image.path,
+      //     filename: nome.text + ".png"),
     });
 
-    // print(formData);
+    if (_image != null) {
+      formData.files.add(MapEntry(
+          'avatar',
+          await MultipartFile.fromFile(_image.path,
+              filename: nome.text + ".png")));
+    }
 
+    print(formData.fields);
 
-    response = await dio.post(
-      host + endpoint,
-      data: formData,
-      options: Options(headers: {
-        "Authorization": this.jwt,
-        "Content-Type": "multipart/form-data"
-      }),
-    );
+    if (edit) {
+      response = await dio.post(
+        host + endpoint,
+        data: formData,
+        options: Options(headers: {
+          "Authorization": this.jwt,
+          "Content-Type": "multipart/form-data"
+        }),
+      );
+    } else {
+      print('################');
+      print('PUT');
+      print('################');
+
+      print(host + endpoint + '/${item.id.toString()}');
+
+      response = await dio.put(
+        host + endpoint + '/${item.id.toString()}',
+        data: formData,
+        options: Options(headers: {
+          "Authorization": this.jwt,
+          "Content-Type": "multipart/form-data"
+        }),
+      );
+    }
     print('formData');
     print(response.data);
     print(response);
@@ -141,26 +171,39 @@ class _FormItemPageState extends State<FormItemPage> {
       });
       // this.getData();
     });
-  
   }
 
   Widget build(BuildContext context) {
-    final item = ModalRoute.of(context).settings.arguments;
-    bool edit;
+    item = ModalRoute.of(context).settings.arguments;
+    edit = item is String;
 
-    if(item is String){
-      print('create');
-    } else {
-      print('edit');
-
+    if (loading) {
+      if (edit) {
+        print('create');
+      } else {
+        print(item.nature == "ARTE");
+        print('item.nature');
+        setState(() {
+          labelArte = 'Editar Arte';
+          labelMaterial = 'Editar Material';
+          isSwitched = item.nature == 'ARTE' ? true : false;
+          nome.text = item.title;
+          descricao.text = item.description;
+          preco.text = item.price.toString();
+          _image = item.thumbnail != '' ? File(host + item.thumbnail) : null;
+        });
+        // preco
+        // descricao
+        print('edit');
+      }
+      print('item');
+      print(isSwitched);
+      print('item');
     }
-    print('item');
-    print(item);
-    print('item');
 
-    if(loading){
+    if (loading) {
       setState(() {
-        isSwitched = item == "arte" ? true : false;
+        // isSwitched = item == "ARTE" ? true : false;
         loading = false;
       });
     }
@@ -183,14 +226,11 @@ class _FormItemPageState extends State<FormItemPage> {
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 40),
                   child: Form(
                       child: Column(mainAxisSize: MainAxisSize.min, children: <
                           Widget>[
-                    Text(
-                      "Foto",
-                      style: TextStyle(fontSize: 23),
-                    ),
+                   
                     _image == null
                         ? Container(
                             margin: EdgeInsets.symmetric(vertical: 10),
@@ -271,12 +311,32 @@ class _FormItemPageState extends State<FormItemPage> {
                                         )))
                               ],
                             ))
-                        : Image.file(
-                            _image,
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
+                        : Stack(children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 20),
+                              child: !edit
+                                  ? Image.network(
+                                      _image.path,
+                                      
+                                      width: MediaQuery.of(context).size.width,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.file(
+                                      _image,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                            Positioned(
+                                top: 30.0,
+                                right: -10,
+                                child: FlatButton(
+                                  onPressed: removeImage,
+                                  child: Icon(Icons.close, size: 30, ),
+                                )),
+                          ]),
+
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
@@ -335,14 +395,12 @@ class _FormItemPageState extends State<FormItemPage> {
                                         : Colors.blue)),
                             Switch(
                               value: isSwitched,
-                              
                               onChanged: (value) {
-                                
                                 print('val');
                                 print(value);
                                 print(isSwitched);
                                 print('val');
-                                
+
                                 setState(() {
                                   isSwitched = value;
                                 });
@@ -394,9 +452,7 @@ class _FormItemPageState extends State<FormItemPage> {
                         padding: EdgeInsets.all(15),
                         onPressed: req,
                         child: Center(
-
                           child: Row(
-
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
@@ -407,7 +463,8 @@ class _FormItemPageState extends State<FormItemPage> {
                               Padding(
                                 padding: EdgeInsets.all(5),
                               ),
-                              Text(isSwitched ? labelArte : labelMaterial, style: TextStyle(color: Colors.white))
+                              Text(isSwitched ? labelArte : labelMaterial,
+                                  style: TextStyle(color: Colors.white))
                             ],
                           ),
                         ))

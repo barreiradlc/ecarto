@@ -71,7 +71,7 @@ class MateriaiState extends State<Materiais> {
                           widget.materiais[index]['nature'],
                           widget.materiais[index]['user_id'],
                           widget.materiais[index]['id'],
-                          // widget.materiais[index]['steps'],
+                          widget.materiais[index]['price'],
                           ),
                     );
                     // print('pokebola vai');
@@ -84,7 +84,7 @@ class MateriaiState extends State<Materiais> {
                         Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: bg,
+                              image: bg,  
                               fit: BoxFit.cover,
                               colorFilter: new ColorFilter.mode(
                                   Colors.black.withOpacity(0.6),

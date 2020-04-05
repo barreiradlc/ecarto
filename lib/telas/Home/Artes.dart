@@ -79,6 +79,7 @@ class ArteState extends State<Artes> {
                             widget.artes[index]['nature'],
                             widget.artes[index]['user_id'],
                             widget.artes[index]['id'],
+                            widget.artes[index]['price'],
                             ),
                       );
                       print('pokebola vai');
