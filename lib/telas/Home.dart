@@ -40,7 +40,9 @@ class CollapsingList extends State<HomeState> {
 
     String token = await authJwt.getString("jwt");
     String login = await authJwt.getString("username");
-    int id = await authJwt.getInt("id");
+    var id = await authJwt.getString("id");
+
+
 
     var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
         headers: {"Authorization": token});
@@ -51,7 +53,7 @@ class CollapsingList extends State<HomeState> {
     setState(() {
       this.token = token;
       this.login = login;
-      this.id = id;
+      this.id = int.parse(id);
       artes = jsonDecode(responseArtes.body);
       materiais = jsonDecode(responseMateriais.body);
       loading = false;

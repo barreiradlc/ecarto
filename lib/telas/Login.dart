@@ -1,4 +1,5 @@
 import 'dart:io' show Platform; //at the top
+import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,20 @@ class _MyCustomFormState extends State<Login> {
   // final myController = TextEditingController(text: '');
   // final myController2 = TextEditingController(text: '');
 
+  alertAviso(msg) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            // Retrieve the text the that user has entered by using the
+            // TextEditingController.
+            content: Text(
+          msg,
+        ));
+      },
+    );
+  }
+
   Future<String> getReq() async {
     showDialog(
       context: context,
@@ -69,7 +84,7 @@ class _MyCustomFormState extends State<Login> {
 
     print('req');
     http.Response response =
-        await http.post(Uri.encodeFull(url + endpoint), body: {
+        await http.post(Uri.encodeFull(host + endpoint), body: {
       // 'username': usuarioCred.text,
       'email': myController.text,
       'password': myController2.text
@@ -77,7 +92,9 @@ class _MyCustomFormState extends State<Login> {
     const bool kIsWeb = identical(0, 0.0);
     var res = jsonDecode(response.body);
 
-    if (res['errors'] == null) {
+
+
+    if (res['token'] != null) {
       SharedPreferences jwt = await SharedPreferences.getInstance();
 
       print('sucesso');
@@ -97,12 +114,14 @@ class _MyCustomFormState extends State<Login> {
       await jwt.setString('jwt', res['token']);
       await jwt.setString('username', res['username']);
       await jwt.setInt('id', res['id']);
-      
 
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/home');
     } else {
+      print(res);
       print('erro');
+      Navigator.pop(context);
+      alertAviso('Usuário não encontrado');
     }
 
     // print(token);

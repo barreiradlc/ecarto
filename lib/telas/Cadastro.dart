@@ -81,6 +81,7 @@ class _MyCustomFormState extends State<Cadastro> {
 
         if (kIsWeb) {
           web.window.localStorage['mypref'] = login['token'];
+          
           print('não mobile');
         } else {
           await jwt.setString('jwt', login['token']);
@@ -98,11 +99,51 @@ class _MyCustomFormState extends State<Cadastro> {
         Navigator.pop(context);
         print('erro');
         var erros = jsonDecode(response.body);
+        print(erros['errors']);
         print(erros['errors'][0]);
         return showDialog(
           context: context,
           builder: (context) {
-            if (erros['errors'][0] == "Email is invalid") {
+            // if (erros['errors'][0] == "Email is invalid") {
+            //   return AlertDialog(
+            //       // Retrieve the text the that user has entered by using the
+            //       // TextEditingController.
+            //       content: Container(
+            //     padding: EdgeInsetsDirectional.only(top: 50),
+            //     height: 150,
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         Text(
+            //           "Erro: \n",
+            //         ),
+            //         Text(
+            //           "Email Inválido",
+            //         )
+            //       ],
+            //     ),
+            //   ));
+            // }
+            // if (erros['errors'][0] == "Password is too short (minimum is 6 characters)") {
+            //   return AlertDialog(
+            //       // Retrieve the text the that user has entered by using the
+            //       // TextEditingController.
+            //       content: Container(
+            //     padding: EdgeInsetsDirectional.only(top: 50),
+            //     height: 150,
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         Text(
+            //           "Erro: \n",
+            //         ),
+            //         Text(
+            //           "Senha muito curta mínimo de 6 dígitos",
+            //         )
+            //       ],
+            //     ),
+            //   ));
+            // }
               return AlertDialog(
                   // Retrieve the text the that user has entered by using the
                   // TextEditingController.
@@ -116,32 +157,11 @@ class _MyCustomFormState extends State<Cadastro> {
                       "Erro: \n",
                     ),
                     Text(
-                      "Email Inválido",
+                      erros[0],
                     )
                   ],
                 ),
               ));
-            }
-            if (erros['errors'][0] == "Password is too short (minimum is 6 characters)") {
-              return AlertDialog(
-                  // Retrieve the text the that user has entered by using the
-                  // TextEditingController.
-                  content: Container(
-                padding: EdgeInsetsDirectional.only(top: 50),
-                height: 150,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Erro: \n",
-                    ),
-                    Text(
-                      "Senha muito curta mínimo de 6 dígitos",
-                    )
-                  ],
-                ),
-              ));
-            }
           },
         );
       }

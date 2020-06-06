@@ -39,7 +39,7 @@ class MyApp extends State<Geral> {
   void initState() {
     super.initState();
     void_getJWT().then((jwt) {
-      if (jwt == null) {
+      if (jwt != null) {
         homePage = '/login';
       } else {
         homePage = '/home';

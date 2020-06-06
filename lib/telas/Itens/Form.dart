@@ -222,7 +222,11 @@ class _FormItemPageState extends State<FormItemPage> {
 
             // primary: : isSwitched ? Colors.green : Colors.blue,
             // backgroundColor: isSwitched ? Colors.green : Colors.blue,
-            body: ListView(
+            body: 
+            AnimatedContainer(
+              duration: Duration(seconds: 3),
+              child:
+            ListView(
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
@@ -471,7 +475,7 @@ class _FormItemPageState extends State<FormItemPage> {
                   ])),
                 ),
               ],
-            )));
+            ))));
   }
 }
 

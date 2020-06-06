@@ -71,7 +71,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var drawerScaff = Drawer(
-      elevation: 5,
+      elevation: 3,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[

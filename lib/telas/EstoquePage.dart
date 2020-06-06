@@ -215,7 +215,7 @@ class _EstoquePageState extends State<EstoquePage> {
           foregroundColor: Colors.white,
           backgroundColor: Colors.green,
           onPressed: () => formDialogModal(null, 'new'),
-          tooltip: 'Show me the value!',
+          tooltip: 'Cadastre algo em seu estoque!',
           child: Icon(Icons.add),
         ),
 
