@@ -64,7 +64,7 @@ class DetailItems extends State<DetailItemScreen> {
     print('item');
     print(item.nature);
 
-    thumb = Image.asset('assets/logo.png');
+    thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
 
     if (item.thumbnail != null) {
       thumb = Image.network(host + item.thumbnail,
@@ -127,16 +127,23 @@ class DetailItems extends State<DetailItemScreen> {
                   children: <Widget>[
                     AlertDialog(
                       // buttonPadd ing: EdgeInsets.all(40),
+                      insetPadding: EdgeInsets.symmetric(vertical: 20),
+                      content: Container(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: 
 
-                      content: Column(
+                      Column(
+
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Text('Deseja realmente remover?'),
+
+                          Text('Deseja realmente remover? \n \n'),
 
                           // Text('$idItem'),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               RaisedButton(
                                   padding: EdgeInsets.all(5),
@@ -150,13 +157,14 @@ class DetailItems extends State<DetailItemScreen> {
                           )
                         ],
                       ),
+                      ) 
                     )
                   ],
                 ));
           });
     }
 
-    editAction(idItem) {
+    editAction(item) {
       Navigator.pushNamed(
         context,
         '/itens/form',
@@ -305,7 +313,7 @@ class DetailItems extends State<DetailItemScreen> {
     print(item.nature);
 
     botAcao = Container(
-        child: Row(
+      child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         RaisedButton(
@@ -313,7 +321,7 @@ class DetailItems extends State<DetailItemScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[Icon(Icons.edit), Text("Editar ")],
             ),
-            onPressed: () => editAction(item.user_id)),
+            onPressed: () => editAction(item)),
         RaisedButton(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -356,13 +364,23 @@ class DetailItems extends State<DetailItemScreen> {
                 Padding(
                   padding: EdgeInsets.all(25),
                   child: Text(item.description), //
+                ),      
+                item.price != 0 ?      
+                Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Text('Preço: R\$ ${item.price.toString()}'), //
+                )
+                :
+                Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Text('Preço: Gratuito'), //
                 ),
                 botAcao,
                 // MateriaisList(),
                 // passoAPasso,
                 Container(
                   alignment: Alignment(1.0, 1.0),
-                  padding: EdgeInsets.fromLTRB(5, 45, 5, 5),
+                  padding: EdgeInsets.fromLTRB(5, 45, 15, 5),
                   child: Text("Última atualização em: " + update), //
                 )
               ])),

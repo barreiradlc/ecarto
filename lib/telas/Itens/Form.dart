@@ -6,10 +6,12 @@ import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 import 'package:e_carto/Construtores/ItemsConstructor.dart';
 import 'package:e_carto/Construtores/StepsConstructor.dart';
+import 'package:e_carto/Funcoes/Fetch.dart';
 
 import 'package:e_carto/Funcoes/UserData.dart';
 import 'package:e_carto/telas/Camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,24 +68,8 @@ class _FormItemPageState extends State<FormItemPage> {
   }
 
   Future<String> req() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-            // Retrieve the text the that user has entered by using the
-            content: Container(
-                padding: EdgeInsetsDirectional.only(top: 50),
-                height: 150,
-                child: Column(
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Text(
-                      "Aguarde...",
-                    )
-                  ],
-                )));
-      },
-    );
+    Get.dialog(alertWidget(),
+        barrierDismissible: false, useRootNavigator: false);
 
     Dio dio = new Dio();
     var response;
@@ -110,7 +96,7 @@ class _FormItemPageState extends State<FormItemPage> {
 
     print(formData.fields);
 
-    if (edit) {
+    if (!edit) {
       response = await dio.post(
         host + endpoint,
         data: formData,
@@ -148,6 +134,7 @@ class _FormItemPageState extends State<FormItemPage> {
     Navigator.pop(context);
 
     if (res['id'] != null) {
+      Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!", snackPosition: SnackPosition.BOTTOM);
       await Navigator.pushNamed(context, '/home');
     }
 
@@ -174,15 +161,24 @@ class _FormItemPageState extends State<FormItemPage> {
   }
 
   Widget build(BuildContext context) {
+    edit = true;
+
     item = ModalRoute.of(context).settings.arguments;
-    edit = item is String;
+    if(item is String){
+      setState(() {
+        isSwitched = item == "arte" ? true : false;
+        edit = false;
+      });
+    }
 
     if (loading) {
-      if (edit) {
+      if (!edit) {
         print('create');
       } else {
         print(item.nature == "ARTE");
         print('item.nature');
+        print(item);
+
         setState(() {
           labelArte = 'Editar Arte';
           labelMaterial = 'Editar Material';
@@ -190,7 +186,7 @@ class _FormItemPageState extends State<FormItemPage> {
           nome.text = item.title;
           descricao.text = item.description;
           preco.text = item.price.toString();
-          _image = item.thumbnail != '' ? File(host + item.thumbnail) : null;
+          // _image = item.thumbnail != '' || null) ? File(host + item.thumbnail) : null;
         });
         // preco
         // descricao
@@ -230,116 +226,118 @@ class _FormItemPageState extends State<FormItemPage> {
               children: <Widget>[
                 Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 40),
+                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 40, top: 30),
                   child: Form(
                       child: Column(mainAxisSize: MainAxisSize.min, children: <
                           Widget>[
                    
-                    _image == null
-                        ? Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                FlatButton(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 0),
-                                    onPressed: getImage,
-                                    child: Container(
-                                        width:
-                                            (MediaQuery.of(context).size.width /
-                                                    2) -
-                                                20,
-                                        height: 200,
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.add_a_photo,
-                                                  size: 22,
-                                                ),
-                                                Text(
-                                                  'Camera',
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ))),
-                                FlatButton(
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    onPressed: getImageGal,
-                                    child: Container(
-                                        height: 200,
-                                        width:
-                                            (MediaQuery.of(context).size.width /
-                                                    2) -
-                                                20,
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.add_photo_alternate,
-                                                  size: 22,
-                                                ),
-                                                Text(
-                                                  'Galeria',
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        )))
-                              ],
-                            ))
-                        : Stack(children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 20),
-                              child: !edit
-                                  ? Image.network(
-                                      _image.path,
+                    // IMG DESCOMENTAR
+
+                    // _image == null
+                    //     ? Container(
+                    //         margin: EdgeInsets.symmetric(vertical: 10),
+                    //         child: Row(
+                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //           children: <Widget>[
+                    //             FlatButton(
+                    //                 padding: EdgeInsets.symmetric(
+                    //                     vertical: 10, horizontal: 0),
+                    //                 onPressed: getImage,
+                    //                 child: Container(
+                    //                     width:
+                    //                         (MediaQuery.of(context).size.width /
+                    //                                 2) -
+                    //                             20,
+                    //                     height: 200,
+                    //                     alignment: Alignment.center,
+                    //                     child: Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.center,
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.center,
+                    //                       children: <Widget>[
+                    //                         Row(
+                    //                           crossAxisAlignment:
+                    //                               CrossAxisAlignment.center,
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.center,
+                    //                           children: <Widget>[
+                    //                             Icon(
+                    //                               Icons.add_a_photo,
+                    //                               size: 22,
+                    //                             ),
+                    //                             Text(
+                    //                               'Camera',
+                    //                               style:
+                    //                                   TextStyle(fontSize: 15),
+                    //                             )
+                    //                           ],
+                    //                         )
+                    //                       ],
+                    //                     ))),
+                    //             FlatButton(
+                    //                 padding: EdgeInsets.symmetric(vertical: 10),
+                    //                 onPressed: getImageGal,
+                    //                 child: Container(
+                    //                     height: 200,
+                    //                     width:
+                    //                         (MediaQuery.of(context).size.width /
+                    //                                 2) -
+                    //                             20,
+                    //                     alignment: Alignment.center,
+                    //                     child: Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.center,
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.center,
+                    //                       children: <Widget>[
+                    //                         Row(
+                    //                           crossAxisAlignment:
+                    //                               CrossAxisAlignment.center,
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.center,
+                    //                           children: <Widget>[
+                    //                             Icon(
+                    //                               Icons.add_photo_alternate,
+                    //                               size: 22,
+                    //                             ),
+                    //                             Text(
+                    //                               'Galeria',
+                    //                               style:
+                    //                                   TextStyle(fontSize: 15),
+                    //                             )
+                    //                           ],
+                    //                         )
+                    //                       ],
+                    //                     )))
+                    //           ],
+                    //         ))
+                    //     : Stack(children: <Widget>[
+                    //         Container(
+                    //           padding: EdgeInsets.symmetric(vertical: 20),
+                    //           child: !edit
+                    //               ? Image.network(
+                    //                   _image.path,
                                       
-                                      width: MediaQuery.of(context).size.width,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      _image,
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 200,
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                            Positioned(
-                                top: 30.0,
-                                right: -10,
-                                child: FlatButton(
-                                  onPressed: removeImage,
-                                  child: Icon(Icons.close, size: 30, ),
-                                )),
-                          ]),
+                    //                   width: MediaQuery.of(context).size.width,
+                    //                   fit: BoxFit.cover,
+                    //                 )
+                    //               : Image.file(
+                    //                   _image,
+                    //                   width: MediaQuery.of(context).size.width,
+                    //                   height: 200,
+                    //                   fit: BoxFit.cover,
+                    //                 ),
+                    //         ),
+                    //         Positioned(
+                    //             top: 30.0,
+                    //             right: -10,
+                    //             child: FlatButton(
+                    //               onPressed: removeImage,
+                    //               child: Icon(Icons.close, size: 30, ),
+                    //             )),
+                    //       ]),
 
                     Container(
                         padding: EdgeInsets.only(bottom: 10),

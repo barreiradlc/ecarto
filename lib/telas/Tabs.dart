@@ -76,7 +76,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text("Bem Vindo(a); ${widget.login}"),
+            child: Text("Bem Vindo(a): ${widget.login}"),
             decoration: BoxDecoration(
               color: Colors.blue,
               image: DecorationImage(

@@ -6,6 +6,7 @@ import 'package:dio/adapter.dart';
 import 'package:e_carto/Construtores/StepsConstructor.dart';
 
 import 'package:e_carto/Funcoes/UserData.dart';
+import 'package:e_carto/Recursos/Api.dart';
 import 'package:e_carto/telas/Camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
 
-import '../../Recursos/Api.dart';
+
 
 class FormPerfilPage extends StatefulWidget {
   @override
@@ -166,96 +167,105 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                   child: Form(
                       child: Column(mainAxisSize: MainAxisSize.min, children: <
                           Widget>[
-                    Text(
-                      "Foto",
-                      style: TextStyle(fontSize: 23),
-                    ),
-                    _image == null
-                        ? Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                FlatButton(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 0),
-                                    onPressed: getImage,
-                                    child: Container(
-                                        width:
-                                            (MediaQuery.of(context).size.width /
-                                                    2) -
-                                                20,
-                                        height: 200,
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.add_a_photo,
-                                                  size: 22,
-                                                ),
-                                                Text(
-                                                  'Camera',
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ))),
-                                FlatButton(
-                                    padding: EdgeInsets.symmetric(vertical: 10),
-                                    onPressed: getImageGal,
-                                    child: Container(
-                                        height: 200,
-                                        width:
-                                            (MediaQuery.of(context).size.width /
-                                                    2) -
-                                                20,
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: <Widget>[
-                                                Icon(
-                                                  Icons.add_photo_alternate,
-                                                  size: 22,
-                                                ),
-                                                Text(
-                                                  'Galeria',
-                                                  style:
-                                                      TextStyle(fontSize: 15),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        )))
-                              ],
-                            ))
-                        : Image.file(
-                            _image,
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
+                    
+                    // IMG
+
+
+                    
+                    // Text(
+                    //   "Foto",
+                    //   style: TextStyle(fontSize: 23),
+                    // ),
+                    // _image == null
+                    //     ? Container(
+                    //         margin: EdgeInsets.symmetric(vertical: 10),
+                    //         child: Row(
+                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //           children: <Widget>[
+                    //             FlatButton(
+                    //                 padding: EdgeInsets.symmetric(
+                    //                     vertical: 10, horizontal: 0),
+                    //                 onPressed: getImage,
+                    //                 child: Container(
+                    //                     width:
+                    //                         (MediaQuery.of(context).size.width /
+                    //                                 2) -
+                    //                             20,
+                    //                     height: 200,
+                    //                     alignment: Alignment.center,
+                    //                     child: Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.center,
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.center,
+                    //                       children: <Widget>[
+                    //                         Row(
+                    //                           crossAxisAlignment:
+                    //                               CrossAxisAlignment.center,
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.center,
+                    //                           children: <Widget>[
+                    //                             Icon(
+                    //                               Icons.add_a_photo,
+                    //                               size: 22,
+                    //                             ),
+                    //                             Text(
+                    //                               'Camera',
+                    //                               style:
+                    //                                   TextStyle(fontSize: 15),
+                    //                             )
+                    //                           ],
+                    //                         )
+                    //                       ],
+                    //                     ))),
+                    //             FlatButton(
+                    //                 padding: EdgeInsets.symmetric(vertical: 10),
+                    //                 onPressed: getImageGal,
+                    //                 child: Container(
+                    //                     height: 200,
+                    //                     width:
+                    //                         (MediaQuery.of(context).size.width /
+                    //                                 2) -
+                    //                             20,
+                    //                     alignment: Alignment.center,
+                    //                     child: Column(
+                    //                       crossAxisAlignment:
+                    //                           CrossAxisAlignment.center,
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.center,
+                    //                       children: <Widget>[
+                    //                         Row(
+                    //                           crossAxisAlignment:
+                    //                               CrossAxisAlignment.center,
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.center,
+                    //                           children: <Widget>[
+                    //                             Icon(
+                    //                               Icons.add_photo_alternate,
+                    //                               size: 22,
+                    //                             ),
+                    //                             Text(
+                    //                               'Galeria',
+                    //                               style:
+                    //                                   TextStyle(fontSize: 15),
+                    //                             )
+                    //                           ],
+                    //                         )
+                    //                       ],
+                    //                     )))
+                    //           ],
+                    //         ))
+                    //     : Image.file(
+                    //         _image,
+                    //         width: 200,
+                    //         height: 200,
+                    //         fit: BoxFit.cover,
+                    //       ),
+
+
+                    // IMG
+
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(

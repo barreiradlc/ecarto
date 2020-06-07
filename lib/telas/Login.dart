@@ -1,6 +1,9 @@
 import 'dart:io' show Platform; //at the top
+import 'package:e_carto/Funcoes/Fetch.dart';
+import 'package:e_carto/Funcoes/UserPreferences.dart';
 import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform;
+import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,8 +37,8 @@ class _MyCustomFormState extends State<Login> {
 
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final myController = TextEditingController(text: 'test4567@example.com');
-  final myController2 = TextEditingController(text: 'password');
+  final myController = TextEditingController(text: 'augustodasilva53@gmail.com');
+  final myController2 = TextEditingController(text: '123123');
 
   // final myController = TextEditingController(text: '');
   // final myController2 = TextEditingController(text: '');
@@ -55,95 +58,19 @@ class _MyCustomFormState extends State<Login> {
   }
 
   Future<String> getReq() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-            // Retrieve the text the that user has entered by using the
-            content: Container(
-                padding: EdgeInsetsDirectional.only(top: 50),
-                height: 150,
-                child: Column(
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Text(
-                      "Aguarde...",
-                    )
-                  ],
-                )));
-      },
-    );
+    login(myController.text, myController2.text).then((res2) {
+          setLoginData(res2).then((response) {
+            print('response');
+            print(response);
 
-    // cloud
-    var url = 'https://ae-teste.herokuapp.com';
-
-    // local
-    // var url = 'http://localhost:3000';
-
-    var endpoint = '/auth/login';
-
-    print('req');
-    http.Response response =
-        await http.post(Uri.encodeFull(host + endpoint), body: {
-      // 'username': usuarioCred.text,
-      'email': myController.text,
-      'password': myController2.text
-    });
-    const bool kIsWeb = identical(0, 0.0);
-    var res = jsonDecode(response.body);
-
-
-
-    if (res['token'] != null) {
-      SharedPreferences jwt = await SharedPreferences.getInstance();
-
-      print('sucesso');
-      print(res);
-      print(res['token']);
-      // http.Response res2 = await http.post(Uri.encodeFull(url + endpoint),
-      //     body: {'email': emailCred.text, 'password': senhaCred.text});
-      // var login = jsonDecode(res2.body);
-
-      // if (kIsWeb) {
-      //   web.window.localStorage['mypref'] = login['token'];
-      //   print('não mobile');
-      // } else {
-      //   await jwt.setString('jwt', login['token']);
-      //   print("mobile");
-      // }
-      await jwt.setString('jwt', res['token']);
-      await jwt.setString('username', res['username']);
-      await jwt.setInt('id', res['id']);
-
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      print(res);
-      print('erro');
-      Navigator.pop(context);
-      alertAviso('Usuário não encontrado');
-    }
-
-    // print(token);
-
-    // } else {
-    //   print('deu ruim');
-    //   return showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return AlertDialog(
-    //           // Retrieve the text the that user has entered by using the
-    //           // TextEditingController.
-    //           content: Text(
-    //         "A senha e confirmação se diferem",
-    //       ));
-    //     },
-    //   );
-    // }
-    // //
-
-    // // if (!Platform.isIOS && !Platform.isAndroid) {
-    // // }
+            Navigator.pushReplacementNamed(context, '/home');
+          }).catchError((err) {
+            print(err);
+          });
+        }).catchError((err) {
+          return Get.snackbar(
+              "Erro de conexão", "Não foi possível conectar ao servidor");
+        });
   }
 
   @override
@@ -226,7 +153,7 @@ class _MyCustomFormState extends State<Login> {
                     padding: const EdgeInsets.all(5.0),
                     child: RaisedButton(
                       onPressed: getReq,
-                      color: Colors.lightBlueAccent,
+                      color: Colors.green,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 25),

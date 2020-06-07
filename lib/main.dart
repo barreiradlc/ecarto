@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart'
     show debugDefaultTargetPlatformOverride;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 // telas
 import './telas/Home.dart';
@@ -39,7 +40,9 @@ class MyApp extends State<Geral> {
   void initState() {
     super.initState();
     void_getJWT().then((jwt) {
-      if (jwt != null) {
+      
+
+      if (jwt == null) {
         homePage = '/login';
       } else {
         homePage = '/home';
@@ -75,7 +78,7 @@ class MyApp extends State<Geral> {
       return CircularProgressIndicator();
     }
 
-    return MaterialApp(
+    return GetMaterialApp(
       color: Colors.lightBlue,
       theme: ThemeData(
         primarySwatch: Colors.green,

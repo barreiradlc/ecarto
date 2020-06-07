@@ -36,28 +36,39 @@ class CollapsingList extends State<HomeState> {
 
   getData() async {
     
-    final authJwt = await SharedPreferences.getInstance();
+    void_getJWT()
+      .then((jwt) async{
+        
+        final authJwt = await SharedPreferences.getInstance();
 
-    String token = await authJwt.getString("jwt");
-    String login = await authJwt.getString("username");
-    var id = await authJwt.getString("id");
+        String token = await authJwt.getString("jwt");
+        String login = await authJwt.getString("username");
+        var id = await authJwt.getInt("id");
+
+        print(token);
+        print(login);
+        print(id);
 
 
+        var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
+            headers: {"Authorization": token});
 
-    var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
-        headers: {"Authorization": token});
+        var responseMateriais = await http.get(Uri.encodeFull(host + '/material'),
+            headers: {"Authorization": token});
 
-    var responseMateriais = await http.get(Uri.encodeFull(host + '/material'),
-        headers: {"Authorization": token});
+        setState(() {
+          this.token = token;
+          this.login = login;
+          this.id = id;
+          artes = jsonDecode(responseArtes.body);
+          materiais = jsonDecode(responseMateriais.body);
+          loading = false;
+        });
 
-    setState(() {
-      this.token = token;
-      this.login = login;
-      this.id = int.parse(id);
-      artes = jsonDecode(responseArtes.body);
-      materiais = jsonDecode(responseMateriais.body);
-      loading = false;
-    });
+      })
+      .catchError((err) {
+
+      });
   }
 
   @override

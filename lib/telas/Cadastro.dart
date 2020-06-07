@@ -1,10 +1,15 @@
 import 'dart:io' show Platform; //at the top
+import 'package:e_carto/Funcoes/Fetch.dart';
+import 'package:e_carto/Funcoes/UserPreferences.dart';
+import 'package:e_carto/Funcoes/Utils.dart';
+import 'package:e_carto/Recursos/Api.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 
 import 'package:flutter/foundation.dart'
     show debugDefaultTargetPlatformOverride;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,177 +33,58 @@ class Cadastro extends StatefulWidget {
 class _MyCustomFormState extends State<Cadastro> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final usuarioCred = TextEditingController();
-  final senhaCred = TextEditingController();
-  final emailCred = TextEditingController();
-  final senhaConfirmaCred = TextEditingController();
+  final usuarioCred = TextEditingController(text: 'gustin');
+  final emailCred = TextEditingController(text: 'augustodasilva53@gmail.com');
+  final senhaCred = TextEditingController(text: '123123');
+  final senhaConfirmaCred = TextEditingController(text: '123123');
 
-  Future<String> cadastroReq() async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-            // Retrieve the text the that user has entered by using the
-            content: Container(
-                padding: EdgeInsetsDirectional.only(top: 50),
-                height: 150,
-                child: Column(
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Text(
-                      "Aguarde...",
-                    )
-                  ],
-                )));
-      },
-    );
-    // cloud
-    var url = 'https://ae-teste.herokuapp.com';
-
-    // local
-    // var url = 'http://localhost:3000';
-
-    var endpoint = '/users';
-    if (senhaCred.text == senhaConfirmaCred.text) {
-      print('req');
-      http.Response response =
-          await http.post(Uri.encodeFull(url + endpoint), body: {
-        'username': usuarioCred.text,
-        'email': emailCred.text,
-        'password': senhaCred.text
-      });
-      const bool kIsWeb = identical(0, 0.0);
-      var res = jsonDecode(response.body);
-
-      if (res['errors'] == null) {
-        endpoint = '/auth/login';
-        SharedPreferences jwt = await SharedPreferences.getInstance();
-
-        print('sucesso');
-        http.Response res2 = await http.post(Uri.encodeFull(url + endpoint),
-            body: {'email': emailCred.text, 'password': senhaCred.text});
-        var login = jsonDecode(res2.body);
-
-        if (kIsWeb) {
-          web.window.localStorage['mypref'] = login['token'];
-          
-          print('não mobile');
-        } else {
-          await jwt.setString('jwt', login['token']);
-          print('sucesso1');
-          await jwt.setString('username', login['username']);
-          print('sucesso2');
-          await jwt.setString('id', login['id'].toString());
-          print('sucesso3');
-
-          print("mobile");
-        }
-
-        Navigator.pushNamed(context, '/home');
+  Future cadastroReq() async {
+    register(usuarioCred.text, emailCred.text, senhaCred.text,
+            senhaConfirmaCred.text)
+        .then((res) {
+      if (res['errors'] != null) {
+        var index = 1;
+        return res['errors']
+            .forEach((item) async => Get.snackbar("Erro", item,
+                margin: EdgeInsets.only(top: 50.0 * ++index),
+                animationDuration: Duration(seconds: 1 * ++index)))
+            .toList();
       } else {
-        Navigator.pop(context);
-        print('erro');
-        var erros = jsonDecode(response.body);
-        print(erros['errors']);
-        print(erros['errors'][0]);
-        return showDialog(
-          context: context,
-          builder: (context) {
-            // if (erros['errors'][0] == "Email is invalid") {
-            //   return AlertDialog(
-            //       // Retrieve the text the that user has entered by using the
-            //       // TextEditingController.
-            //       content: Container(
-            //     padding: EdgeInsetsDirectional.only(top: 50),
-            //     height: 150,
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: <Widget>[
-            //         Text(
-            //           "Erro: \n",
-            //         ),
-            //         Text(
-            //           "Email Inválido",
-            //         )
-            //       ],
-            //     ),
-            //   ));
-            // }
-            // if (erros['errors'][0] == "Password is too short (minimum is 6 characters)") {
-            //   return AlertDialog(
-            //       // Retrieve the text the that user has entered by using the
-            //       // TextEditingController.
-            //       content: Container(
-            //     padding: EdgeInsetsDirectional.only(top: 50),
-            //     height: 150,
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: <Widget>[
-            //         Text(
-            //           "Erro: \n",
-            //         ),
-            //         Text(
-            //           "Senha muito curta mínimo de 6 dígitos",
-            //         )
-            //       ],
-            //     ),
-            //   ));
-            // }
-              return AlertDialog(
-                  // Retrieve the text the that user has entered by using the
-                  // TextEditingController.
-                  content: Container(
-                padding: EdgeInsetsDirectional.only(top: 50),
-                height: 150,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "Erro: \n",
-                    ),
-                    Text(
-                      erros[0],
-                    )
-                  ],
-                ),
-              ));
-          },
-        );
+        Get.snackbar("Sucesso", "Usuário cadastrado com sucesso");
+
+        login(emailCred.text, senhaCred.text).then((res2) {
+          setLoginData(res2).then((response) {
+            print('response');
+            print(response);
+
+            Navigator.pushReplacementNamed(context, '/home');
+          }).catchError((err) {
+            print(err);
+          });
+        }).catchError((err) {
+          return Get.snackbar(
+              "Erro de conexão", "Não foi possível conectar ao servidor");
+        });
       }
+    }).catchError((err) {
+      print('Erro');
+      print(err);
+      Get.back();
+      return Get.snackbar(
+          "Erro de conexão", "Não foi possível conectar ao servidor");
 
-      // print(token);
-    } else {
-      Navigator.pop(context);
-      print('deu ruim');
-      return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              // Retrieve the text the that user has entered by using the
-              // TextEditingController.
-              content: Text(
-            "A senha e confirmação se diferem",
-          ));
-        },
-      );
-    }
+      // dialogoAlertaLista(err['errors'], context);
+    });
 
-    //
+    // Navigator.pop(context);
 
-    // if (!Platform.isIOS && !Platform.isAndroid) {
-    // }
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    // myController.dispose();
-    // myController2.dispose();
-    usuarioCred.dispose();
-    senhaCred.dispose();
-    emailCred.dispose();
-    senhaConfirmaCred.dispose();
-    super.dispose();
+    // checar id
+    // tratar erro
+    // if erro (alert())
+    // else login
+    // funçao de login
+    // salvar id, jwt e usename
+    // redirect para home
   }
 
   @override
@@ -281,11 +167,31 @@ class _MyCustomFormState extends State<Cadastro> {
                       color: Colors.green,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child:
-                            Text('Cadastrar', style: TextStyle(fontSize: 20, color: Colors.white)),
+                        child: Text('Cadastrar',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.white)),
                       ),
                     ),
-                  )
+                  ),
+                  Divider(
+                    height: 40,
+                  ),
+                  Padding(
+                    // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    padding: const EdgeInsets.only(bottom: 30.0),
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                            'Já sou cadastrado, fazer login',
+                            style: TextStyle(fontSize: 10)),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )

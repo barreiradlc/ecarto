@@ -19,12 +19,30 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
+  String imgUrl = '';
   var loading = true;
   var profile;
   var status;
   var id;
 
- 
+  Future getThumb() async {
+    var url = 'https://source.unsplash.com/random/?craft';
+    // var url = 'https://dog.ceo/api/breeds/image/random';
+
+    Dio dio = new Dio();
+
+    var response = await dio.get(url);
+
+    print('realUri');
+    print(response.realUri);
+
+    setState(() {
+      imgUrl = response.realUri.toString();
+    });
+
+    return response.realUri;
+  }
+
   Future<String> getPerfil() async {
     void_getJWT().then((token) async {
       void_getID().then((id) async {
@@ -57,6 +75,14 @@ class _PerfilState extends State<Perfil> {
   @override
   void initState() {
     super.initState();
+    getThumb().then((value) {
+      setState(() {
+        imgUrl = value.toString();
+      });
+    }).catchError((err) {
+      print(err);
+    });
+
     var p = getPerfil();
 
     void_getID().then((id) {
@@ -73,8 +99,6 @@ class _PerfilState extends State<Perfil> {
   Widget build(BuildContext context) {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
-    final String imgUrl =
-        'https://pixel.nymag.com/imgs/daily/selectall/2017/12/26/26-eric-schmidt.w700.h700.jpg';
 
     if (loading == true) {
       return Scaffold(
@@ -94,10 +118,14 @@ class _PerfilState extends State<Perfil> {
         new Container(
           color: Colors.blue,
         ),
-        new Image.network(
-          profile['avatar']['url'] != null ? profile['avatar']['url'] : imgUrl,
-          fit: BoxFit.fill,
-        ),
+        imgUrl != ''
+            ? new Image.network(
+                profile['avatar']['url'] != null
+                    ? profile['avatar']['url']
+                    : imgUrl,
+                fit: BoxFit.fill,
+              )
+            : CircularProgressIndicator(),
         new BackdropFilter(
             filter: new ui.ImageFilter.blur(
               sigmaX: 6.0,
@@ -126,10 +154,22 @@ class _PerfilState extends State<Perfil> {
                   new SizedBox(
                     height: _height / 12,
                   ),
-                  new CircleAvatar(
-                    radius: _width < _height ? _width / 4 : _height / 4,
-                    backgroundImage: NetworkImage(profile['avatar']['url'] != null ? profile['avatar']['url'] : imgUrl),
-                  ),
+                  imgUrl != ''
+                      ? new CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: _width < _height ? _width / 4 : _height / 4,
+                          backgroundImage: NetworkImage(
+                              profile['avatar']['url'] != null
+                                  ? profile['avatar']['url']
+                                  : imgUrl),
+                        )
+                      : Container(
+                          height: 205,
+                          width: 205,
+                          // child: CircularProgressIndicator(
+                          //   strokeWidth: 5,
+                          // )
+                          ),
                   new SizedBox(
                     height: _height / 25.0,
                   ),
@@ -147,6 +187,10 @@ class _PerfilState extends State<Perfil> {
                         fontSize: _width / 15,
                         color: Colors.white),
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                  ),
+                  Divider(color: Colors.white, height: 30, thickness: 5, ),
                   new Text(
                     profile['email'] != null ? profile['email'] : "",
                     style: new TextStyle(
@@ -154,12 +198,18 @@ class _PerfilState extends State<Perfil> {
                         fontSize: _width / 35,
                         color: Colors.white),
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                  ),
                   new Text(
                     profile['phone'] != null ? profile['phone'] : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 35,
                         color: Colors.white),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
                   ),
                   new Text(
                     profile['instagram'] != null ? profile['instagram'] : "",
@@ -179,7 +229,9 @@ class _PerfilState extends State<Perfil> {
                     padding: new EdgeInsets.only(
                         top: _height / 30, left: _width / 8, right: _width / 8),
                     child: new Text(
-                      profile['about'] != null ? profile['about'] : 'Sobre mim... ',
+                      profile['about'] != null
+                          ? profile['about']
+                          : 'Sobre mim... ',
                       style: new TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: _width / 25,
@@ -193,78 +245,71 @@ class _PerfilState extends State<Perfil> {
                   ),
                   new Row(
                     children: <Widget>[
-                      rowCell(status[0]['Material'], 'MATERIAIS'),
-                      rowCell(status[1]['Artes'], 'ARTES')
+                      rowCell(status[0]['Material'], 'MATERIA${status[0]['Material'] > 1 ? 'S' : 'L'} ' ),
+                      rowCell(status[1]['Artes'], 'ARTE${status[0]['Material'] > 1 ? 'S' : ''}')
                     ],
                   ),
                   new Divider(height: _height / 30, color: Colors.white),
-
-                  id.toString() != profile['id'].toString() ?
-                  Padding(
-                    padding: new EdgeInsets.only(
-                        left: _width / 8, right: _width / 8),
-                    child: new FlatButton(
-                      onPressed: () { 
-                        print('a implementar'); 
-                      },
-                      child: new Container(
-                          child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Icon(Icons.person),
-                          new SizedBox(
-                            width: _width / 30,
+                  id.toString() != profile['id'].toString()
+                      ? Padding(
+                          padding: new EdgeInsets.only(
+                              left: _width / 8, right: _width / 8),
+                          child: new FlatButton(
+                            onPressed: () {
+                              print('a implementar');
+                            },
+                            child: new Container(
+                                child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                new Icon(Icons.person),
+                                new SizedBox(
+                                  width: _width / 30,
+                                ),
+                                new Text('SEGUIR')
+                              ],
+                            )),
+                            color: Colors.blue[50],
                           ),
-                          new Text('FOLLOW')
-                        ],
-                      )),
-                      color: Colors.blue[50],
-                    ),
-                  )
-                  :
-                  Padding(
-                    padding: new EdgeInsets.only(
-                        left: _width / 8, right: _width / 8),
-                    child: new FlatButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/formperfil',
-                          arguments: UserArguments(
-                            profile['id'],
-                            profile['name'],
-                            profile['username'],
-                            profile['email'],
-                            profile['phone'],
-                            profile['instagram'],
-                            profile['pinterest'],
-                            profile['about'],
-                            profile['avatar'],
-                          )      
-                        );
-                      }, 
-                      child: new Container(
-                          child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          new Icon(Icons.person),
-                          new SizedBox(
-                            width: _width / 30,
+                        )
+                      : Padding(
+                          padding: new EdgeInsets.only(
+                              left: _width / 8, right: _width / 8),
+                          child: new FlatButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/formperfil',
+                                  arguments: UserArguments(
+                                    profile['id'],
+                                    profile['name'],
+                                    profile['username'],
+                                    profile['email'],
+                                    profile['phone'],
+                                    profile['instagram'],
+                                    profile['pinterest'],
+                                    profile['about'],
+                                    profile['avatar'],
+                                  ));
+                            },
+                            child: new Container(
+                                child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                new Icon(Icons.person),
+                                new SizedBox(
+                                  width: _width / 30,
+                                ),
+                                new Text('EDITAR PERFIL')
+                              ],
+                            )),
+                            color: Colors.blue[50],
                           ),
-                          new Text('EDITAR PERFIL')
-                        ],
-                      )),
-                      color: Colors.blue[50],
-                    ),
-                  ),
+                        ),
                 ],
               ),
             ))
       ],
     );
   }
-
-
 
   Widget rowCell(int count, String type) => new Expanded(
           child: new Column(
@@ -273,7 +318,7 @@ class _PerfilState extends State<Perfil> {
             '$count',
             style: new TextStyle(color: Colors.white),
           ),
-          new Text(type ,
+          new Text(type,
               style: new TextStyle(
                   color: Colors.white, fontWeight: FontWeight.normal))
         ],
