@@ -1,7 +1,7 @@
 import 'dart:io' show Platform; //at the top
-import 'package:e_carto/Funcoes/Fetch.dart';
-import 'package:e_carto/Funcoes/UserPreferences.dart';
-import 'package:e_carto/Recursos/Api.dart';
+import 'package:ecarto/Funcoes/Fetch.dart';
+import 'package:ecarto/Funcoes/UserPreferences.dart';
+import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:get/get.dart';
 
@@ -59,14 +59,21 @@ class _MyCustomFormState extends State<Login> {
 
   Future<String> getReq() async {
     login(myController.text, myController2.text).then((res2) {
-          setLoginData(res2).then((response) {
             print('response');
-            print(response);
+            print(res2['error']);
+            print(res2['error']);
+          if(res2['error'] == null){
+            setLoginData(res2).then((response) {
 
-            Navigator.pushReplacementNamed(context, '/home');
-          }).catchError((err) {
-            print(err);
-          });
+              Navigator.pushReplacementNamed(context, '/home');
+            }).catchError((err) {
+              print(err);
+            });
+          } else {
+          return Get.snackbar(
+              "Usuário não encontrato", "Email ou senha inválidos");
+
+          }
         }).catchError((err) {
           return Get.snackbar(
               "Erro de conexão", "Não foi possível conectar ao servidor");

@@ -1,5 +1,5 @@
-import 'package:e_carto/Construtores/ItemsConstructor.dart';
-import 'package:e_carto/Recursos/Api.dart';
+import 'package:ecarto/Construtores/ItemsConstructor.dart';
+import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -55,16 +55,18 @@ class ArteState extends State<Artes> {
             children: List.generate(widget.artes.length, (index) {
               var bg;
 
-              if (widget.artes[index]['avatar'] != null) {
-                if (widget.artes[index]['avatar']['url'] == null) {
-                  bg = AssetImage("assets/logo.png");
-                } else {
-                  bg =
-                      NetworkImage(host + widget.artes[index]['avatar']['url']);
-                }
-              } else {
-                bg = AssetImage("assets/logo.png");
-              }
+              // if (widget.artes[index]['avatar'] != null) {
+              //   if (widget.artes[index]['avatar']['url'] == null) {
+              //     bg = AssetImage("assets/logo.png");
+              //   } else {
+              //     bg =
+              //         NetworkImage(host + widget.artes[index]['avatar']['url']);
+              //   }
+              // } else {
+              //   bg = AssetImage("assets/logo.png");
+              // }
+              
+              bg = AssetImage("assets/logo.png");
 
               if (widget.artes[index]['nature'] == 'ARTE') {
                 return new Container(

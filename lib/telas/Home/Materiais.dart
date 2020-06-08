@@ -1,5 +1,5 @@
-import 'package:e_carto/Construtores/ItemsConstructor.dart';
-import 'package:e_carto/Recursos/Api.dart';
+import 'package:ecarto/Construtores/ItemsConstructor.dart';
+import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -49,12 +49,15 @@ class MateriaiState extends State<Materiais> {
             (index) {
               var bg;
 
-              if (widget.materiais[index]['avatar']['url'] == null) {
-                bg = AssetImage("assets/logo.png");
-              } else {
-                bg = NetworkImage(
-                    host + widget.materiais[index]['avatar']['url']);
-              }
+              // if (widget.materiais[index]['avatar']['url'] == null) {
+              //   bg = AssetImage("assets/logo.png");
+              // } else {
+              //   bg = NetworkImage(
+              //       host + widget.materiais[index]['avatar']['url']);
+              // }
+              
+              bg = AssetImage("assets/logo.png");
+
               return new Container(
                   margin: EdgeInsets.all(5),
                   child: RaisedButton(

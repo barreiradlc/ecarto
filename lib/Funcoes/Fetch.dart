@@ -27,7 +27,7 @@ alertWidget() {
           image: bg,
           fit: BoxFit.cover,
           colorFilter: new ColorFilter.mode(
-              Colors.green.withOpacity(0.6), BlendMode.srcOver),
+              Colors.transparent.withOpacity(0.5), BlendMode.dstIn),
         ),
       ),
       child: Center(
@@ -57,14 +57,6 @@ Future register(usuario, email, senha, confirmaSenha) async {
     var res = jsonDecode(response.body);
 
     return res;
-
-    // tratar erro
-    // if erro (alert())
-    // else login
-    // funçao de login
-    // salvar id, jwt e usename
-    // redirect para home
-
   }
 
   Get.snackbar("Erro", "Senha e confirmação se diferem");

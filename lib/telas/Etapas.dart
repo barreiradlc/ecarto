@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:e_carto/Construtores/StepsConstructor.dart';
-import 'package:e_carto/telas/Passo.dart';
+import 'package:ecarto/Construtores/StepsConstructor.dart';
+import 'package:ecarto/telas/Passo.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

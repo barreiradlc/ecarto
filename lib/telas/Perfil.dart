@@ -1,14 +1,14 @@
 import 'dart:collection';
 
-import 'package:e_carto/Construtores/UserArguments.dart';
-import 'package:e_carto/Recursos/Api.dart';
+import 'package:ecarto/Construtores/UserArguments.dart';
+import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 import 'package:http/http.dart' as http;
-import 'package:e_carto/Funcoes/UserData.dart';
+import 'package:ecarto/Funcoes/UserData.dart';
 
 class Perfil extends StatefulWidget {
   Perfil({Key key, this.title}) : super(key: key);
@@ -110,8 +110,7 @@ class _PerfilState extends State<Perfil> {
           ));
     }
 
-    print(profile['id']);
-    print(this.id);
+    print(status[0]['Material']);
 
     return new Stack(
       children: <Widget>[
@@ -245,8 +244,8 @@ class _PerfilState extends State<Perfil> {
                   ),
                   new Row(
                     children: <Widget>[
-                      rowCell(status[0]['Material'], 'MATERIA${status[0]['Material'] > 1 ? 'S' : 'L'} ' ),
-                      rowCell(status[1]['Artes'], 'ARTE${status[0]['Material'] > 1 ? 'S' : ''}')
+                      rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L' ),
+                      rowCell(status[1]['Artes'], 'ARTE', 'S', '')
                     ],
                   ),
                   new Divider(height: _height / 30, color: Colors.white),
@@ -311,14 +310,14 @@ class _PerfilState extends State<Perfil> {
     );
   }
 
-  Widget rowCell(int count, String type) => new Expanded(
+  Widget rowCell(int count, String type, String sufixoP,  String sufixoS) => new Expanded(
           child: new Column(
         children: <Widget>[
           new Text(
             '$count',
             style: new TextStyle(color: Colors.white),
           ),
-          new Text(type,
+          new Text('$type${count > 1 ? sufixoP : sufixoS }',
               style: new TextStyle(
                   color: Colors.white, fontWeight: FontWeight.normal))
         ],

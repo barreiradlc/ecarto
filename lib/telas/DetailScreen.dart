@@ -1,7 +1,7 @@
-import 'package:e_carto/Construtores/WikisContructor.dart';
-import 'package:e_carto/Parcial/Carousel.dart';
-import 'package:e_carto/Parcial/MateriaisList.dart';
-import 'package:e_carto/Recursos/Api.dart';
+import 'package:ecarto/Construtores/WikisContructor.dart';
+import 'package:ecarto/Parcial/Carousel.dart';
+import 'package:ecarto/Parcial/MateriaisList.dart';
+import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';

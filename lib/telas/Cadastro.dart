@@ -1,26 +1,9 @@
-import 'dart:io' show Platform; //at the top
-import 'package:e_carto/Funcoes/Fetch.dart';
-import 'package:e_carto/Funcoes/UserPreferences.dart';
-import 'package:e_carto/Funcoes/Utils.dart';
-import 'package:e_carto/Recursos/Api.dart';
-import 'package:flutter/foundation.dart' show TargetPlatform;
-
-import 'package:flutter/foundation.dart'
-    show debugDefaultTargetPlatformOverride;
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:universal_html/prefer_universal/html.dart' as web;
-
+import 'package:ecarto/Funcoes/Fetch.dart';
+import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
+import 'package:get/get.dart';
 
 // Define a custom Form widget.
 class Cadastro extends StatefulWidget {
@@ -39,16 +22,23 @@ class _MyCustomFormState extends State<Cadastro> {
   final senhaConfirmaCred = TextEditingController(text: '123123');
 
   Future cadastroReq() async {
-    register(usuarioCred.text, emailCred.text, senhaCred.text,
-            senhaConfirmaCred.text)
-        .then((res) {
+    register(
+      usuarioCred.text, 
+      emailCred.text, 
+      senhaCred.text,
+      senhaConfirmaCred.text)        
+      .then((res) {
       if (res['errors'] != null) {
+
+        print(res);
+
         var index = 1;
-        return res['errors']
+        res['errors']
             .forEach((item) async => Get.snackbar("Erro", item,
                 margin: EdgeInsets.only(top: 50.0 * ++index),
-                animationDuration: Duration(seconds: 1 * ++index)))
-            .toList();
+                animationDuration: Duration(seconds: 1 * ++index)));
+
+        return Get.back();
       } else {
         Get.snackbar("Sucesso", "Usuário cadastrado com sucesso");
 

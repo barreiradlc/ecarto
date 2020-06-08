@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
-import 'package:e_carto/Construtores/StepsConstructor.dart';
+import 'package:ecarto/Construtores/StepsConstructor.dart';
 
-import 'package:e_carto/Funcoes/UserData.dart';
-import 'package:e_carto/telas/Camera.dart';
+import 'package:ecarto/Funcoes/UserData.dart';
+import 'package:ecarto/telas/Camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';

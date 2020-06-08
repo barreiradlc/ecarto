@@ -1,7 +1,7 @@
-import 'package:e_carto/telas/DetailScreen.dart';
-import 'package:e_carto/telas/EstoquePage.dart';
-import 'package:e_carto/telas/Etapas.dart';
-import 'package:e_carto/telas/NewWikiPage.dart';
+import 'package:ecarto/telas/DetailScreen.dart';
+import 'package:ecarto/telas/EstoquePage.dart';
+import 'package:ecarto/telas/Etapas.dart';
+import 'package:ecarto/telas/NewWikiPage.dart';
 import 'package:flutter/foundation.dart'
     show debugDefaultTargetPlatformOverride;
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ import './telas/Home.dart';
 import './telas/Login.dart';
 import './telas/Cadastro.dart';
 // import  './telas/Camera.dart';
-import 'package:e_carto/telas/Home/ExtractArgumentsScreen.dart';
+import 'package:ecarto/telas/Home/ExtractArgumentsScreen.dart';
 
 import 'telas/Perfil/FormPerfilPage.dart';
 import './Funcoes/UserData.dart';

@@ -1,8 +1,8 @@
-import 'package:e_carto/Construtores/ItemsConstructor.dart';
-import 'package:e_carto/Funcoes/UserData.dart';
-import 'package:e_carto/Parcial/Carousel.dart';
-import 'package:e_carto/Parcial/MateriaisList.dart';
-import 'package:e_carto/Recursos/Api.dart';
+import 'package:ecarto/Construtores/ItemsConstructor.dart';
+import 'package:ecarto/Funcoes/UserData.dart';
+import 'package:ecarto/Parcial/Carousel.dart';
+import 'package:ecarto/Parcial/MateriaisList.dart';
+import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,10 +66,10 @@ class DetailItems extends State<DetailItemScreen> {
 
     thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
 
-    if (item.thumbnail != null) {
-      thumb = Image.network(host + item.thumbnail,
-          fit: BoxFit.cover, alignment: Alignment.center);
-    }
+    // if (item.thumbnail != null) {
+    //   thumb = Image.network(host + item.thumbnail,
+    //       fit: BoxFit.cover, alignment: Alignment.center);
+    // }
 
     delete(id) async {
       final authJwt = await SharedPreferences.getInstance();

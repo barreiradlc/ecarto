@@ -4,12 +4,12 @@ import 'dart:wasm';
 
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
-import 'package:e_carto/Construtores/ItemsConstructor.dart';
-import 'package:e_carto/Construtores/StepsConstructor.dart';
-import 'package:e_carto/Funcoes/Fetch.dart';
+import 'package:ecarto/Construtores/ItemsConstructor.dart';
+import 'package:ecarto/Construtores/StepsConstructor.dart';
+import 'package:ecarto/Funcoes/Fetch.dart';
 
-import 'package:e_carto/Funcoes/UserData.dart';
-import 'package:e_carto/telas/Camera.dart';
+import 'package:ecarto/Funcoes/UserData.dart';
+import 'package:ecarto/telas/Camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -67,7 +67,11 @@ class _FormItemPageState extends State<FormItemPage> {
     });
   }
 
-  Future<String> req() async {
+  Future req() async {
+    if(nome.text == ''){
+      return Get.snackbar("Erro", "Nome do Item é obrigatório!", snackPosition: SnackPosition.BOTTOM);
+    }
+
     Get.dialog(alertWidget(),
         barrierDismissible: false, useRootNavigator: false);
 
