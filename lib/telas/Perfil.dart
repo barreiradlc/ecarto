@@ -25,7 +25,7 @@ class _PerfilState extends State<Perfil> {
   var status;
   var id;
 
-  Future getThumb() async {
+  getThumb() async {
     var url = 'https://source.unsplash.com/random/?craft';
     // var url = 'https://dog.ceo/api/breeds/image/random';
 
@@ -75,13 +75,14 @@ class _PerfilState extends State<Perfil> {
   @override
   void initState() {
     super.initState();
-    getThumb().then((value) {
-      setState(() {
-        imgUrl = value.toString();
-      });
-    }).catchError((err) {
-      print(err);
-    });
+    // getThumb().then((value) {
+    //   setState(() {
+    //     imgUrl = value.toString();
+    //   });
+    // }).catchError((err) {
+    //   print(err);
+    // });
+    getThumb();
 
     var p = getPerfil();
 
@@ -119,9 +120,10 @@ class _PerfilState extends State<Perfil> {
         ),
         imgUrl != ''
             ? new Image.network(
-                profile['avatar']['url'] != null
-                    ? profile['avatar']['url']
-                    : imgUrl,
+                // profile['avatar']['url'] != null
+                //     ? profile['avatar']['url']
+                //     : imgUrl,
+                imgUrl,
                 fit: BoxFit.fill,
               )
             : CircularProgressIndicator(),
@@ -158,9 +160,11 @@ class _PerfilState extends State<Perfil> {
                           backgroundColor: Colors.transparent,
                           radius: _width < _height ? _width / 4 : _height / 4,
                           backgroundImage: NetworkImage(
-                              profile['avatar']['url'] != null
-                                  ? profile['avatar']['url']
-                                  : imgUrl),
+                              // profile['avatar']['url'] != null
+                              //     ? profile['avatar']['url']
+                              //     : imgUrl
+                              imgUrl
+                                  ),
                         )
                       : Container(
                           height: 205,
