@@ -84,12 +84,16 @@ class MateriaiState extends State<Materiais> {
                         // print('pokebola vai');
                       },
                       child: Container(
+                        // foregroundDecoration: BoxDecoration(
+                        //   color: Colors.grey,
+                        //   backgroundBlendMode: BlendMode.saturation,
+                        // ),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: bg,
                               fit: BoxFit.cover,
                               colorFilter: new ColorFilter.mode(
-                                  Colors.green.withOpacity(0.6),
+                                  Colors.lightGreen.withOpacity(0.6),
                                   BlendMode.srcOver),
                             ),
                           ),

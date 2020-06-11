@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:wasm';
 
+import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 import 'package:ecarto/Construtores/ItemsConstructor.dart';
@@ -27,11 +28,13 @@ class FormItemPage extends StatefulWidget {
 class _FormItemPageState extends State<FormItemPage> {
   var item;
   bool edit;
-  bool isSwitched = true;
+  bool isSwitched;
   bool loading = true;
   var label = 'novo';
   var labelArte = 'Nova Arte';
   var labelMaterial = 'Novo Material';
+  Position position;
+
 
   File _image;
 
@@ -146,16 +149,26 @@ class _FormItemPageState extends State<FormItemPage> {
     //     body: {
     //       'title': nome.text,
     //       'description': descricao.text,
+
     //       'avatar': _image
     //     });
 
     // print(response.body);
   }
 
+  getLocation() async{
+    var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print('p');
+    print(p);
+    print(p.latitude);
+
+  }
+
   @override
   void initState() {
     super.initState();
-
+    getLocation();
     void_getJWT().then((jwt) {
       setState(() {
         this.jwt = jwt;
@@ -168,15 +181,19 @@ class _FormItemPageState extends State<FormItemPage> {
     edit = true;
 
     item = ModalRoute.of(context).settings.arguments;
-    if(item is String){
+    
+    if(item is String && isSwitched == null){
       setState(() {
         isSwitched = item == "arte" ? true : false;
         edit = false;
       });
+
     }
 
     if (loading) {
       if (!edit) {
+      // if(isSwitched != null){
+      // }
         print('create');
       } else {
         print(item.nature == "ARTE");

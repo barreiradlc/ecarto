@@ -97,7 +97,7 @@ class ArteState extends State<Artes> {
                                 image: bg,
                                 fit: BoxFit.cover,
                                 colorFilter: new ColorFilter.mode(
-                                    Colors.blue.withOpacity(0.6),
+                                    Colors.lightBlue.withOpacity(0.6),
                                     BlendMode.srcOver),
                               ),
                             ),

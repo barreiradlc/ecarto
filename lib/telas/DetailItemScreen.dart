@@ -127,7 +127,7 @@ class DetailItems extends State<DetailItemScreen> {
                   children: <Widget>[
                     AlertDialog(
                       // buttonPadd ing: EdgeInsets.all(40),
-                      insetPadding: EdgeInsets.symmetric(vertical: 20),
+                      contentPadding: EdgeInsets.symmetric(vertical: 20),
                       content: Container(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: 
