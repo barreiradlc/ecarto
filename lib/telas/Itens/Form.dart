@@ -33,7 +33,7 @@ class _FormItemPageState extends State<FormItemPage> {
   var label = 'novo';
   var labelArte = 'Nova Arte';
   var labelMaterial = 'Novo Material';
-  Position position;
+  var position;
 
 
   File _image;
@@ -82,13 +82,15 @@ class _FormItemPageState extends State<FormItemPage> {
     var response;
     var endpoint = '/items';
 
-    // print(jwt);
+    print(position);
 
     FormData formData = FormData.fromMap({
       'title': nome.text,
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
       'price': double.parse(preco.text),
+      'latitude':position.latitude,
+      'longitude': position.longitude
       // 'avatar': await MultipartFile.fromFile(_image,   )
       // 'avatar': await MultipartFile.fromFile(_image.path,
       //     filename: nome.text + ".png"),
@@ -117,7 +119,7 @@ class _FormItemPageState extends State<FormItemPage> {
       print('PUT');
       print('################');
 
-      print(host + endpoint + '/${item.id.toString()}');
+      
 
       response = await dio.put(
         host + endpoint + '/${item.id.toString()}',
@@ -163,16 +165,24 @@ class _FormItemPageState extends State<FormItemPage> {
     print(p);
     print(p.latitude);
 
+    setState(() {
+      position = p;
+    });
+
+
   }
 
   @override
   void initState() {
     super.initState();
     getLocation();
+    print('position');
+    print(position);
     void_getJWT().then((jwt) {
       setState(() {
         this.jwt = jwt;
       });
+      
       // this.getData();
     });
   }
@@ -182,12 +192,16 @@ class _FormItemPageState extends State<FormItemPage> {
 
     item = ModalRoute.of(context).settings.arguments;
     
-    if(item is String && isSwitched == null){
+    if(item is String){
       setState(() {
         isSwitched = item == "arte" ? true : false;
         edit = false;
       });
-
+      if(isSwitched == null){
+        setState(() {
+          edit = false;
+        });
+      }
     }
 
     if (loading) {

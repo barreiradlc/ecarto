@@ -1,7 +1,9 @@
 import 'package:ecarto/Construtores/ItemsConstructor.dart';
 import 'package:ecarto/Recursos/Api.dart';
+import 'package:ecarto/Widgets/Distancia.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 import 'dart:async';
 import 'dart:convert';
@@ -19,15 +21,56 @@ class Artes extends StatefulWidget {
 
 class ArteState extends State<Artes> {
   bool loading = true;
+  var position;
+
+  getLocation() async {
+    var p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print('position');
+    print(p);
+    print(p.latitude);
+
+    setState(() {
+      position = p;
+    });
+
+    return p;
+  }
+
+  getDistancia(arte) async {
+    print('arte');
+    print(arte['latitude']);
+    print(arte['longitude']);
+
+    print(position.latitude);
+    print(position.longitude);
+
+    var startLat = double.parse(arte['latitude']);
+    var startLong = double.parse(arte['longitude']);
+
+    var endLat = position.latitude;
+    var endLong = position.longitude;
+
+    double distanceInMeters = await Geolocator()
+        .distanceBetween(startLat, startLong, endLat, endLong);
+
+    print('DISTANCIA');
+    return distanceInMeters.toInt();
+  }
 
   @override
   void initState() {
     super.initState();
-    if (mounted) {
-      setState(() {
-        loading = false;
-      });
-    }
+
+      getLocation();      
+      if (mounted) {
+      
+        setState(() {
+          loading = false;
+        });
+      
+      }
   }
 
   @override
@@ -48,27 +91,41 @@ class ArteState extends State<Artes> {
         //   title: Text(title),
         // ),
         body: GridView.count(
-          padding: EdgeInsets.only(top: 25),
+            padding: EdgeInsets.only(top: 25),
             // crossAxisCount is the number of columns
             crossAxisCount: 2,
             // This creates two columns with two items in each column
             children: List.generate(widget.artes.length, (index) {
               var bg;
+              var distancia = '';
+              var load = true;
 
               // if (widget.artes[index]['avatar'] != null) {
               //   if (widget.artes[index]['avatar']['url'] == null) {
               //     bg = AssetImage("assets/logo.png");
               //   } else {
-              //     bg =
-              //         NetworkImage(host + widget.artes[index]['avatar']['url']);
+              //     bg = NetworkImage(host + widget.artes[index]['avatar']['url']);
               //   }
               // } else {
               //   bg = AssetImage("assets/logo.png");
               // }
+
+
               
+              
+
               bg = AssetImage("assets/logo.png");
 
+              // if(load){
+              //   return Container(
+              //     child: Center(child: 
+              //       LinearProgressIndicator()
+              //     ,),
+              //   );
+              // }
+
               if (widget.artes[index]['nature'] == 'ARTE') {
+
                 return new Container(
                     margin: EdgeInsets.all(5),
                     child: RaisedButton(
@@ -127,16 +184,27 @@ class ArteState extends State<Artes> {
                                           ),
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        Container(
-                                          child: Text(
-                                            'R\$ ${widget.artes[index]['price'].toString()}',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black87),
-                                          ),
-                                          padding: const EdgeInsets.all(20),
-                                        ),
+                                        Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: 
+                                                Distancia(widget.artes[index], position),
+                                              padding: const EdgeInsets.only(left: 20, bottom:5),
+                                            ),
+                                            Container(
+                                              child: Text(
+                                                'R\$ ${widget.artes[index]['price'].toString()}',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black87),
+                                              ),
+                                              padding: const EdgeInsets.only(left: 20, bottom:15),
+                                            ),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   )
@@ -146,6 +214,7 @@ class ArteState extends State<Artes> {
                             ))));
               } else {
                 print('alou');
+                
               }
             }))
 

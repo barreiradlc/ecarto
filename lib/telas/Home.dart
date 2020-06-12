@@ -2,13 +2,12 @@ import 'dart:convert';
 
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_html/prefer_universal/html.dart' as web;
 
 import './Tabs.dart';
-
-import 'package:universal_html/prefer_universal/html.dart' as web;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math' as math;
 import '../Funcoes/UserData.dart';
 
 class Home extends StatelessWidget {
@@ -34,11 +33,19 @@ class CollapsingList extends State<HomeState> {
 
   var myPref = web.window.localStorage['mypref'];
 
+  getLocation() async {
+    var p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print('p');
+    print(p);
+    print(p.latitude);
+    return p;
+  }
+
   getData() async {
-    
-    void_getJWT()
-      .then((jwt) async{
-        
+    getLocation().then((location) {
+      void_getJWT().then((jwt) async {
         final authJwt = await SharedPreferences.getInstance();
 
         String token = await authJwt.getString("jwt");
@@ -49,12 +56,25 @@ class CollapsingList extends State<HomeState> {
         print(login);
         print(id);
 
+        // longitude=long&latitude=lat&radius=20
+        var long = location.latitude;
+        var lat = location.longitude;
 
-        var responseArtes = await http.get(Uri.encodeFull(host + '/arte'),
+        print(lat);
+        print(long);
+
+        var responseArtes = await http.get(
+            Uri.encodeFull(
+                host + '/arte?longitude=$long&latitude=$lat&radius=20'),
+            headers: {"Authorization": token}); 
+
+        var responseMateriais = await http.get(
+            Uri.encodeFull(
+                host + '/material?longitude=$long&latitude=$lat&radius=20'),
             headers: {"Authorization": token});
 
-        var responseMateriais = await http.get(Uri.encodeFull(host + '/material'),
-            headers: {"Authorization": token});
+        print('url');
+        print(host + '/material?longitude=$long&latitude=$lat&radius=20');
 
         setState(() {
           this.token = token;
@@ -64,11 +84,16 @@ class CollapsingList extends State<HomeState> {
           materiais = jsonDecode(responseMateriais.body);
           loading = false;
         });
-
       })
       .catchError((err) {
-
+        print('erro em jwt');
+        print(err);
       });
+    })
+    .catchError((err) {
+      print('erro em location');
+      print(err);
+    });
   }
 
   @override
@@ -82,7 +107,7 @@ class CollapsingList extends State<HomeState> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    
+
     if (loading) {
       return Center(
         child: CircularProgressIndicator(),
@@ -91,7 +116,6 @@ class CollapsingList extends State<HomeState> {
 
     return CustomScrollView(
       slivers: <Widget>[
-
         SliverFixedExtentList(
           itemExtent: height,
           delegate: SliverChildListDelegate(

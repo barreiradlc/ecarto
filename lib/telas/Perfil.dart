@@ -135,7 +135,7 @@ class _PerfilState extends State<Perfil> {
             child: new Container(
               decoration: BoxDecoration(
                 color: Colors.blue.withOpacity(0.9),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                borderRadius: BorderRadius.   all(Radius.circular(50.0)),
               ),
             )),
         new Scaffold(

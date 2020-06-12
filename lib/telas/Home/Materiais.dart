@@ -1,6 +1,8 @@
 import 'package:ecarto/Construtores/ItemsConstructor.dart';
 import 'package:ecarto/Recursos/Api.dart';
+import 'package:ecarto/Widgets/Distancia.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:async';
@@ -19,15 +21,32 @@ class Materiais extends StatefulWidget {
 
 class MateriaiState extends State<Materiais> {
   bool loading = true;
+  var position;
+
+getLocation() async {
+    var p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print('position');
+    print(p);
+    print(p.latitude);
+
+    setState(() {
+      position = p;
+    });
+
+    return p;
+  }
 
   @override
   void initState() {
     super.initState();
-    if (mounted) {
-      setState(() {
-        loading = false;
-      });
-    }
+      getLocation();
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
   }
 
   @override
@@ -121,16 +140,27 @@ class MateriaiState extends State<Materiais> {
                                         ),
                                         padding: const EdgeInsets.all(2),
                                       ),
-                                      Container(
-                                        child: Text(
-                                          'R\$ ${widget.materiais[index]['price'].toString()}',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                      ),
+                                       Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: 
+                                                Distancia(widget.materiais[index], position),
+                                              padding: const EdgeInsets.only(left: 20, bottom:5),
+                                            ),
+                                            Container(
+                                              child: Text(
+                                                'R\$ ${widget.materiais[index]['price'].toString()}',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black87),
+                                              ),
+                                              padding: const EdgeInsets.only(left: 20, bottom:15),
+                                            ),
+                                          ],
+                                        )
                                     ],
                                   ),
                                 )
