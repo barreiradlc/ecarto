@@ -159,7 +159,7 @@ class _FormItemPageState extends State<FormItemPage> {
   }
 
   getLocation() async{
-    var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     print('p');
     print(p);

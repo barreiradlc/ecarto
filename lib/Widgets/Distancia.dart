@@ -33,6 +33,8 @@ class _DistanciaState extends State<Distancia> {
         .distanceBetween(startLat, startLong, endLat, endLong);
 
     print('DISTANCIA');
+    print(distanceInMeters);
+    print('DISTANCIA');
     return distanceInMeters.toInt();
   }
 

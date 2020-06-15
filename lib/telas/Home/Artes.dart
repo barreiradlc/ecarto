@@ -25,7 +25,7 @@ class ArteState extends State<Artes> {
 
   getLocation() async {
     var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     print('position');
     print(p);
