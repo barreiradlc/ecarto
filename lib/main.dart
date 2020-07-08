@@ -80,8 +80,11 @@ class MyApp extends State<Geral> {
 
     return GetMaterialApp(
       color: Colors.lightBlue,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+      theme: ThemeData(     
+           
+        primaryColor: Color(0xff00999b),                
+        accentColor: Color(0xffb3e848),
+        
         // See https://github.com/flutter/flutter/wiki/Desktop-shells#fonts
         fontFamily: 'Roboto',
       ),

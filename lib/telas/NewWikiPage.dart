@@ -239,7 +239,7 @@ class _FormWikiPageState extends State<FormWikiPage> {
                 ),
           // alignment: Alignment(1.0, 1.0),
           RaisedButton(
-              color: Colors.green,
+              color: Theme.of(context).primaryColor,
               padding: EdgeInsets.all(5),
               onPressed: req,
               child: Center(

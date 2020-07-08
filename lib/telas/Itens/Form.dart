@@ -192,13 +192,17 @@ class _FormItemPageState extends State<FormItemPage> {
 
     item = ModalRoute.of(context).settings.arguments;
     
+
+    print('isSwitched');
+    print(isSwitched);
+
     if(item is String){
-      setState(() {
-        isSwitched = item == "arte" ? true : false;
-        edit = false;
-      });
+      // setState(() {
+      // });
+
       if(isSwitched == null){
         setState(() {
+        isSwitched = item == "arte" ? true : false;        
           edit = false;
         });
       }
@@ -242,17 +246,17 @@ class _FormItemPageState extends State<FormItemPage> {
 
     return Theme(
         data: new ThemeData(
-          primaryColor: isSwitched ? Colors.green : Colors.blue,
-          // primaryColorDark: isSwitched ? Colors.green : Colors.blue,
+          primaryColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+          // primaryColorDark: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
         ),
         child: Scaffold(
             appBar: AppBar(
-              title: Text(isSwitched ? labelArte : labelMaterial),
-              backgroundColor: isSwitched ? Colors.green : Colors.blue,
+              title: Text(isSwitched ? labelArte : labelMaterial, style: TextStyle(color: Colors.white)),              
+              backgroundColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             ),
 
-            // primary: : isSwitched ? Colors.green : Colors.blue,
-            // backgroundColor: isSwitched ? Colors.green : Colors.blue,
+            // primary: : isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+            // backgroundColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             body: 
             AnimatedContainer(
               duration: Duration(seconds: 3),
@@ -377,8 +381,8 @@ class _FormItemPageState extends State<FormItemPage> {
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                          cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                           controller: nome,
 
                           // obscureText: true,
@@ -401,11 +405,11 @@ class _FormItemPageState extends State<FormItemPage> {
                           controller: descricao,
                           // obscureText: true,
                           decoration: InputDecoration(
-                            // fillColor: isSwitched ? Colors.green : Colors.blue,
+                            // fillColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                             filled: true,
-                            focusColor: isSwitched ? Colors.green : Colors.blue,
-                            // hoverColor: isSwitched ? Colors.green : Colors.blue,
-                            // hoverColor: isSwitched ? Colors.green : Colors.blue,
+                            focusColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                            // hoverColor: isSwitched ? Theme.of(context).primaryColor : Them e.of(context).accentColor,
+                            // hoverColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
 
                             // disabledBorder: InputBorder.none ,
                             fillColor: Colors.white,
@@ -429,7 +433,7 @@ class _FormItemPageState extends State<FormItemPage> {
                                 style: TextStyle(
                                     color: isSwitched
                                         ? Colors.black38
-                                        : Colors.blue)),
+                                        : Theme.of(context).accentColor)),
                             Switch(
                               value: isSwitched,
                               onChanged: (value) {
@@ -442,16 +446,16 @@ class _FormItemPageState extends State<FormItemPage> {
                                   isSwitched = value;
                                 });
                               },
-                              activeTrackColor: Colors.lightGreenAccent,
-                              activeColor: Colors.green,
-                              inactiveTrackColor: Colors.lightBlueAccent,
-                              inactiveThumbColor: Colors.blue,
+                              activeTrackColor: Colors.lightBlue,
+                              activeColor: Theme.of(context).primaryColor,
+                              inactiveTrackColor: Colors.lightGreenAccent ,
+                              inactiveThumbColor: Theme.of(context).accentColor,
                             ),
                             Text(
                               "Arte",
                               style: TextStyle(
                                   color: isSwitched
-                                      ? Colors.green
+                                      ? Theme.of(context).primaryColor
                                       : Colors.black38),
                             ),
                           ],
@@ -459,8 +463,8 @@ class _FormItemPageState extends State<FormItemPage> {
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                          cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                           controller: preco,
 
                           // obscureText: true,
@@ -485,7 +489,7 @@ class _FormItemPageState extends State<FormItemPage> {
 
                     // alignment: Alignment(1.0, 1.0),
                     RaisedButton(
-                        color: isSwitched ? Colors.green : Colors.blue,
+                        color: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                         padding: EdgeInsets.all(15),
                         onPressed: req,
                         child: Center(
@@ -494,14 +498,14 @@ class _FormItemPageState extends State<FormItemPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Icon(
-                                Icons.add_circle_outline,
+                                Icons.add,
                                 color: Colors.white,
                               ),
                               Padding(
                                 padding: EdgeInsets.all(5),
                               ),
                               Text(isSwitched ? labelArte : labelMaterial,
-                                  style: TextStyle(color: Colors.white))
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
                             ],
                           ),
                         ))

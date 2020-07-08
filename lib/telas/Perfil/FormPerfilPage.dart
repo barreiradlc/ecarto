@@ -187,17 +187,17 @@ class FormPerfilPageState extends State<FormPerfilPage> {
 
     return Theme(
         data: new ThemeData(
-          primaryColor: Colors.blue,
-          // primaryColorDark: Colors.blue,
+          primaryColor: Theme.of(context).accentColor,
+          // primaryColorDark: Theme.of(context).accentColor,
         ),
         child: Scaffold(
             appBar: AppBar(
               title: Text('Editar Perfil'),
-              backgroundColor: Colors.blue,
+              backgroundColor: Theme.of(context).accentColor,
             ),
 
-            // primary: : Colors.blue,
-            // backgroundColor: Colors.blue,
+            // primary: : Theme.of(context).accentColor,
+            // backgroundColor: Theme.of(context).accentColor,
             body: ListView(
               children: <Widget>[
                 Container(
@@ -314,8 +314,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     // Container(
                     //     padding: EdgeInsets.only(bottom: 10),
                     //     child: TextField(
-                    //       // cursorColor: Colors.blue,
-                    //       cursorColor: Colors.blue,
+                    //       // cursorColor: Theme.of(context).accentColor,
+                    //       cursorColor: Theme.of(context).accentColor,
                     //       controller: username,
 
                     //       // obscureText: true,
@@ -332,8 +332,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     // Container(
                     //     padding: EdgeInsets.only(bottom: 10),
                     //     child: TextField(
-                    //       // cursorColor: Colors.blue,
-                    //       cursorColor: Colors.blue,
+                    //       // cursorColor: Theme.of(context).accentColor,
+                    //       cursorColor: Theme.of(context).accentColor,
                     //       controller: name,
 
                     //       // obscureText: true,
@@ -357,11 +357,11 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     //       controller: about,
                     //       // obscureText: true,
                     //       decoration: InputDecoration(
-                    //         // fillColor: Colors.blue,
+                    //         // fillColor: Theme.of(context).accentColor,
                     //         filled: true,
-                    //         focusColor: Colors.blue,
-                    //         // hoverColor: Colors.blue,
-                    //         // hoverColor: Colors.blue,
+                    //         focusColor: Theme.of(context).accentColor,
+                    //         // hoverColor: Theme.of(context).accentColor,
+                    //         // hoverColor: Theme.of(context).accentColor,
 
                     //         // disabledBorder: InputBorder.none ,
                     //         fillColor: Colors.white,
@@ -393,8 +393,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     // Container(
                     //     padding: EdgeInsets.only(bottom: 10),
                     //     child: TextField(
-                    //       // cursorColor: Colors.blue,
-                    //       cursorColor: Colors.blue,
+                    //       // cursorColor: Theme.of(context).accentColor,
+                    //       cursorColor: Theme.of(context).accentColor,
                     //       controller: phone,
 
                     //       // obscureText: true,
@@ -411,8 +411,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     // Container(
                     //     padding: EdgeInsets.only(bottom: 10),
                     //     child: TextField(
-                    //       // cursorColor: Colors.blue,
-                    //       cursorColor: Colors.blue,
+                    //       // cursorColor: Theme.of(context).accentColor,
+                    //       cursorColor: Theme.of(context).accentColor,
                     //       controller: phone,
 
                     //       // obscureText: true,
@@ -428,7 +428,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     //     )),
                     // alignment: Alignment(1.0, 1.0),
                     RaisedButton(
-                        color: Colors.blue,
+                        color: Theme.of(context).accentColor,
                         padding: EdgeInsets.all(15),
                         onPressed: req,
                         child: Center(
@@ -488,8 +488,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     : TextInputType.text,
                 maxLines: null,
                 minLines: lines != null ? lines : 1,
-                // cursorColor: Colors.blue,
-                cursorColor: Colors.blue,
+                // cursorColor: Theme.of(context).accentColor,
+                cursorColor: Theme.of(context).accentColor,
                 controller: type,
 
                 // obscureText: true,

@@ -92,7 +92,7 @@ class _MyCustomFormState extends State<Cadastro> {
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.topCenter,
                 // padding: new EdgeInsets.all(2.0),
-                color: Colors.green,
+                color: Theme.of(context).primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.all(0),
                   child: Image.asset(
@@ -154,7 +154,7 @@ class _MyCustomFormState extends State<Cadastro> {
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: RaisedButton(
                       onPressed: cadastroReq,
-                      color: Colors.green,
+                      color: Theme.of(context).primaryColor,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text('Cadastrar',

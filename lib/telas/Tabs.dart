@@ -34,7 +34,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
   bool _activeTabIndex = true;
   bool loading = true;
-  var bg = AssetImage("assets/logo.png");
+  var bg = AssetImage("assets/logo-bg.png");
   var materiais;
   var artes;
   String username = '';
@@ -78,12 +78,12 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
           DrawerHeader(
             child: Text("Bem Vindo(a): ${widget.login}"),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).accentColor,
               image: DecorationImage(
                 image: bg,
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                    Colors.black.withOpacity(0.2), BlendMode.color),
               ),
             ),
           ),
@@ -123,7 +123,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
         data: ThemeData(
             secondaryHeaderColor: Colors.white,
             accentColor: Colors.white,
-            primaryColor: _activeTabIndex ? Colors.green : Colors.blue),
+            primaryColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor),
         child: Scaffold(
           drawer: drawerScaff,
           appBar: AppBar(
@@ -136,7 +136,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             // When the user presses the button, show an alert dialog containing
             // the text that the user has entered into the text field.
             foregroundColor: Colors.white,
-            backgroundColor: _activeTabIndex ? Colors.green : Colors.blue,
+            backgroundColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             onPressed: () {
               Navigator.pushNamed(context, '/itens/form', arguments: _activeTabIndex ? "arte" : "material");
             },
@@ -163,7 +163,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
         ));
 
     // return Theme(
-    //     data: ThemeData(primaryColor: _activeTabIndex == 1 ? Colors.green : Colors.blue),
+    //     data: ThemeData(primaryColor: _activeTabIndex == 1 ? Theme.of(context).primaryColor : Theme.of(context).accentColor),
     //     child: DefaultTabController(
     //         length: 2,
     //         child: Scaffold(

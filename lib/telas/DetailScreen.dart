@@ -71,7 +71,7 @@ class Details extends State<DetailScreen> {
               child: Container(
                   height: 200.0,
                   width: MediaQuery.of(context).size.width,
-                  color: Colors.green,
+                  color: Theme.of(context).primaryColor,
                   child: thumb),
             ),
             Padding(
@@ -119,7 +119,7 @@ class Details extends State<DetailScreen> {
               height: 50,
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
-                color: Colors.greenAccent,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
@@ -146,7 +146,7 @@ class Details extends State<DetailScreen> {
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Colors.blue[300],
+                    color: Theme.of(context).accentColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(12),
                       bottomRight: Radius.circular(12),

@@ -138,7 +138,7 @@ class WikiState extends State<Wikis> {
       //     // When the user presses the button, show an alert dialog containing
       //     // the text that the user has entered into the text field.
       //     foregroundColor: Colors.white,
-      //     backgroundColor: Colors.green,
+      //     backgroundColor: Theme.of(context).primaryColor,
       //     onPressed: () {Navigator.pushNamed(context, '/wiki/form');},
       //     tooltip: 'Criar Wiki',
       //     child: Icon(Icons.add),

@@ -114,7 +114,7 @@ class ArteState extends State<Artes> {
               
               
 
-              bg = AssetImage("assets/logo.png");
+              bg = AssetImage("assets/logo-gray.png");
 
               // if(load){
               //   return Container(
@@ -149,8 +149,10 @@ class ArteState extends State<Artes> {
                           print('pokebola vai');
                         },
                         child: Container(
+                            padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               image: DecorationImage(
+                                scale: 0.25,
                                 image: bg,
                                 fit: BoxFit.cover,
                                 colorFilter: new ColorFilter.mode(
@@ -222,7 +224,7 @@ class ArteState extends State<Artes> {
         //   // When the user presses the button, show an alert dialog containing
         //   // the text that the user has entered into the text field.
         //   foregroundColor: Colors.white,
-        //   backgroundColor: Colors.green,
+        //   backgroundColor: Theme.of(context).primaryColor,
         //   onPressed: () {
         //     Navigator.pushNamed(context, '/itens/form', arguments: "arte");
         //   },

@@ -148,17 +148,17 @@ class FormPerfilPageState extends State<FormPerfilPage> {
 
     return Theme(
         data: new ThemeData(
-          primaryColor: isSwitched ? Colors.green : Colors.blue,
-          // primaryColorDark: isSwitched ? Colors.green : Colors.blue,
+          primaryColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+          // primaryColorDark: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
         ),
         child: Scaffold(
             appBar: AppBar(
               title: Text(isSwitched ? labelArte : labelMaterial),
-              backgroundColor: isSwitched ? Colors.green : Colors.blue,
+              backgroundColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             ),
 
-            // primary: : isSwitched ? Colors.green : Colors.blue,
-            // backgroundColor: isSwitched ? Colors.green : Colors.blue,
+            // primary: : isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+            // backgroundColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             body: ListView(
               children: <Widget>[
                 Container(
@@ -269,8 +269,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                          cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                           controller: nome,
 
                           // obscureText: true,
@@ -293,11 +293,11 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                           controller: descricao,
                           // obscureText: true,
                           decoration: InputDecoration(
-                            // fillColor: isSwitched ? Colors.green : Colors.blue,
+                            // fillColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                             filled: true,
-                            focusColor: isSwitched ? Colors.green : Colors.blue,
-                            // hoverColor: isSwitched ? Colors.green : Colors.blue,
-                            // hoverColor: isSwitched ? Colors.green : Colors.blue,
+                            focusColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                            // hoverColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                            // hoverColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
 
                             // disabledBorder: InputBorder.none ,
                             fillColor: Colors.white,
@@ -321,7 +321,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                                 style: TextStyle(
                                     color: isSwitched
                                         ? Colors.black38
-                                        : Colors.blue)),
+                                        : Theme.of(context).accentColor)),
                             Switch(
                               value: isSwitched,
                               
@@ -337,15 +337,15 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                                 });
                               },
                               activeTrackColor: Colors.lightGreenAccent,
-                              activeColor: Colors.green,
+                              activeColor: Theme.of(context).primaryColor,
                               inactiveTrackColor: Colors.lightBlueAccent,
-                              inactiveThumbColor: Colors.blue,
+                              inactiveThumbColor: Theme.of(context).accentColor,
                             ),
                             Text(
                               "Arte",
                               style: TextStyle(
                                   color: isSwitched
-                                      ? Colors.green
+                                      ? Theme.of(context).primaryColor
                                       : Colors.black38),
                             ),
                           ],
@@ -353,8 +353,8 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     Container(
                         padding: EdgeInsets.only(bottom: 10),
                         child: TextField(
-                          // cursorColor: isSwitched ? Colors.green : Colors.blue,
-                          cursorColor: isSwitched ? Colors.green : Colors.blue,
+                          // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                          cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                           controller: preco,
 
                           // obscureText: true,
@@ -379,7 +379,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
 
                     // alignment: Alignment(1.0, 1.0),
                     RaisedButton(
-                        color: isSwitched ? Colors.green : Colors.blue,
+                        color: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
                         padding: EdgeInsets.all(15),
                         onPressed: req,
                         child: Center(

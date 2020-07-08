@@ -108,7 +108,7 @@ class _MyCustomFormState extends State<Login> {
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.topCenter,
               // padding: new EdgeInsets.all(2.0),
-              color: Colors.green,
+              color: Theme.of(context).primaryColor,
               child: Padding(
                 padding: const EdgeInsets.all(0),
                 child: Image.asset(
@@ -160,7 +160,7 @@ class _MyCustomFormState extends State<Login> {
                     padding: const EdgeInsets.all(5.0),
                     child: RaisedButton(
                       onPressed: getReq,
-                      color: Colors.green,
+                      color: Theme.of(context).primaryColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 25),

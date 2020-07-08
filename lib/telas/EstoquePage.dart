@@ -83,7 +83,7 @@ class _EstoquePageState extends State<EstoquePage> {
 
                 // alignment: Alignment(1.0, 1.0),
                 RaisedButton(
-                    color: Colors.green,
+                    color: Theme.of(context).primaryColor,
                     padding: EdgeInsets.all(5),
                     onPressed: add,
                     child: Center(
@@ -189,7 +189,7 @@ class _EstoquePageState extends State<EstoquePage> {
                                     Text(
                                       this.estoque[index].age.toString() +
                                           " Disponíveis",
-                                      style: TextStyle(color: Colors.green)
+                                      style: TextStyle(color: Theme.of(context).primaryColor)
                                     ),
                                     IconButton(
                                       padding: EdgeInsets.all(2),
@@ -213,7 +213,7 @@ class _EstoquePageState extends State<EstoquePage> {
           // When the user presses the button, show an alert dialog containing
           // the text that the user has entered into the text field.
           foregroundColor: Colors.white,
-          backgroundColor: Colors.green,
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () => formDialogModal(null, 'new'),
           tooltip: 'Cadastre algo em seu estoque!',
           child: Icon(Icons.add),
@@ -227,7 +227,7 @@ class _EstoquePageState extends State<EstoquePage> {
     return Scaffold(
         body: Container(
           child: Center(
-            child: CircularProgressIndicator(backgroundColor: Colors.blue,)
+            child: CircularProgressIndicator(backgroundColor: Theme.of(context).accentColor,)
           )
         )
     );

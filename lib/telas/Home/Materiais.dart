@@ -75,7 +75,7 @@ getLocation() async {
               //       host + widget.materiais[index]['avatar']['url']);
               // }
               
-              bg = AssetImage("assets/logo.png");
+              bg = AssetImage("assets/logo-gray.png");
 
               return new Container(
                   margin: EdgeInsets.all(5),
@@ -174,7 +174,7 @@ getLocation() async {
       //   // When the user presses the button, show an alert dialog containing
       //   // the text that the user has entered into the text field.
       //   foregroundColor: Colors.white,
-      //   backgroundColor: Colors.blue,
+      //   backgroundColor: Theme.of(context).accentColor,
       //   onPressed: () {
       //     Navigator.pushNamed(context, '/itens/form', arguments: "material");
       //   },

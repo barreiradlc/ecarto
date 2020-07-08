@@ -116,7 +116,7 @@ class _PerfilState extends State<Perfil> {
     return new Stack(
       children: <Widget>[
         new Container(
-          color: Colors.blue,
+          color: Theme.of(context).accentColor,
         ),
         imgUrl != ''
             ? new Image.network(
@@ -134,7 +134,7 @@ class _PerfilState extends State<Perfil> {
             ),
             child: new Container(
               decoration: BoxDecoration(
-                color: Colors.blue.withOpacity(0.9),
+                color: Theme.of(context).accentColor.withOpacity(0.9),
                 borderRadius: BorderRadius.   all(Radius.circular(50.0)),
               ),
             )),
@@ -272,7 +272,7 @@ class _PerfilState extends State<Perfil> {
                                 new Text('SEGUIR')
                               ],
                             )),
-                            color: Colors.blue[50],
+                            color: Theme.of(context).accentColor,
                           ),
                         )
                       : Padding(
@@ -304,7 +304,7 @@ class _PerfilState extends State<Perfil> {
                                 new Text('EDITAR PERFIL')
                               ],
                             )),
-                            color: Colors.blue[50],
+                            color: Theme.of(context).accentColor,
                           ),
                         ),
                 ],
