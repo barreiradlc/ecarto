@@ -135,12 +135,13 @@ class _PerfilState extends State<Perfil> {
             child: new Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).accentColor.withOpacity(0.9),
-                borderRadius: BorderRadius.   all(Radius.circular(50.0)),
+                borderRadius: BorderRadius.all(Radius.circular(50.0)),
               ),
             )),
         new Scaffold(
             appBar: new AppBar(
-              title: new Text('Perfil'),
+              iconTheme: new IconThemeData(color: Colors.white),
+              title: new Text('Perfil', style: TextStyle(color: Colors.white)),
               centerTitle: false,
               elevation: 0.0,
               backgroundColor: Colors.transparent,
@@ -163,8 +164,7 @@ class _PerfilState extends State<Perfil> {
                               // profile['avatar']['url'] != null
                               //     ? profile['avatar']['url']
                               //     : imgUrl
-                              imgUrl
-                                  ),
+                              imgUrl),
                         )
                       : Container(
                           height: 205,
@@ -172,7 +172,7 @@ class _PerfilState extends State<Perfil> {
                           // child: CircularProgressIndicator(
                           //   strokeWidth: 5,
                           // )
-                          ),
+                        ),
                   new SizedBox(
                     height: _height / 25.0,
                   ),
@@ -193,7 +193,11 @@ class _PerfilState extends State<Perfil> {
                   Padding(
                     padding: EdgeInsets.all(5),
                   ),
-                  Divider(color: Colors.white, height: 30, thickness: 5, ),
+                  Divider(
+                    color: Colors.white,
+                    height: 30,
+                    thickness: 5,
+                  ),
                   new Text(
                     profile['email'] != null ? profile['email'] : "",
                     style: new TextStyle(
@@ -248,7 +252,7 @@ class _PerfilState extends State<Perfil> {
                   ),
                   new Row(
                     children: <Widget>[
-                      rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L' ),
+                      rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L'),
                       rowCell(status[1]['Artes'], 'ARTE', 'S', '')
                     ],
                   ),
@@ -294,16 +298,20 @@ class _PerfilState extends State<Perfil> {
                                   ));
                             },
                             child: new Container(
+                                
+                                padding: EdgeInsets.only(top: 40),
                                 child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                new Icon(Icons.person),
-                                new SizedBox(
-                                  width: _width / 30,
-                                ),
-                                new Text('EDITAR PERFIL')
-                              ],
-                            )),
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    new Icon(Icons.person, color: Colors.white),
+                                    new SizedBox(   
+                                      width: _width / 30,
+                                    ),
+                                    new Text('EDITAR PERFIL',
+                                        style: TextStyle(color: Colors.white))
+                                  ],
+                                )),
                             color: Theme.of(context).accentColor,
                           ),
                         ),
@@ -314,14 +322,15 @@ class _PerfilState extends State<Perfil> {
     );
   }
 
-  Widget rowCell(int count, String type, String sufixoP,  String sufixoS) => new Expanded(
+  Widget rowCell(int count, String type, String sufixoP, String sufixoS) =>
+      new Expanded(
           child: new Column(
         children: <Widget>[
           new Text(
             '$count',
             style: new TextStyle(color: Colors.white),
           ),
-          new Text('$type${count > 1 ? sufixoP : sufixoS }',
+          new Text('$type${count > 1 ? sufixoP : sufixoS}',
               style: new TextStyle(
                   color: Colors.white, fontWeight: FontWeight.normal))
         ],

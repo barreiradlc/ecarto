@@ -37,11 +37,11 @@ class _MyCustomFormState extends State<Login> {
 
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  // final myController = TextEditingController(text: 'augustodasilva53@gmail.com');
-  // final myController2 = TextEditingController(text: '123123');
+  final myController = TextEditingController(text: '');
+  final myController2 = TextEditingController(text: '');
 
-  final myController = TextEditingController(text: 'test4567@example.com');
-  final myController2 = TextEditingController(text: 'password');
+  // final myController = TextEditingController(text: 'test4567@example.com');
+  // final myController2 = TextEditingController(text: 'password');
 
   alertAviso(msg) {
     return showDialog(
@@ -104,18 +104,21 @@ class _MyCustomFormState extends State<Login> {
           Transform.scale(
             scale: 1,
             child: Container(
-              height: MediaQuery.of(context).size.height / 4,
+              padding: const EdgeInsets.only(top: 60),
+              height: MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.topCenter,
               // padding: new EdgeInsets.all(2.0),
-              color: Theme.of(context).primaryColor,
-              child: Padding(
-                padding: const EdgeInsets.all(0),
-                child: Image.asset(
-                  'assets/logo.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
+              // color: Colors.white,              
+                
+                child: Hero(
+                  tag: "LogoHome",
+                  child: Image.asset(
+                    'assets/logo.png',
+                    fit: BoxFit.contain,
+                  )
+                )
+              
             ),
           ),
           //
@@ -159,14 +162,14 @@ class _MyCustomFormState extends State<Login> {
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: RaisedButton(
-                      onPressed: getReq,
-                      color: Theme.of(context).primaryColor,
+                      onPressed: getReq,                      
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 10, horizontal: 25),
                         child: Text('Login',
                             style:
-                                TextStyle(fontSize: 20, color: Colors.white)),
+                                TextStyle(fontSize: 20, color: Theme.of(context).primaryColor )),
                       ),
                     ),
                   ),
@@ -187,9 +190,9 @@ class _MyCustomFormState extends State<Login> {
               color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text(
+                child: Text(                  
                     'Ainda não tem uma conta? Clique aqui para registrar-se',
-                    style: TextStyle(fontSize: 10)),
+                    style: TextStyle(fontSize: 10,color: Theme.of(context).primaryColor)),
               ),
             ),
           ),

@@ -127,6 +127,11 @@ class ArteState extends State<Artes> {
               if (widget.artes[index]['nature'] == 'ARTE') {
 
                 return new Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0)                        
+                      )
+                    ),
                     margin: EdgeInsets.all(5),
                     child: RaisedButton(
                         padding: EdgeInsets.all(0),
@@ -152,11 +157,11 @@ class ArteState extends State<Artes> {
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                scale: 0.25,
+                                // scale: 0.25,
                                 image: bg,
                                 fit: BoxFit.cover,
                                 colorFilter: new ColorFilter.mode(
-                                    Colors.lightBlue.withOpacity(0.6),
+                                    Colors.green.withOpacity(0.8),
                                     BlendMode.srcOver),
                               ),
                             ),
@@ -182,7 +187,7 @@ class ArteState extends State<Artes> {
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.black),
+                                                color: Theme.of(context).accentColor),
                                           ),
                                           padding: const EdgeInsets.all(2),
                                         ),
@@ -201,7 +206,8 @@ class ArteState extends State<Artes> {
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.black87),
+                                                    color: Theme.of(context).accentColor
+                                                ),
                                               ),
                                               padding: const EdgeInsets.only(left: 20, bottom:15),
                                             ),

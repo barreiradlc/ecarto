@@ -16,27 +16,27 @@ class Cadastro extends StatefulWidget {
 class _MyCustomFormState extends State<Cadastro> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final usuarioCred = TextEditingController(text: 'gustin');
-  final emailCred = TextEditingController(text: 'augustodasilva53@gmail.com');
-  final senhaCred = TextEditingController(text: '123123');
-  final senhaConfirmaCred = TextEditingController(text: '123123');
+  final usuarioCred = TextEditingController(text: '');
+  final emailCred = TextEditingController(text: '');
+  final senhaCred = TextEditingController(text: '');
+  final senhaConfirmaCred = TextEditingController(text: '');
+  
+  // final usuarioCred = TextEditingController(text: 'gustin');
+  // final emailCred = TextEditingController(text: 'augustodasilva53@gmail.com');
+  // final senhaCred = TextEditingController(text: '123123');
+  // final senhaConfirmaCred = TextEditingController(text: '123123');
 
   Future cadastroReq() async {
-    register(
-      usuarioCred.text, 
-      emailCred.text, 
-      senhaCred.text,
-      senhaConfirmaCred.text)        
-      .then((res) {
+    register(usuarioCred.text, emailCred.text, senhaCred.text,
+            senhaConfirmaCred.text)
+        .then((res) {
       if (res['errors'] != null) {
-
         print(res);
 
         var index = 1;
-        res['errors']
-            .forEach((item) async => Get.snackbar("Erro", item,
-                margin: EdgeInsets.only(top: 50.0 * ++index),
-                animationDuration: Duration(seconds: 1 * ++index)));
+        res['errors'].forEach((item) async => Get.snackbar("Erro", item,
+            margin: EdgeInsets.only(top: 50.0 * ++index),
+            animationDuration: Duration(seconds: 1 * ++index)));
 
         return Get.back();
       } else {
@@ -80,31 +80,36 @@ class _MyCustomFormState extends State<Cadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Cadastro'),
-        ),
+        // appBar: AppBar(
+        //   iconTheme: new IconThemeData(color: Colors.white),
+        //   title: Text('Cadastro', style: TextStyle(color: Colors.white)),
+        // ),
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Transform.scale(
               scale: 1,
               child: Container(
-                height: MediaQuery.of(context).size.height / 4,
+                padding: const EdgeInsets.only(top: 60),
+                height: MediaQuery.of(context).size.height / 3,
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.topCenter,
                 // padding: new EdgeInsets.all(2.0),
-                color: Theme.of(context).primaryColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
+                
+                child: Hero(
+                  tag: "LogoHome",
                   child: Image.asset(
                     'assets/logo.png',
                     fit: BoxFit.contain,
-                  ),
-                ),
+                  )
+                )
+              
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 45),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -112,7 +117,11 @@ class _MyCustomFormState extends State<Cadastro> {
                       controller: usuarioCred,
                       obscureText: false,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
+                        ),
                         labelText: 'Usuário',
                       ),
                     ),
@@ -123,7 +132,11 @@ class _MyCustomFormState extends State<Cadastro> {
                       controller: emailCred,
                       obscureText: false,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
+                        ),
                         labelText: 'E-mail',
                       ),
                     ),
@@ -134,7 +147,11 @@ class _MyCustomFormState extends State<Cadastro> {
                       controller: senhaCred,
                       obscureText: true,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
+                        ),
                         labelText: 'Senha',
                       ),
                     ),
@@ -145,7 +162,11 @@ class _MyCustomFormState extends State<Cadastro> {
                       controller: senhaConfirmaCred,
                       obscureText: true,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(50.0),
+                          ),
+                        ),
                         labelText: 'Confirme sua senha',
                       ),
                     ),
@@ -153,34 +174,30 @@ class _MyCustomFormState extends State<Cadastro> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: RaisedButton(
-                      onPressed: cadastroReq,
-                      color: Theme.of(context).primaryColor,
+                      onPressed: cadastroReq,                      
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Text('Cadastrar',
                             style:
-                                TextStyle(fontSize: 20, color: Colors.white)),
+                                TextStyle(fontSize: 20, color: Theme.of(context).primaryColor,)),
                       ),
                     ),
                   ),
                   Divider(
-                    height: 40,
+                    height: 20,
                   ),
-                  Padding(
-                    // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                    padding: const EdgeInsets.only(bottom: 30.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                            'Já sou cadastrado, fazer login',
-                            style: TextStyle(fontSize: 10)),
-                      ),
-                    ),
+
+                  // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+
+                  RaisedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    color: Colors.white,
+                    
+                    child: Text('Já sou cadastrado, fazer login',
+                        style: TextStyle(fontSize: 10, color: Theme.of(context).primaryColor,)),
                   ),
                 ],
               ),

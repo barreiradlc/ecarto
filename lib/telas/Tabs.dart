@@ -26,15 +26,15 @@ class Tabs extends StatefulWidget {
 
 class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   final List<Tab> myTabs = <Tab>[
-    Tab(icon: Icon(Icons.brush), child: Text('Artes')),
-    Tab(icon: Icon(Icons.extension), child: Text('Materiais')),
+    Tab(icon: Icon(Icons.brush), child: Text('Artes', style: TextStyle(fontWeight: FontWeight.bold ),)),
+    Tab(icon: Icon(Icons.extension), child: Text('Materiais', style: TextStyle(fontWeight: FontWeight.bold),)),
   ];
 
   TabController _tabController;
 
   bool _activeTabIndex = true;
   bool loading = true;
-  var bg = AssetImage("assets/logo-bg.png");
+  var bg = AssetImage("assets/logo-white.png");
   var materiais;
   var artes;
   String username = '';
@@ -70,20 +70,21 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var drawerScaff = Drawer(
+    var drawerScaff = Drawer(      
       elevation: 3,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          DrawerHeader(            
             child: Text("Bem Vindo(a): ${widget.login}"),
             decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
+              color: Colors.white,
               image: DecorationImage(
                 image: bg,
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.2), BlendMode.color),
+                    _activeTabIndex ? Theme.of(context).primaryColor.withOpacity(0.5) : Theme.of(context).accentColor.withOpacity(0.5),
+                    BlendMode.color),
               ),
             ),
           ),
@@ -121,13 +122,19 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
     return Theme(
         data: ThemeData(
+
             secondaryHeaderColor: Colors.white,
             accentColor: Colors.white,
-            primaryColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor),
+            primaryColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor
+        ),
         child: Scaffold(
+
           drawer: drawerScaff,
           appBar: AppBar(
+            iconTheme: new IconThemeData(color: Colors.white),
             bottom: TabBar(
+              labelColor: Colors.white,
+              indicatorColor: Colors.white,
               controller: _tabController,
               tabs: myTabs,
             ),
@@ -186,7 +193,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
 Widget tabs() {
   return TabBar(
-    indicatorColor: Colors.white,
+    indicatorColor: Colors.green,
     onTap: (index) => {print('pokebola vai $index')},
     tabs: [
       // Tab(icon: Icon(Icons.collections_bookmark), child: Text('Wikis')),

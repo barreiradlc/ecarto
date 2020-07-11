@@ -35,7 +35,6 @@ class _FormItemPageState extends State<FormItemPage> {
   var labelMaterial = 'Novo Material';
   var position;
 
-
   File _image;
 
   var nome = TextEditingController(text: '');
@@ -71,8 +70,9 @@ class _FormItemPageState extends State<FormItemPage> {
   }
 
   Future req() async {
-    if(nome.text == ''){
-      return Get.snackbar("Erro", "Nome do Item é obrigatório!", snackPosition: SnackPosition.BOTTOM);
+    if (nome.text == '') {
+      return Get.snackbar("Erro", "Nome do Item é obrigatório!",
+          snackPosition: SnackPosition.BOTTOM);
     }
 
     Get.dialog(alertWidget(),
@@ -89,7 +89,7 @@ class _FormItemPageState extends State<FormItemPage> {
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
       'price': double.parse(preco.text),
-      'latitude':position.latitude,
+      'latitude': position.latitude,
       'longitude': position.longitude
       // 'avatar': await MultipartFile.fromFile(_image,   )
       // 'avatar': await MultipartFile.fromFile(_image.path,
@@ -119,8 +119,6 @@ class _FormItemPageState extends State<FormItemPage> {
       print('PUT');
       print('################');
 
-      
-
       response = await dio.put(
         host + endpoint + '/${item.id.toString()}',
         data: formData,
@@ -143,7 +141,8 @@ class _FormItemPageState extends State<FormItemPage> {
     Navigator.pop(context);
 
     if (res['id'] != null) {
-      Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!", snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!",
+          snackPosition: SnackPosition.BOTTOM);
       await Navigator.pushNamed(context, '/home');
     }
 
@@ -158,8 +157,9 @@ class _FormItemPageState extends State<FormItemPage> {
     // print(response.body);
   }
 
-  getLocation() async{
-    var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+  getLocation() async {
+    var p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     print('p');
     print(p);
@@ -168,8 +168,6 @@ class _FormItemPageState extends State<FormItemPage> {
     setState(() {
       position = p;
     });
-
-
   }
 
   @override
@@ -182,7 +180,7 @@ class _FormItemPageState extends State<FormItemPage> {
       setState(() {
         this.jwt = jwt;
       });
-      
+
       // this.getData();
     });
   }
@@ -191,27 +189,28 @@ class _FormItemPageState extends State<FormItemPage> {
     edit = true;
 
     item = ModalRoute.of(context).settings.arguments;
-    
 
     print('isSwitched');
     print(isSwitched);
 
-    if(item is String){
+    if (item is String) {
       // setState(() {
       // });
 
-      if(isSwitched == null){
+      if (isSwitched == null) {
         setState(() {
-        isSwitched = item == "arte" ? true : false;        
-          edit = false;
+          isSwitched = item == "arte" ? true : false;
         });
       }
+      setState(() {
+        edit = false;
+      });
     }
 
     if (loading) {
       if (!edit) {
-      // if(isSwitched != null){
-      // }
+        // if(isSwitched != null){
+        // }
         print('create');
       } else {
         print(item.nature == "ARTE");
@@ -246,273 +245,289 @@ class _FormItemPageState extends State<FormItemPage> {
 
     return Theme(
         data: new ThemeData(
-          primaryColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+          primaryColor: isSwitched
+              ? Theme.of(context).primaryColor
+              : Theme.of(context).accentColor,
           // primaryColorDark: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
         ),
         child: Scaffold(
             appBar: AppBar(
-              title: Text(isSwitched ? labelArte : labelMaterial, style: TextStyle(color: Colors.white)),              
-              backgroundColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+              title: Text(isSwitched ? labelArte : labelMaterial,
+                  style: TextStyle(color: Colors.white)),
+              backgroundColor: isSwitched
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).accentColor,
             ),
 
             // primary: : isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
             // backgroundColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-            body: 
-            AnimatedContainer(
-              duration: Duration(seconds: 3),
-              child:
-            ListView(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 20, right: 20, bottom: 40, top: 30),
-                  child: Form(
-                      child: Column(mainAxisSize: MainAxisSize.min, children: <
-                          Widget>[
-                   
-                    // IMG DESCOMENTAR
-
-                    // _image == null
-                    //     ? Container(
-                    //         margin: EdgeInsets.symmetric(vertical: 10),
-                    //         child: Row(
-                    //           crossAxisAlignment: CrossAxisAlignment.center,
-                    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //           children: <Widget>[
-                    //             FlatButton(
-                    //                 padding: EdgeInsets.symmetric(
-                    //                     vertical: 10, horizontal: 0),
-                    //                 onPressed: getImage,
-                    //                 child: Container(
-                    //                     width:
-                    //                         (MediaQuery.of(context).size.width /
-                    //                                 2) -
-                    //                             20,
-                    //                     height: 200,
-                    //                     alignment: Alignment.center,
-                    //                     child: Column(
-                    //                       crossAxisAlignment:
-                    //                           CrossAxisAlignment.center,
-                    //                       mainAxisAlignment:
-                    //                           MainAxisAlignment.center,
-                    //                       children: <Widget>[
-                    //                         Row(
-                    //                           crossAxisAlignment:
-                    //                               CrossAxisAlignment.center,
-                    //                           mainAxisAlignment:
-                    //                               MainAxisAlignment.center,
-                    //                           children: <Widget>[
-                    //                             Icon(
-                    //                               Icons.add_a_photo,
-                    //                               size: 22,
-                    //                             ),
-                    //                             Text(
-                    //                               'Camera',
-                    //                               style:
-                    //                                   TextStyle(fontSize: 15),
-                    //                             )
-                    //                           ],
-                    //                         )
-                    //                       ],
-                    //                     ))),
-                    //             FlatButton(
-                    //                 padding: EdgeInsets.symmetric(vertical: 10),
-                    //                 onPressed: getImageGal,
-                    //                 child: Container(
-                    //                     height: 200,
-                    //                     width:
-                    //                         (MediaQuery.of(context).size.width /
-                    //                                 2) -
-                    //                             20,
-                    //                     alignment: Alignment.center,
-                    //                     child: Column(
-                    //                       crossAxisAlignment:
-                    //                           CrossAxisAlignment.center,
-                    //                       mainAxisAlignment:
-                    //                           MainAxisAlignment.center,
-                    //                       children: <Widget>[
-                    //                         Row(
-                    //                           crossAxisAlignment:
-                    //                               CrossAxisAlignment.center,
-                    //                           mainAxisAlignment:
-                    //                               MainAxisAlignment.center,
-                    //                           children: <Widget>[
-                    //                             Icon(
-                    //                               Icons.add_photo_alternate,
-                    //                               size: 22,
-                    //                             ),
-                    //                             Text(
-                    //                               'Galeria',
-                    //                               style:
-                    //                                   TextStyle(fontSize: 15),
-                    //                             )
-                    //                           ],
-                    //                         )
-                    //                       ],
-                    //                     )))
-                    //           ],
-                    //         ))
-                    //     : Stack(children: <Widget>[
-                    //         Container(
-                    //           padding: EdgeInsets.symmetric(vertical: 20),
-                    //           child: !edit
-                    //               ? Image.network(
-                    //                   _image.path,
-                                      
-                    //                   width: MediaQuery.of(context).size.width,
-                    //                   fit: BoxFit.cover,
-                    //                 )
-                    //               : Image.file(
-                    //                   _image,
-                    //                   width: MediaQuery.of(context).size.width,
-                    //                   height: 200,
-                    //                   fit: BoxFit.cover,
-                    //                 ),
-                    //         ),
-                    //         Positioned(
-                    //             top: 30.0,
-                    //             right: -10,
-                    //             child: FlatButton(
-                    //               onPressed: removeImage,
-                    //               child: Icon(Icons.close, size: 30, ),
-                    //             )),
-                    //       ]),
-
+            body: AnimatedContainer(
+                duration: Duration(seconds: 3),
+                child: ListView(
+                  children: <Widget>[
                     Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                          cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                          controller: nome,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(
+                          left: 20, right: 20, bottom: 40, top: 30),
+                      child: Form(
+                          child:
+                              Column(mainAxisSize: MainAxisSize.min, children: <
+                                  Widget>[
+                        // IMG DESCOMENTAR
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
+                        // _image == null
+                        //     ? Container(
+                        //         margin: EdgeInsets.symmetric(vertical: 10),
+                        //         child: Row(
+                        //           crossAxisAlignment: CrossAxisAlignment.center,
+                        //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //           children: <Widget>[
+                        //             FlatButton(
+                        //                 padding: EdgeInsets.symmetric(
+                        //                     vertical: 10, horizontal: 0),
+                        //                 onPressed: getImage,
+                        //                 child: Container(
+                        //                     width:
+                        //                         (MediaQuery.of(context).size.width /
+                        //                                 2) -
+                        //                             20,
+                        //                     height: 200,
+                        //                     alignment: Alignment.center,
+                        //                     child: Column(
+                        //                       crossAxisAlignment:
+                        //                           CrossAxisAlignment.center,
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment.center,
+                        //                       children: <Widget>[
+                        //                         Row(
+                        //                           crossAxisAlignment:
+                        //                               CrossAxisAlignment.center,
+                        //                           mainAxisAlignment:
+                        //                               MainAxisAlignment.center,
+                        //                           children: <Widget>[
+                        //                             Icon(
+                        //                               Icons.add_a_photo,
+                        //                               size: 22,
+                        //                             ),
+                        //                             Text(
+                        //                               'Camera',
+                        //                               style:
+                        //                                   TextStyle(fontSize: 15),
+                        //                             )
+                        //                           ],
+                        //                         )
+                        //                       ],
+                        //                     ))),
+                        //             FlatButton(
+                        //                 padding: EdgeInsets.symmetric(vertical: 10),
+                        //                 onPressed: getImageGal,
+                        //                 child: Container(
+                        //                     height: 200,
+                        //                     width:
+                        //                         (MediaQuery.of(context).size.width /
+                        //                                 2) -
+                        //                             20,
+                        //                     alignment: Alignment.center,
+                        //                     child: Column(
+                        //                       crossAxisAlignment:
+                        //                           CrossAxisAlignment.center,
+                        //                       mainAxisAlignment:
+                        //                           MainAxisAlignment.center,
+                        //                       children: <Widget>[
+                        //                         Row(
+                        //                           crossAxisAlignment:
+                        //                               CrossAxisAlignment.center,
+                        //                           mainAxisAlignment:
+                        //                               MainAxisAlignment.center,
+                        //                           children: <Widget>[
+                        //                             Icon(
+                        //                               Icons.add_photo_alternate,
+                        //                               size: 22,
+                        //                             ),
+                        //                             Text(
+                        //                               'Galeria',
+                        //                               style:
+                        //                                   TextStyle(fontSize: 15),
+                        //                             )
+                        //                           ],
+                        //                         )
+                        //                       ],
+                        //                     )))
+                        //           ],
+                        //         ))
+                        //     : Stack(children: <Widget>[
+                        //         Container(
+                        //           padding: EdgeInsets.symmetric(vertical: 20),
+                        //           child: !edit
+                        //               ? Image.network(
+                        //                   _image.path,
+
+                        //                   width: MediaQuery.of(context).size.width,
+                        //                   fit: BoxFit.cover,
+                        //                 )
+                        //               : Image.file(
+                        //                   _image,
+                        //                   width: MediaQuery.of(context).size.width,
+                        //                   height: 200,
+                        //                   fit: BoxFit.cover,
+                        //                 ),
+                        //         ),
+                        //         Positioned(
+                        //             top: 30.0,
+                        //             right: -10,
+                        //             child: FlatButton(
+                        //               onPressed: removeImage,
+                        //               child: Icon(Icons.close, size: 30, ),
+                        //             )),
+                        //       ]),
+
+                        Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: TextField(
+                              // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                              cursorColor: isSwitched
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).accentColor,
+                              controller: nome,
+
+                              // obscureText: true,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    const Radius.circular(5.0),
+                                  ),
+                                ),
+                                labelText: 'Nome',
                               ),
-                            ),
-                            labelText: 'Nome',
-                          ),
-                          autofocus: true,
-                        )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          minLines: 3,
-                          controller: descricao,
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            // fillColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                            filled: true,
-                            focusColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                            // hoverColor: isSwitched ? Theme.of(context).primaryColor : Them e.of(context).accentColor,
-                            // hoverColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                              autofocus: true,
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: 3,
+                              controller: descricao,
+                              // obscureText: true,
+                              decoration: InputDecoration(
+                                // fillColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                                filled: true,
+                                focusColor: isSwitched
+                                    ? Theme.of(context).primaryColor
+                                    : Theme.of(context).accentColor,
+                                // hoverColor: isSwitched ? Theme.of(context).primaryColor : Them e.of(context).accentColor,
+                                // hoverColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
 
-                            // disabledBorder: InputBorder.none ,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
+                                // disabledBorder: InputBorder.none ,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    const Radius.circular(5.0),
+                                  ),
+                                ),
+                                alignLabelWithHint: true,
+                                labelText: 'Descrição',
                               ),
-                            ),
-                            alignLabelWithHint: true,
-                            labelText: 'Descrição',
-                          ),
-                          // autofocus: true,
-                        )),
-                    Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Text("Material",
-                                style: TextStyle(
-                                    color: isSwitched
-                                        ? Colors.black38
-                                        : Theme.of(context).accentColor)),
-                            Switch(
-                              value: isSwitched,
-                              onChanged: (value) {
-                                print('val');
-                                print(value);
-                                print(isSwitched);
-                                print('val');
+                              // autofocus: true,
+                            )),
+                        Container(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Text("Material",
+                                    style: TextStyle(
+                                        color: isSwitched
+                                            ? Colors.black38
+                                            : Theme.of(context).accentColor)),
+                                Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) {
+                                    print('val');
+                                    print(value);
+                                    print(isSwitched);
+                                    print('val');
 
-                                setState(() {
-                                  isSwitched = value;
-                                });
-                              },
-                              activeTrackColor: Colors.lightBlue,
-                              activeColor: Theme.of(context).primaryColor,
-                              inactiveTrackColor: Colors.lightGreenAccent ,
-                              inactiveThumbColor: Theme.of(context).accentColor,
-                            ),
-                            Text(
-                              "Arte",
-                              style: TextStyle(
-                                  color: isSwitched
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.black38),
-                            ),
-                          ],
-                        )),
-                    Container(
-                        padding: EdgeInsets.only(bottom: 10),
-                        child: TextField(
-                          // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                          cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                          controller: preco,
+                                    setState(() {
+                                      isSwitched = value;
+                                    });
+                                  },
+                                  activeTrackColor: Colors.lightBlue,
+                                  activeColor: Theme.of(context).primaryColor,
+                                  inactiveTrackColor: Colors.lightGreenAccent,
+                                  inactiveThumbColor:
+                                      Theme.of(context).accentColor,
+                                ),
+                                Text(
+                                  "Arte",
+                                  style: TextStyle(
+                                      color: isSwitched
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.black38),
+                                ),
+                              ],
+                            )),
+                        Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: TextField(
+                              // cursorColor: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+                              cursorColor: isSwitched
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).accentColor,
+                              controller: preco,
 
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                const Radius.circular(5.0),
+                              // obscureText: true,
+                              decoration: InputDecoration(
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide:
+                                      const BorderSide(color: Colors.grey),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: const BorderRadius.all(
+                                    const Radius.circular(5.0),
+                                  ),
+                                ),
+                                labelText: 'Preço',
+                                prefixText: 'R\$: ',
                               ),
-                            ),
-                            labelText: 'Preço',
-                            prefixText: 'R\$: ',
-                          ),
-                          // keyboardAppearance: ,
-                          keyboardType: TextInputType.number,
+                              // keyboardAppearance: ,
+                              keyboardType: TextInputType.number,
 
-                          autofocus: false,
-                        )),
-                    // Text("Adicionar imagem:"),
+                              autofocus: false,
+                            )),
+                        // Text("Adicionar imagem:"),
 
-                    // alignment: Alignment(1.0, 1.0),
-                    RaisedButton(
-                        color: isSwitched ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
-                        padding: EdgeInsets.all(15),
-                        onPressed: req,
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.add,
-                                color: Colors.white,
+                        // alignment: Alignment(1.0, 1.0),
+                        RaisedButton(
+                            color: isSwitched
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).accentColor,
+                            padding: EdgeInsets.all(15),
+                            onPressed: req,
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(5),
+                                  ),
+                                  Text(isSwitched ? labelArte : labelMaterial,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold))
+                                ],
                               ),
-                              Padding(
-                                padding: EdgeInsets.all(5),
-                              ),
-                              Text(isSwitched ? labelArte : labelMaterial,
-                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
-                            ],
-                          ),
-                        ))
-                  ])),
-                ),
-              ],
-            ))));
+                            ))
+                      ])),
+                    ),
+                  ],
+                ))));
   }
 }
 

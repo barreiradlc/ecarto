@@ -75,10 +75,10 @@ class _DistanciaState extends State<Distancia> {
 
     if (load) {
       return Container(
-        child: Text('Calculando distância...'),
+        child: Text('Calculando distância...', style: TextStyle(color: Colors.white),)
       );
     }
 
-    return Text(distancia);
+    return Text(distancia, style: TextStyle(color: Colors.white));
   }
 }

@@ -22,6 +22,7 @@ alertWidget() {
   var bg = AssetImage("assets/logo.png");
 
   return Container(
+      padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
         image: DecorationImage(
           image: bg,
@@ -34,12 +35,16 @@ alertWidget() {
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-            Text(
-              'Aguarde',
-              style: TextStyle(color: Colors.white, fontSize: 23),
-            ),
+            // Text(
+            //   'Aguarde',
+            //   style: TextStyle(color: Colors.white, fontSize: 23),
+            // ),
             Divider(),
-            CircularProgressIndicator()
+            Container(
+              height: 200,
+              width: 200,
+              child: CircularProgressIndicator()
+            )
           ])));
 }
 

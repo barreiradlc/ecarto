@@ -112,7 +112,7 @@ getLocation() async {
                               image: bg,
                               fit: BoxFit.cover,
                               colorFilter: new ColorFilter.mode(
-                                  Colors.lightGreen.withOpacity(0.6),
+                                  Colors.blue.withOpacity(0.8),
                                   BlendMode.srcOver),
                             ),
                           ),
@@ -136,7 +136,7 @@ getLocation() async {
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black),
+                                              color: Theme.of(context).accentColor),
                                         ),
                                         padding: const EdgeInsets.all(2),
                                       ),
@@ -155,7 +155,8 @@ getLocation() async {
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.black87),
+                                                    color: Theme.of(context).accentColor
+                                                  ),
                                               ),
                                               padding: const EdgeInsets.only(left: 20, bottom:15),
                                             ),
