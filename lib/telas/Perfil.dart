@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:ecarto/Construtores/UserArguments.dart';
+import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
@@ -22,6 +24,7 @@ class _PerfilState extends State<Perfil> {
   String imgUrl = '';
   var loading = true;
   var profile;
+  var loadQuote;
   var status;
   var id;
 
@@ -41,6 +44,14 @@ class _PerfilState extends State<Perfil> {
     });
 
     return response.realUri;
+  }
+
+  getQuote() {
+    var length = listCitacoes.length;
+    var num = Random().nextInt(length);
+    setState(() {
+      loadQuote = listCitacoes[num];
+    });
   }
 
   Future<String> getPerfil() async {
@@ -63,9 +74,16 @@ class _PerfilState extends State<Perfil> {
         setState(() {
           this.id = id;
           profile = response.data[0];
-          loading = false;
+          // loading = false;
           status = [response.data[2], response.data[1]];
         });
+
+        Future.delayed(const Duration(milliseconds: 3000), () {
+          setState(() {
+              loading = false;
+          });
+        });
+
       });
     });
 
@@ -75,6 +93,7 @@ class _PerfilState extends State<Perfil> {
   @override
   void initState() {
     super.initState();
+    getQuote();
     // getThumb().then((value) {
     //   setState(() {
     //     imgUrl = value.toString();
@@ -82,6 +101,7 @@ class _PerfilState extends State<Perfil> {
     // }).catchError((err) {
     //   print(err);
     // });
+
     getThumb();
 
     var p = getPerfil();
@@ -103,12 +123,34 @@ class _PerfilState extends State<Perfil> {
 
     if (loading == true) {
       return Scaffold(
-          backgroundColor: Colors.lightBlueAccent,
-          body: Center(
-            child: Container(
-              child: CircularProgressIndicator(),
-            ),
-          ));
+          body: Container(
+              color: Theme.of(context).primaryColor,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: 75,
+                    width: 75,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 10,
+                    ),
+                  ),
+                  Container(
+                    height: 20,
+                  ),
+                  Text(
+                    loadQuote,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Montserrat',
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              )));
     }
 
     print(status[0]['Material']);
@@ -116,10 +158,12 @@ class _PerfilState extends State<Perfil> {
     return new Stack(
       children: <Widget>[
         new Container(
+
           color: Theme.of(context).accentColor,
         ),
         imgUrl != ''
             ? new Image.network(
+
                 // profile['avatar']['url'] != null
                 //     ? profile['avatar']['url']
                 //     : imgUrl,
@@ -140,6 +184,7 @@ class _PerfilState extends State<Perfil> {
             )),
         new Scaffold(
             appBar: new AppBar(
+              brightness: Brightness.dark,
               iconTheme: new IconThemeData(color: Colors.white),
               title: new Text('Perfil', style: TextStyle(color: Colors.white)),
               centerTitle: false,
@@ -294,18 +339,17 @@ class _PerfilState extends State<Perfil> {
                                     profile['instagram'],
                                     profile['pinterest'],
                                     profile['about'],
-                                    profile['avatar'],
+                                    profile['image'],
                                   ));
                             },
                             child: new Container(
-                                
                                 padding: EdgeInsets.only(top: 40),
                                 child: new Row(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     new Icon(Icons.person, color: Colors.white),
-                                    new SizedBox(   
+                                    new SizedBox(
                                       width: _width / 30,
                                     ),
                                     new Text('EDITAR PERFIL',

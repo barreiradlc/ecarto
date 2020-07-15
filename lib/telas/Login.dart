@@ -40,8 +40,8 @@ class _MyCustomFormState extends State<Login> {
   final myController = TextEditingController(text: '');
   final myController2 = TextEditingController(text: '');
 
-  // final myController = TextEditingController(text: 'test4567@example.com');
-  // final myController2 = TextEditingController(text: 'password');
+  // final myController = TextEditingController(text: 'elBarrero');
+  // final myController2 = TextEditingController(text: '123123');
 
   alertAviso(msg) {
     return showDialog(
@@ -132,6 +132,8 @@ class _MyCustomFormState extends State<Login> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextField(
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => FocusScope.of(context).nextFocus(), // move focus to next
                       controller: myController,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -147,6 +149,8 @@ class _MyCustomFormState extends State<Login> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: TextField(
+                      // textInputAction: TextInputAction.done,
+                      // onSubmitted: (_) => FocusScope.of(context).unfocus(),
                       controller: myController2,
                       obscureText: true,
                       decoration: InputDecoration(

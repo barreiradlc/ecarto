@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,7 +14,7 @@ import '../Funcoes/UserData.dart';
 
 class Home extends StatelessWidget {
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(      
       body: HomeState(),
     );
   }
@@ -29,6 +31,7 @@ class CollapsingList extends State<HomeState> {
   bool loading = true;
   String token = 'testeJWT';
   String login = '';
+  String loadQuote = '';
   int id;
 
   var myPref = web.window.localStorage['mypref'];
@@ -41,6 +44,14 @@ class CollapsingList extends State<HomeState> {
     print(p);
     print(p.latitude);
     return p;
+  }
+
+  getQuote(){
+    var length = listCitacoes.length;
+    var num = Random().nextInt(length);
+    setState(() {
+      loadQuote = listCitacoes[num];
+    });
   }
 
   getData() async {
@@ -82,8 +93,15 @@ class CollapsingList extends State<HomeState> {
           this.id = id;
           artes = jsonDecode(responseArtes.body);
           materiais = jsonDecode(responseMateriais.body);
-          loading = false;
+          // loading = false;
         });
+
+        Future.delayed(const Duration(milliseconds: 1000), () {
+          setState(() {
+              loading = false;
+          });
+        });
+        
       })
       .catchError((err) {
         print('erro em jwt');
@@ -99,6 +117,9 @@ class CollapsingList extends State<HomeState> {
   @override
   void initState() {
     super.initState();
+
+    getQuote();
+
     if (mounted) {
       getData();
     }
@@ -109,8 +130,24 @@ class CollapsingList extends State<HomeState> {
     double height = MediaQuery.of(context).size.height;
 
     if (loading) {
-      return Center(
-        child: CircularProgressIndicator(),
+      return Container(        
+        padding: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              height: 75,
+              width: 75,
+              child: CircularProgressIndicator(strokeWidth: 10,), 
+            ),          
+          Container(height: 20,),
+          Text(loadQuote, style: TextStyle( 
+            fontFamily: 'Montserrat', 
+            fontSize: 20, fontStyle: FontStyle.italic), 
+          textAlign: TextAlign.center, )            
+          
+        ],)
       );
     }
 

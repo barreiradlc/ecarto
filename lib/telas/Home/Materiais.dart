@@ -68,15 +68,16 @@ getLocation() async {
             (index) {
               var bg;
 
-              // if (widget.materiais[index]['avatar']['url'] == null) {
-              //   bg = AssetImage("assets/logo.png");
-              // } else {
-              //   bg = NetworkImage(
-              //       host + widget.materiais[index]['avatar']['url']);
-              // }
+              if (widget.materiais[index]['image'] != null) {                
+                if (widget.materiais[index]['image'] == null) {
+                  bg = AssetImage("assets/logo.png");
+                } else {
+                  bg = NetworkImage('$hostImg/uploads/${widget.materiais[index]['image']}');
+                }
+              } else {
+                bg = AssetImage("assets/logo.png");
+              }                                          
               
-              bg = AssetImage("assets/logo-gray.png");
-
               return new Container(
                   margin: EdgeInsets.all(5),
                   child: RaisedButton(
@@ -98,6 +99,7 @@ getLocation() async {
                             widget.materiais[index]['user_id'],
                             widget.materiais[index]['id'],
                             widget.materiais[index]['price'],
+                            index,
                           ),
                         );
                         // print('pokebola vai');
@@ -112,7 +114,7 @@ getLocation() async {
                               image: bg,
                               fit: BoxFit.cover,
                               colorFilter: new ColorFilter.mode(
-                                  Colors.blue.withOpacity(0.8),
+                                  Colors.white.withOpacity(0.3),
                                   BlendMode.srcOver),
                             ),
                           ),

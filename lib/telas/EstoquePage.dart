@@ -160,8 +160,11 @@ class _EstoquePageState extends State<EstoquePage> {
   Widget build(BuildContext context) {
     if (estoque != null) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text('Estoque'),
+        
+        appBar: AppBar(          
+          brightness: Brightness.dark,
+          iconTheme: new IconThemeData(color: Colors.white),
+          title: Text('Estoque', style: TextStyle(color: Colors.white)),
         ),
         // body: Center(
         body: Container(

@@ -27,10 +27,6 @@ class ArteState extends State<Artes> {
     var p = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
-    print('position');
-    print(p);
-    print(p.latitude);
-
     setState(() {
       position = p;
     });
@@ -54,8 +50,6 @@ class ArteState extends State<Artes> {
 
     double distanceInMeters = await Geolocator()
         .distanceBetween(startLat, startLong, endLat, endLong);
-
-    print('DISTANCIA');
     return distanceInMeters.toInt();
   }
 
@@ -90,6 +84,18 @@ class ArteState extends State<Artes> {
         // appBar: AppBar(
         //   title: Text(title),
         // ),
+
+        // <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        // <ins class="adsbygoogle"
+        //      style="display:block"
+        //      data-ad-format="fluid"
+        //      data-ad-layout-key="-fb+5w+4e-db+86"
+        //      data-ad-client="ca-pub-5489812063406279"
+        //      data-ad-slot="9775639514"></ins>
+        // <script>
+        //      (adsbygoogle = window.adsbygoogle || []).push({});
+        // </script>
+
         body: GridView.count(
             padding: EdgeInsets.only(top: 25),
             // crossAxisCount is the number of columns
@@ -100,21 +106,16 @@ class ArteState extends State<Artes> {
               var distancia = '';
               var load = true;
 
-              // if (widget.artes[index]['avatar'] != null) {
-              //   if (widget.artes[index]['avatar']['url'] == null) {
-              //     bg = AssetImage("assets/logo.png");
-              //   } else {
-              //     bg = NetworkImage(host + widget.artes[index]['avatar']['url']);
-              //   }
-              // } else {
-              //   bg = AssetImage("assets/logo.png");
-              // }
 
-
-              
-              
-
-              bg = AssetImage("assets/logo-gray.png");
+              if (widget.artes[index]['image'] != null) {                
+                if (widget.artes[index]['image'] == null) {
+                  bg = AssetImage("assets/logo.png");
+                } else {
+                  bg = NetworkImage( '$hostImg/uploads/${widget.artes[index]['image']}');
+                }
+              } else {
+                bg = AssetImage("assets/logo.png");
+              }                                          
 
               // if(load){
               //   return Container(
@@ -143,12 +144,13 @@ class ArteState extends State<Artes> {
                             arguments: ScreenArguments(
                               widget.artes[index]['title'],
                               widget.artes[index]['description'],
-                              widget.artes[index]['avatar']['url'],
+                              widget.artes[index]['image'],
                               DateTime.parse(widget.artes[index]['updated_at']),
                               widget.artes[index]['nature'],
                               widget.artes[index]['user_id'],
                               widget.artes[index]['id'],
                               widget.artes[index]['price'],
+                              index,
                             ),
                           );
                           print('pokebola vai');
@@ -161,7 +163,7 @@ class ArteState extends State<Artes> {
                                 image: bg,
                                 fit: BoxFit.cover,
                                 colorFilter: new ColorFilter.mode(
-                                    Colors.green.withOpacity(0.8),
+                                    Colors.white.withOpacity(0.3),
                                     BlendMode.srcOver),
                               ),
                             ),

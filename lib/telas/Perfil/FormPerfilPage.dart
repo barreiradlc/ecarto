@@ -70,6 +70,45 @@ class FormPerfilPageState extends State<FormPerfilPage> {
 
   Future<String> reqEdit() async {}
 
+ uploadImage() async {
+
+    if(_image == null){
+      return null;
+    }
+
+    Dio dio = new Dio();
+
+    print(dio);
+
+    FormData formData = FormData.fromMap({});
+
+    print(formData);
+
+    formData.files.add(
+      MapEntry(
+          'image', 
+          await MultipartFile.fromFile(_image.path)
+      )
+    );
+
+    
+    var response = await dio.post(
+        '$hostImg/img',
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "multipart/form-data"
+        }),
+    );
+
+    print('UPLOAD');
+    print(response);
+    print(response.data);
+    print('UPLOAD');
+
+    return response.data['img'];
+  }
+
+
   Future<String> req() async {
     alertWidget();
 
@@ -86,6 +125,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
       'email': email.text,
       'phone': phone.text,
       'instagram': instagram.text,
+      'image': await uploadImage(),
       // 'pinterest': pinterest.text,
       'about': about.text,
 
@@ -98,13 +138,6 @@ class FormPerfilPageState extends State<FormPerfilPage> {
       // 'avatar': await MultipartFile.fromFile(_image.path,
       //     filename: nome.text + ".png"),
     });
-
-    if (_image != null) {
-      formData.files.add(MapEntry(
-          'avatar',
-          await MultipartFile.fromFile(_image.path,
-              filename: nome.text + ".png")));
-    }
 
     print(formData.fields);
 
@@ -209,96 +242,96 @@ class FormPerfilPageState extends State<FormPerfilPage> {
                     
                     // IMG
                     
-                    // Text(
-                    //   "Foto",
-                    //   style: TextStyle(fontSize: 23),
-                    // ),
-                    // _image == null
-                    //     ? Container(
-                    //         margin: EdgeInsets.symmetric(vertical: 10),
-                    //         child: Row(
-                    //           crossAxisAlignment: CrossAxisAlignment.center,
-                    //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //           children: <Widget>[
-                    //             FlatButton(
-                    //                 padding: EdgeInsets.symmetric(
-                    //                     vertical: 10, horizontal: 0),
-                    //                 onPressed: getImage,
-                    //                 child: Container(
-                    //                     width:
-                    //                         (MediaQuery.of(context).size.width /
-                    //                                 2) -
-                    //                             20,
-                    //                     height: 200,
-                    //                     alignment: Alignment.center,
-                    //                     child: Column(
-                    //                       crossAxisAlignment:
-                    //                           CrossAxisAlignment.center,
-                    //                       mainAxisAlignment:
-                    //                           MainAxisAlignment.center,
-                    //                       children: <Widget>[
-                    //                         Row(
-                    //                           crossAxisAlignment:
-                    //                               CrossAxisAlignment.center,
-                    //                           mainAxisAlignment:
-                    //                               MainAxisAlignment.center,
-                    //                           children: <Widget>[
-                    //                             Icon(
-                    //                               Icons.add_a_photo,
-                    //                               size: 22,
-                    //                             ),
-                    //                             Text(
-                    //                               'Camera',
-                    //                               style:
-                    //                                   TextStyle(fontSize: 15),
-                    //                             )
-                    //                           ],
-                    //                         )
-                    //                       ],
-                    //                     ))),
-                    //             FlatButton(
-                    //                 padding: EdgeInsets.symmetric(vertical: 10),
-                    //                 onPressed: getImageGal,
-                    //                 child: Container(
-                    //                     height: 200,
-                    //                     width:
-                    //                         (MediaQuery.of(context).size.width /
-                    //                                 2) -
-                    //                             20,
-                    //                     alignment: Alignment.center,
-                    //                     child: Column(
-                    //                       crossAxisAlignment:
-                    //                           CrossAxisAlignment.center,
-                    //                       mainAxisAlignment:
-                    //                           MainAxisAlignment.center,
-                    //                       children: <Widget>[
-                    //                         Row(
-                    //                           crossAxisAlignment:
-                    //                               CrossAxisAlignment.center,
-                    //                           mainAxisAlignment:
-                    //                               MainAxisAlignment.center,
-                    //                           children: <Widget>[
-                    //                             Icon(
-                    //                               Icons.add_photo_alternate,
-                    //                               size: 22,
-                    //                             ),
-                    //                             Text(
-                    //                               'Galeria',
-                    //                               style:
-                    //                                   TextStyle(fontSize: 15),
-                    //                             )
-                    //                           ],
-                    //                         )
-                    //                       ],
-                    //                     )))
-                    //           ],
-                    //         ))
-                    //     : Image.file(
-                    //         _image,
-                    //         width: 200,
-                    //         height: 200,
-                    //         fit: BoxFit.cover,
-                    //       ),
+                    Text(
+                      "Foto",
+                      style: TextStyle(fontSize: 23),
+                    ),
+                    _image == null
+                        ? Container(
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                FlatButton(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 0),
+                                    onPressed: getImage,
+                                    child: Container(
+                                        width:
+                                            (MediaQuery.of(context).size.width /
+                                                    2) -
+                                                20,
+                                        height: 200,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.add_a_photo,
+                                                  size: 22,
+                                                ),
+                                                Text(
+                                                  'Camera',
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ))),
+                                FlatButton(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    onPressed: getImageGal,
+                                    child: Container(
+                                        height: 200,
+                                        width:
+                                            (MediaQuery.of(context).size.width /
+                                                    2) -
+                                                20,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.add_photo_alternate,
+                                                  size: 22,
+                                                ),
+                                                Text(
+                                                  'Galeria',
+                                                  style:
+                                                      TextStyle(fontSize: 15),
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        )))
+                              ],
+                            ))
+                        : Image.file(
+                            _image,
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          ),
 
 
                     // IMG

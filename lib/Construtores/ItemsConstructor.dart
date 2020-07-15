@@ -7,7 +7,7 @@ class ScreenArguments {
   final user_id;
   final id;
   final price;
-
+  var index;
 
   ScreenArguments(
     this.title, 
@@ -17,6 +17,7 @@ class ScreenArguments {
     this.nature,
     this.user_id,
     this.id,
-    this.price
+    this.price,
+    this.index
   );
 }

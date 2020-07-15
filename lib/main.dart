@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import 'package:ecarto/telas/DetailScreen.dart';
 import 'package:ecarto/telas/EstoquePage.dart';
 import 'package:ecarto/telas/Etapas.dart';
@@ -40,8 +42,6 @@ class MyApp extends State<Geral> {
   void initState() {
     super.initState();
     void_getJWT().then((jwt) {
-      
-
       if (jwt == null) {
         homePage = '/login';
       } else {
@@ -74,21 +74,37 @@ class MyApp extends State<Geral> {
   @override
   Widget build(BuildContext context) {
 
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: Brightness.light,
+
+      statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
+      statusBarBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.light
+    ));
+
     if (this.homePage == '') {
       return CircularProgressIndicator();
     }
 
-    return GetMaterialApp(
-      color: Colors.lightBlue,
-      theme: ThemeData(     
-        
-        // primaryColor: Colors.blue,                
+    return GetMaterialApp(      
+      theme: ThemeData(
+        // primaryColor: Colors.blue,
         // accentColor: Colors.green,
-        primaryColor: Color(0xff42A5F5),                
-        accentColor: Color(0xff558b2f),
         
+        
+
+        highlightColor: Colors.white,
+        primaryColorLight: Colors.white,
+
+        accentIconTheme: new IconThemeData(color: Colors.white),
+        primaryColor: Color(0xff42A5F5),
+        accentColor: Color(0xff558b2f),
+
         // See https://github.com/flutter/flutter/wiki/Desktop-shells#fonts
         fontFamily: 'Roboto',
+        appBarTheme: Theme.of(context)
+            .appBarTheme
+            .copyWith(brightness: Brightness.light),
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: this.homePage,
@@ -108,7 +124,7 @@ class MyApp extends State<Geral> {
 
         '/wiki/form': (context) => formWiki,
         '/steps/form': (context) => formSteps,
-        
+
         '/login': (context) => login,
         '/cadastro': (context) => cadastro,
         // '/camera': (context) => camera,

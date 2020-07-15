@@ -1,9 +1,11 @@
 import 'package:ecarto/Construtores/ItemsConstructor.dart';
+import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Parcial/Carousel.dart';
 import 'package:ecarto/Parcial/MateriaisList.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,13 +65,15 @@ class DetailItems extends State<DetailItemScreen> {
 
     print('item');
     print(item.nature);
+    print(item.index);
 
-    thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
 
-    // if (item.thumbnail != null) {
-    //   thumb = Image.network(host + item.thumbnail,
-    //       fit: BoxFit.cover, alignment: Alignment.center);
-    // }
+    if (item.thumbnail != null) {      
+      thumb = Hero( tag:'Thumbnail${item.index}', child:Image.network('$hostImg/uploads/${item.thumbnail}',
+          fit: BoxFit.cover, alignment: Alignment.center));
+    } else {
+      thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
+    }
 
     delete(id) async {
       final authJwt = await SharedPreferences.getInstance();
@@ -129,7 +133,7 @@ class DetailItems extends State<DetailItemScreen> {
                       // buttonPadd ing: EdgeInsets.all(40),
                       contentPadding: EdgeInsets.symmetric(vertical: 20),
                       content: Container(
-                        padding: EdgeInsets.symmetric(vertical: 20),
+                        padding: EdgeInsets.all(20),
                         child: 
 
                       Column(
@@ -165,6 +169,9 @@ class DetailItems extends State<DetailItemScreen> {
     }
 
     editAction(item) {
+      print('item.thumbnail');
+      print(item.thumbnail);
+
       Navigator.pushNamed(
         context,
         '/itens/form',
@@ -176,12 +183,16 @@ class DetailItems extends State<DetailItemScreen> {
           item.nature,
           item.user_id,
           item.id,
-          item.price
+          item.price,
+          item.index
         ),
       );
     }
 
     alertAutor() {
+      double dividerHeigth = 20;
+      var dividerColor = item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor;
+
       print('autor');
       print(autor['email']);
       print('autor');
@@ -204,17 +215,20 @@ class DetailItems extends State<DetailItemScreen> {
                               style: TextStyle(
                                   fontSize: 21,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black45),
+                                  color: item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor
+                              )
                             ),
                           )
                         : Container(),
+                        Divider(height: dividerHeigth, color: dividerColor, thickness: 3,),
                     autor['phone'] != null
                         ? ListTile(
                             onTap: () => launch(
                                 "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
-                            title: Text('Telefone:' + autor['phone']),
+                            title: Text('Telefone: ' + autor['phone']),
                           )
                         : Container(),
+                        Divider(height: dividerHeigth),
                     autor['email'] != null
                         ? ListTile(
                             onTap: () => launch(
@@ -222,11 +236,12 @@ class DetailItems extends State<DetailItemScreen> {
                             title: Text('Email: ' + autor['email']),
                           )
                         : Container(),
+                        Divider(height: dividerHeigth),
                     autor['instagram'] != null
                         ? ListTile(
                             onTap: () => launch(
                                 "https://instagram.com/${autor['instagram']}"),
-                            title: Text('Instagram:' + autor['instagram']),
+                            title: Text('Instagram: ' + autor['instagram']),
                           )
                         : Container(),
 
@@ -246,6 +261,9 @@ class DetailItems extends State<DetailItemScreen> {
     }
 
     Future<String> contatarAutor(userId) async {
+      Get.dialog(alertWidget(msg:"Buscando dados do autor"),
+        barrierDismissible: false, useRootNavigator: false);
+
       void_getJWT().then((token) async {
         print(token);
         // print(item.title);
@@ -264,6 +282,7 @@ class DetailItems extends State<DetailItemScreen> {
           autor = response.data;
         });
 
+        Navigator.pop(context);
         alertAutor();
       });
 
@@ -338,11 +357,15 @@ class DetailItems extends State<DetailItemScreen> {
 
     if (item.user_id != id) {
       botAcao = Container(
+          margin: EdgeInsets.all(20),
           child: RaisedButton(
+
+            padding: EdgeInsets.all(15),
+              color: item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[Icon(Icons.chat), Text("Contatar autor")],
+                children: <Widget>[Icon(Icons.chat, color: Colors.white), Text("   Contatar autor", style: TextStyle(color: Colors.white))],
               ),
               onPressed: () => contatarAutor(item.user_id)));
     }
@@ -352,7 +375,9 @@ class DetailItems extends State<DetailItemScreen> {
             primaryColor: item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor),
         child: Scaffold(
           appBar: AppBar(
-            title: Text(item.title),
+            iconTheme: new IconThemeData(color: Colors.white),
+            brightness: Brightness.dark,
+            title: Text(item.title, style: TextStyle(color: Colors.white)),
           ),
           body: Padding(
               padding: EdgeInsets.all(0),

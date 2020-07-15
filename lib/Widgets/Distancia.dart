@@ -79,6 +79,6 @@ class _DistanciaState extends State<Distancia> {
       );
     }
 
-    return Text(distancia, style: TextStyle(color: Colors.white));
+    return Text(distancia, style: TextStyle(color: Colors.black));
   }
 }

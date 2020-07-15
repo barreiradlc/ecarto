@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:ecarto/Recursos/Api.dart';
@@ -35,6 +36,9 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   bool _activeTabIndex = true;
   bool loading = true;
   var bg = AssetImage("assets/logo-white.png");
+
+
+
   var materiais;
   var artes;
   String username = '';
@@ -78,7 +82,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
           DrawerHeader(            
             child: Text("Bem Vindo(a): ${widget.login}"),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.white,              
               image: DecorationImage(
                 image: bg,
                 fit: BoxFit.cover,
@@ -105,8 +109,18 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
           ListTile(
             title: Text('Sair'),
             onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/login');
+              
+
+              removeLoginData().then((response) {
+                
+                print('LOGOUT');
+                print(response);
+                print('LOGOUT');
+
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/login');
+              });
+
             },
           )
         ],
@@ -121,16 +135,15 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     }
 
     return Theme(
-        data: ThemeData(
-
-            secondaryHeaderColor: Colors.white,
-            accentColor: Colors.white,
+        data: ThemeData(            
+            accentColor: Colors.black,
             primaryColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor
         ),
         child: Scaffold(
 
           drawer: drawerScaff,
           appBar: AppBar(
+            brightness: Brightness.dark, // status bar brightness
             iconTheme: new IconThemeData(color: Colors.white),
             bottom: TabBar(
               labelColor: Colors.white,
@@ -151,6 +164,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             child: Icon(Icons.add),
           ),
           body: TabBarView(
+
             controller: _tabController,
             // children: myTabs.map((Tab tab) {
             //   final String label = tab.text.toLowerCase();

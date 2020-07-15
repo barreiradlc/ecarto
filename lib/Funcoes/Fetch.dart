@@ -18,34 +18,41 @@ Future<http.Response> fetchPost() async {
   return response;
 }
 
-alertWidget() {
-  var bg = AssetImage("assets/logo.png");
+alertWidget({String msg = "Aguarde"}) {
+ 
+  var bg = AssetImage("assets/logo-colorida.png");
 
-  return Container(
+  return Scaffold(
+    backgroundColor: Colors.black54.withOpacity(0.5),
+    body: 
+
+  Container(      
       padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: bg,
-          fit: BoxFit.cover,
-          colorFilter: new ColorFilter.mode(
-              Colors.transparent.withOpacity(0.5), BlendMode.dstIn),
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   image: DecorationImage(
+      //           image: bg,
+      //           fit: BoxFit.cover,
+      //           colorFilter: new ColorFilter.mode(
+      //               Color(0xff42A5F5).withOpacity(0.5),
+      //               BlendMode.softLight),
+      //         ),
+      // ),
       child: Center(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-            // Text(
-            //   'Aguarde',
-            //   style: TextStyle(color: Colors.white, fontSize: 23),
-            // ),
+            Text(
+              msg,
+              style: TextStyle(color: Colors.white, fontSize: 23),
+            ),
             Divider(),
             Container(
-              height: 200,
-              width: 200,
+              height: 80,
+              width: 80,
               child: CircularProgressIndicator()
             )
-          ])));
+          ])))
+  );
 }
 
 Future register(usuario, email, senha, confirmaSenha) async {

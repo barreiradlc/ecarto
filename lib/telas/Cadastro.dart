@@ -16,13 +16,14 @@ class Cadastro extends StatefulWidget {
 class _MyCustomFormState extends State<Cadastro> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
+  
   final usuarioCred = TextEditingController(text: '');
   final emailCred = TextEditingController(text: '');
   final senhaCred = TextEditingController(text: '');
   final senhaConfirmaCred = TextEditingController(text: '');
   
-  // final usuarioCred = TextEditingController(text: 'gustin');
-  // final emailCred = TextEditingController(text: 'augustodasilva53@gmail.com');
+  // final usuarioCred = TextEditingController(text: 'elBarrero');
+  // final emailCred = TextEditingController(text: 'barreira234@hotmail.com');
   // final senhaCred = TextEditingController(text: '123123');
   // final senhaConfirmaCred = TextEditingController(text: '123123');
 
@@ -80,11 +81,17 @@ class _MyCustomFormState extends State<Cadastro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
         // appBar: AppBar(
         //   iconTheme: new IconThemeData(color: Colors.white),
         //   title: Text('Cadastro', style: TextStyle(color: Colors.white)),
         // ),
-        body: Column(
+        body: 
+        SingleChildScrollView(
+          child: 
+          
+        
+        Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Transform.scale(
@@ -114,6 +121,8 @@ class _MyCustomFormState extends State<Cadastro> {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: TextField(
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => FocusScope.of(context).nextFocus(), // move focus to next
                       controller: usuarioCred,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -129,6 +138,8 @@ class _MyCustomFormState extends State<Cadastro> {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: TextField(
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => FocusScope.of(context).nextFocus(), // move focus to next
                       controller: emailCred,
                       obscureText: false,
                       decoration: InputDecoration(
@@ -142,8 +153,11 @@ class _MyCustomFormState extends State<Cadastro> {
                     ),
                   ),
                   Padding(
+                    
                     padding: const EdgeInsets.all(6.0),
                     child: TextField(
+                      textInputAction: TextInputAction.next,
+                      onSubmitted: (_) => FocusScope.of(context).nextFocus(), // move focus to next
                       controller: senhaCred,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -159,6 +173,7 @@ class _MyCustomFormState extends State<Cadastro> {
                   Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: TextField(
+                      textInputAction: TextInputAction.done,                      
                       controller: senhaConfirmaCred,
                       obscureText: true,
                       decoration: InputDecoration(
@@ -185,7 +200,7 @@ class _MyCustomFormState extends State<Cadastro> {
                     ),
                   ),
                   Divider(
-                    height: 20,
+                    height: 24,
                   ),
 
                   // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -203,6 +218,7 @@ class _MyCustomFormState extends State<Cadastro> {
               ),
             )
           ],
+        )
         )
         // floatingActionButton: FloatingActionButton(
         //   // When the user presses the button, show an alert dialog containing
