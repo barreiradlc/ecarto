@@ -75,6 +75,29 @@ class DetailItems extends State<DetailItemScreen> {
       thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
     }
 
+    
+  removeImage(image) async {
+    Dio dio = new Dio();
+
+    print(dio);
+    
+
+
+    
+    
+    var response = await dio.get(
+      '$hostImg/img/$image'        
+    );
+
+    print('UPLOAD');
+    print(response);
+    print(response.data);
+    print('UPLOAD');
+
+    return response.data['img'];
+  }
+
+
     delete(id) async {
       final authJwt = await SharedPreferences.getInstance();
       String token = await authJwt.getString("jwt");
@@ -102,6 +125,11 @@ class DetailItems extends State<DetailItemScreen> {
       var endpoint = '/items/${id}';
 
       print(endpoint);
+      
+      if(item.thumbnail != null){
+        removeImage(item.thumbnail);
+      }
+
       var response =
           await http.delete(host + endpoint, headers: {"Authorization": token});
 
@@ -171,7 +199,6 @@ class DetailItems extends State<DetailItemScreen> {
     editAction(item) {
       print('item.thumbnail');
       print(item.thumbnail);
-
       Navigator.pushNamed(
         context,
         '/itens/form',

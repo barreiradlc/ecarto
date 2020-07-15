@@ -28,6 +28,7 @@ class FormItemPage extends StatefulWidget {
 class _FormItemPageState extends State<FormItemPage> {
   var item;
   bool edit;
+  bool changeImage = false;
   bool isSwitched;
   bool loading = true;
   var label = 'novo';
@@ -53,6 +54,7 @@ class _FormItemPageState extends State<FormItemPage> {
 
     setState(() {
       _image = image;
+      changeImage = true;
     });
   }
 
@@ -61,12 +63,14 @@ class _FormItemPageState extends State<FormItemPage> {
 
     setState(() {
       _image = image;
+      changeImage = true;
     });
   }
 
   Future<String> removeImage() async {
     setState(() {
       _image = null;
+      changeImage = true;
     });
   }
 
@@ -88,7 +92,7 @@ class _FormItemPageState extends State<FormItemPage> {
 
     
     var response = await dio.post(
-        '$hostImg/img',
+        '$hostImg/img?d=$image',
         data: formData,
         options: Options(headers: {
           "Content-Type": "multipart/form-data"
@@ -125,7 +129,7 @@ class _FormItemPageState extends State<FormItemPage> {
       'price': double.parse(preco.text),
       'latitude': position.latitude,
       'longitude': position.longitude,
-      'image': await uploadImage()
+      'image': changeImage == true ? await uploadImage() : image
       // 'avatar': await MultipartFile.fromFile(_image,   )
       // 'avatar': await MultipartFile.fromFile(_image.path,
       //     filename: nome.text + ".png"),
@@ -264,7 +268,8 @@ class _FormItemPageState extends State<FormItemPage> {
           nome.text = item.title;
           descricao.text = item.description;
           preco.text = item.price.toString();
-          _image = item.thumbnail != '' || null ? File(host + item.thumbnail) : null;
+          _image = item.thumbnail != '' || null ? File('$hostImg/uploads/${item.thumbnail}') : null;
+          image = item.thumbnail != '' || null ? item.thumbnail : '';
         });
         // preco
         // descricao
@@ -400,18 +405,18 @@ class _FormItemPageState extends State<FormItemPage> {
                             : Stack(children: <Widget>[
                                 Container(
                                   padding: EdgeInsets.symmetric(vertical: 20),
-                                  child: edit
+                                  child: edit && !changeImage
                                       ? Image.network(
                                           _image.path,
-
                                           width: MediaQuery.of(context).size.width,
-                                          fit: BoxFit.cover,
+                                          height: 240,
+                                          fit: BoxFit.fitWidth,
                                         )
                                       : Image.file(
                                           _image,
                                           width: MediaQuery.of(context).size.width,
-                                          height: 200,
-                                          fit: BoxFit.cover,
+                                          height: 240,
+                                          fit: BoxFit.fitWidth,                                          
                                         ),
                                 ),
                                 Positioned(
