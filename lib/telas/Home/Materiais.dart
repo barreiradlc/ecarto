@@ -92,7 +92,7 @@ getLocation() async {
                           arguments: ScreenArguments(
                             widget.materiais[index]['title'],
                             widget.materiais[index]['description'],
-                            widget.materiais[index]['avatar']['url'],
+                            widget.materiais[index]['image'],
                             DateTime.parse(
                             widget.materiais[index]['updated_at']),
                             widget.materiais[index]['nature'],

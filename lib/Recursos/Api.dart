@@ -9,6 +9,6 @@ String host = 'https://ae-teste.herokuapp.com';
 
 // MICroservice de uploads
 // LOCAL
-String hostImg = 'http://192.168.0.115:3333';
+// String hostImg = 'http://192.168.0.115:3333';
 
-// String hostImg = 'https://ecarto-image-provider.herokuapp.com';
+String hostImg = 'https://ecarto-image-provider.herokuapp.com';

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:transparent_image/transparent_image.dart';
 import 'dart:math';
 
 import 'package:ecarto/Construtores/UserArguments.dart';
@@ -78,7 +79,7 @@ class _PerfilState extends State<Perfil> {
           status = [response.data[2], response.data[1]];
         });
 
-        Future.delayed(const Duration(milliseconds: 3000), () {
+        Future.delayed(const Duration(milliseconds: 1000), () {
           setState(() {
               loading = false;
           });
@@ -121,7 +122,9 @@ class _PerfilState extends State<Perfil> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
-    if (loading == true) {
+
+
+    if (loading) {
       return Scaffold(
           body: Container(
               color: Theme.of(context).primaryColor,
@@ -153,22 +156,20 @@ class _PerfilState extends State<Perfil> {
               )));
     }
 
-    print(status[0]['Material']);
-
     return new Stack(
       children: <Widget>[
         new Container(
-
+          height: _height,
           color: Theme.of(context).accentColor,
         ),
         imgUrl != ''
-            ? new Image.network(
-
-                // profile['avatar']['url'] != null
-                //     ? profile['avatar']['url']
-                //     : imgUrl,
-                imgUrl,
-                fit: BoxFit.fill,
+            ? FadeInImage.memoryNetwork(              
+              height: _height,
+              fit: BoxFit.contain,
+              placeholder: kTransparentImage,
+              image:(profile['image'] == null || profile['image'] == '')
+                  ? imgUrl
+                  : '$hostImg/uploads/${profile['image']}'
               )
             : CircularProgressIndicator(),
         new BackdropFilter(
@@ -206,10 +207,10 @@ class _PerfilState extends State<Perfil> {
                           backgroundColor: Colors.transparent,
                           radius: _width < _height ? _width / 4 : _height / 4,
                           backgroundImage: NetworkImage(
-                              // profile['avatar']['url'] != null
-                              //     ? profile['avatar']['url']
-                              //     : imgUrl
-                              imgUrl),
+                              profile['image'] == null || profile['image'] == ''
+                                  ?
+                                  imgUrl
+                                  : '$hostImg/uploads/${profile['image']}'),
                         )
                       : Container(
                           height: 205,
@@ -343,9 +344,9 @@ class _PerfilState extends State<Perfil> {
                                   ));
                             },
                             child: new Container(
-                                padding: EdgeInsets.only(top: 40),
+                                padding: EdgeInsets.all(40),
                                 child: new Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     new Icon(Icons.person, color: Colors.white),
@@ -356,7 +357,8 @@ class _PerfilState extends State<Perfil> {
                                         style: TextStyle(color: Colors.white))
                                   ],
                                 )),
-                            color: Theme.of(context).accentColor,
+                            // color: Theme.of(context).accentColor,
+                            color: Colors.transparent,
                           ),
                         ),
                 ],

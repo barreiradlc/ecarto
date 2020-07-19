@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 // telas
 import './telas/Home.dart';
@@ -26,15 +27,44 @@ import 'telas/Perfil.dart';
 void main() {
   // See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override
   debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
-  runApp(new Geral());
+  runApp(new MyApp());
 }
 
-class Geral extends StatefulWidget {
+class MyApp extends StatelessWidget {
   @override
-  MyApp createState() => MyApp();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Splash Screen',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'Splash Screen Flutter'),
+    );
+  }
 }
 
-class MyApp extends State<Geral> {
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return _introScreen();
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreen createState() => _HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen> {
   String jwt = '';
   String homePage = '';
 
@@ -73,25 +103,21 @@ class MyApp extends State<Geral> {
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarIconBrightness: Brightness.light,
-
-      statusBarColor: Colors.transparent, //or set color with: Color(0xFF0000FF)
-      statusBarBrightness: Brightness.light,
-      systemNavigationBarIconBrightness: Brightness.light
-    ));
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor:
+            Colors.transparent, //or set color with: Color(0xFF0000FF)
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light));
 
     if (this.homePage == '') {
       return CircularProgressIndicator();
     }
 
-    return GetMaterialApp(      
+    return GetMaterialApp(
       theme: ThemeData(
         // primaryColor: Colors.blue,
         // accentColor: Colors.green,
-        
-        
 
         highlightColor: Colors.white,
         primaryColorLight: Colors.white,
@@ -131,4 +157,48 @@ class MyApp extends State<Geral> {
       },
     );
   }
+}
+
+Widget _introScreen() {
+  return Stack(
+    children: <Widget>[
+      SplashScreen(
+        seconds: 5,
+        gradientBackground: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            Colors.white,
+            Colors.white30,
+            // Color(0xffED213A),
+            // Color(0xff93291E)
+          ],
+        ),
+        navigateAfterSeconds: HomeScreen(),
+        loaderColor: Colors.transparent,
+      ),
+      Center(
+        child: Container(
+            alignment: Alignment.bottomCenter,
+            margin: EdgeInsets.all(50),
+            height: 350,
+            width: 350,            
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(                  
+                  color: Colors.white30,
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+              // image: DecorationImage(
+              //   image: AssetImage("assets/logo-colorida.png"),
+              //   fit: BoxFit.contain,
+              // ),
+            ),
+            child: Image.asset("assets/logo.png")),
+      )
+    ],
+  );
 }

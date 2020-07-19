@@ -141,11 +141,16 @@ class CollapsingList extends State<HomeState> {
               width: 75,
               child: CircularProgressIndicator(strokeWidth: 10,), 
             ),          
-          Container(height: 20,),
-          Text(loadQuote, style: TextStyle( 
-            fontFamily: 'Montserrat', 
-            fontSize: 20, fontStyle: FontStyle.italic), 
-          textAlign: TextAlign.center, )            
+          Container(height: 20),
+          Wrap(
+            children: <Widget>[
+              Icon(Icons.format_quote, size: 35, textDirection: TextDirection.rtl),
+              Text(loadQuote, style: TextStyle( 
+                fontFamily: 'Montserrat', 
+                fontSize: 20, fontStyle: FontStyle.italic), 
+              textAlign: TextAlign.center)              
+            ],
+          )
           
         ],)
       );

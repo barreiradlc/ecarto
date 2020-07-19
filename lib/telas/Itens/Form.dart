@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:wasm';
 
+import 'package:ecarto/Funcoes/Utils.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
@@ -46,23 +47,25 @@ class _FormItemPageState extends State<FormItemPage> {
   String jwt;
 
   Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var newImage = await ImagePicker.pickImage(source: ImageSource.camera);
+    newImage = await compressImage(newImage);
 
     print('image');
-    print(image);
+    print(newImage);
     print('image');
 
     setState(() {
-      _image = image;
+      _image = newImage;
       changeImage = true;
     });
   }
 
   Future getImageGal() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var newImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    newImage = await compressImage(newImage);
 
     setState(() {
-      _image = image;
+      _image = newImage;
       changeImage = true;
     });
   }
@@ -89,8 +92,7 @@ class _FormItemPageState extends State<FormItemPage> {
           await MultipartFile.fromFile(_image.path)
       )
     );
-
-    
+          
     var response = await dio.post(
         '$hostImg/img?d=$image',
         data: formData,
@@ -185,8 +187,15 @@ class _FormItemPageState extends State<FormItemPage> {
     Navigator.pop(context);
 
     if (res['id'] != null) {
+      if(edit){
+        Get.snackbar("Sucesso", "${nome.text} editado(a) com sucesso!",
+          snackPosition: SnackPosition.BOTTOM);
+        
+      } else {
       Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!",
           snackPosition: SnackPosition.BOTTOM);
+      }
+          
       await Navigator.pushNamed(context, '/home');
     }
 
@@ -229,6 +238,17 @@ class _FormItemPageState extends State<FormItemPage> {
     });
   }
 
+  getImageService(item){    
+    if(item.thumbnail == '' || item.thumbnail == null){
+      print('SEM IMAGEM');
+      return;
+    }    
+    setState(() {
+        _image = File('$hostImg/uploads/${item.thumbnail}');
+        image = item.thumbnail;
+    });
+  }
+
   Widget build(BuildContext context) {
     edit = true;
 
@@ -261,6 +281,8 @@ class _FormItemPageState extends State<FormItemPage> {
         print('item.nature');
         print(item.thumbnail);
 
+        getImageService(item);
+
         setState(() {
           labelArte = 'Editar Arte';
           labelMaterial = 'Editar Material';
@@ -268,8 +290,8 @@ class _FormItemPageState extends State<FormItemPage> {
           nome.text = item.title;
           descricao.text = item.description;
           preco.text = item.price.toString();
-          _image = item.thumbnail != '' || null ? File('$hostImg/uploads/${item.thumbnail}') : null;
-          image = item.thumbnail != '' || null ? item.thumbnail : '';
+          // _image = item.thumbnail;
+          image = item.thumbnail != '' && null ? item.thumbnail : '';
         });
         // preco
         // descricao
@@ -421,8 +443,12 @@ class _FormItemPageState extends State<FormItemPage> {
                                 ),
                                 Positioned(
                                     top: 30.0,
-                                    right: -10,
+                                    right: 10,
+                                    width: 60,
+                                    height:60,
                                     child: FlatButton(
+                                    padding: EdgeInsets.all(5),
+                                      color: Colors.white30,
                                       onPressed: removeImage,
                                       child: Icon(Icons.close, size: 30, ),
                                     )),
@@ -525,6 +551,7 @@ class _FormItemPageState extends State<FormItemPage> {
                               controller: preco,
 
                               // obscureText: true,
+                              
                               decoration: InputDecoration(
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide:
@@ -532,7 +559,7 @@ class _FormItemPageState extends State<FormItemPage> {
                                 ),
                                 border: OutlineInputBorder(
                                   borderRadius: const BorderRadius.all(
-                                    const Radius.circular(5.0),
+                                    const Radius.circular(50.0),
                                   ),
                                 ),
                                 labelText: 'Preço',
