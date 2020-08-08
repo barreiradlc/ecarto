@@ -68,6 +68,7 @@ class _PerfilState extends State<Perfil> {
         // dio.options.headers["authorization"] = "token ${token}";
         var response = await dio.get(host + '/perfil');
         // print(response);
+        
         print('response.data');
         print(response.data);
         print('response.data');

@@ -73,6 +73,8 @@ class _DistanciaState extends State<Distancia> {
     print(distancia == '');
     }
 
+    return Container();
+
     if (load) {
       return Container(
         child: Text('Calculando distância...', style: TextStyle(color: Colors.black),)

@@ -41,7 +41,7 @@ class _FormItemPageState extends State<FormItemPage> {
   String image;
 
   var nome = TextEditingController(text: '');
-  var preco = TextEditingController(text: '0');
+  var preco = TextEditingController(text: '20.00');
   var descricao = TextEditingController(text: '');
 
   String jwt;
@@ -128,7 +128,7 @@ class _FormItemPageState extends State<FormItemPage> {
       'title': nome.text,
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
-      'price': double.parse(preco.text),
+      'price': isSwitched ? double.parse(preco.text) : 0.0,
       'latitude': position.latitude,
       'longitude': position.longitude,
       'image': changeImage == true ? await uploadImage() : image
@@ -137,7 +137,7 @@ class _FormItemPageState extends State<FormItemPage> {
       //     filename: nome.text + ".png"),
     });
 
-    if (_image != null && 3 == 2) {
+    if (_image != null) {
 
       formData.files.add(MapEntry(
           'avatar',
@@ -189,11 +189,10 @@ class _FormItemPageState extends State<FormItemPage> {
     if (res['id'] != null) {
       if(edit){
         Get.snackbar("Sucesso", "${nome.text} editado(a) com sucesso!",
-          snackPosition: SnackPosition.BOTTOM);
-        
+          snackPosition: SnackPosition.BOTTOM);        
       } else {
-      Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!",
-          snackPosition: SnackPosition.BOTTOM);
+        Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!",
+            snackPosition: SnackPosition.BOTTOM);
       }
           
       await Navigator.pushNamed(context, '/home');
@@ -291,7 +290,7 @@ class _FormItemPageState extends State<FormItemPage> {
           descricao.text = item.description;
           preco.text = item.price.toString();
           // _image = item.thumbnail;
-          image = item.thumbnail != '' && null ? item.thumbnail : '';
+          // image = item.thumbnail != '' &&item.thumbnail != null ? item.thumbnail : '';
         });
         // preco
         // descricao
@@ -541,6 +540,7 @@ class _FormItemPageState extends State<FormItemPage> {
                                 ),
                               ],
                             )),
+                            isSwitched ?
                         Container(
                             padding: EdgeInsets.only(bottom: 10),
                             child: TextField(
@@ -569,7 +569,9 @@ class _FormItemPageState extends State<FormItemPage> {
                               keyboardType: TextInputType.number,
 
                               autofocus: false,
-                            )),
+                            ))
+                            :
+                            Container(),
                         // Text("Adicionar imagem:"),
 
                         // alignment: Alignment(1.0, 1.0),

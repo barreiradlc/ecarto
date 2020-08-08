@@ -151,6 +151,7 @@ getLocation() async {
                                                 Distancia(widget.materiais[index], position),
                                               padding: const EdgeInsets.only(left: 20, bottom:5),
                                             ),
+                                            
                                             Container(
                                               child: Text(
                                                 'R\$ ${widget.materiais[index]['price'].toString()}',
@@ -162,6 +163,7 @@ getLocation() async {
                                               ),
                                               padding: const EdgeInsets.only(left: 20, bottom:15),
                                             ),
+
                                           ],
                                         )
                                     ],
