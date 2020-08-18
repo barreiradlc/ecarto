@@ -1,4 +1,5 @@
 var listCitacoes = [
+    "Não espere para plantar, apenas tenha paciência para colher.\n\n-RocketSeat"!,
     "Na manufatura e no artesanato, o trabalhador utiliza a ferramenta; na fábrica, ele é um servo da máquina.\n\n-Karl Marx",
     "QUESTÃO DE CRIATIVIDADE : Na Arte e no Artesanato não é o material, mas o resultado que deve ser NOBRE...\n\n-CANAL ARTE 1 ( 115 na NET )",
     "O verdadeiro artista é aquele que sabe enxergar o lado bom das coisas e reciclar o que não serve para transformar tudo em uma obra prima.\n\n-anderson",
