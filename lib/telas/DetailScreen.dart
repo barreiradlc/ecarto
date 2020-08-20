@@ -33,7 +33,7 @@ class Details extends State<DetailScreen> {
     thumb = Image.asset('assets/logo.png');
 
     if (item.thumbnail != null) {
-      thumb = Image.network(host + item.thumbnail);
+      thumb = Image.network(item.thumbnail);
     }
 
     if (item.steps.length != 0) {

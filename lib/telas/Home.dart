@@ -77,7 +77,7 @@ class CollapsingList extends State<HomeState> {
         var responseArtes = await http.get(
             Uri.encodeFull(
                 host + '/arte?longitude=$long&latitude=$lat&radius=20'),
-            headers: {"Authorization": token}); 
+            headers: {"Authorization": token});
 
         var responseMateriais = await http.get(
             Uri.encodeFull(
@@ -96,7 +96,7 @@ class CollapsingList extends State<HomeState> {
           // loading = false;
         });
 
-        Future.delayed(const Duration(milliseconds: 1000), () {
+        Future.delayed(const Duration(milliseconds: 500), () {
           setState(() {
               loading = false;
           });

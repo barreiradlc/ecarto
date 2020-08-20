@@ -69,7 +69,7 @@ class DetailItems extends State<DetailItemScreen> {
 
 
     if (item.thumbnail != null) {      
-      thumb = Hero( tag:'Thumbnail${item.index}', child:Image.network('$hostImg/uploads/${item.thumbnail}',
+      thumb = Hero( tag:'Thumbnail${item.index}', child:Image.network(item.thumbnail,
           fit: BoxFit.cover, alignment: Alignment.center));
     } else {
       thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
@@ -219,6 +219,7 @@ class DetailItems extends State<DetailItemScreen> {
     alertAutor() {
       double dividerHeigth = 20;
       var dividerColor = item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor;
+      var textColor = item.nature != 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor;
 
       print('autor');
       print(autor['email']);
@@ -242,7 +243,7 @@ class DetailItems extends State<DetailItemScreen> {
                               style: TextStyle(
                                   fontSize: 21,
                                   fontWeight: FontWeight.bold,
-                                  color: item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor
+                                  color: textColor
                               )
                             ),
                           )

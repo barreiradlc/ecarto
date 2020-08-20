@@ -55,7 +55,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     });
   }
 
-  getImage() async {
+  Future getImage() async {
     var getImage = await ImagePicker.pickImage(source: ImageSource.camera);    
     getImage = await compressImage(getImage);
 
@@ -78,6 +78,11 @@ class FormPerfilPageState extends State<FormPerfilPage> {
       Future<String> reqEdit() async {}
     
       uploadImage() async {
+
+        if(!changeImage){
+          return _image.path;
+        }
+
         Dio dio = new Dio();
     
         print(dio);
@@ -88,13 +93,13 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     
         formData.files.add(
           MapEntry(
-              'image', 
+              'file', 
               await MultipartFile.fromFile(_image.path)
           )
         );
         
         var response = await dio.post(
-            '$hostImg/img?d=$image',
+            '$hostImg/upload?d=$image',
             data: formData,
             options: Options(headers: {
               "Content-Type": "multipart/form-data"
@@ -159,10 +164,17 @@ class FormPerfilPageState extends State<FormPerfilPage> {
         // var id = int.parse(res['id']);
     
         // print(id);
+
         Navigator.pop(context);
     
         if (res['id'] != null) {
+          // await Navigator.pop(context);
+
           await Navigator.pushReplacementNamed(context, '/perfil');
+          
+          // Future.delayed(const Duration(milliseconds: 1000), () {
+          //   Navigator.pop(context, '/perfil');
+          // });
         }
     
         // http.Response response = await http.post(Uri.encodeFull(url + endpoint),
@@ -200,7 +212,7 @@ class FormPerfilPageState extends State<FormPerfilPage> {
           return;
         }   
         setState(() {
-            _image = File('$hostImg/uploads/${item.avatar}');
+            _image = File(item.avatar);
             image = item.avatar;
         });
         

@@ -111,7 +111,7 @@ class ArteState extends State<Artes> {
                 if (widget.artes[index]['image'] == null) {
                   bg = AssetImage("assets/logo.png");
                 } else {
-                  bg = NetworkImage( '$hostImg/uploads/${widget.artes[index]['image']}');
+                  bg = NetworkImage(widget.artes[index]['image']);
                 }
               } else {
                 bg = AssetImage("assets/logo.png");

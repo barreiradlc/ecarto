@@ -28,6 +28,7 @@ class FormItemPage extends StatefulWidget {
 
 class _FormItemPageState extends State<FormItemPage> {
   var item;
+  var index;
   bool edit;
   bool changeImage = false;
   bool isSwitched;
@@ -49,10 +50,6 @@ class _FormItemPageState extends State<FormItemPage> {
   Future getImage() async {
     var newImage = await ImagePicker.pickImage(source: ImageSource.camera);
     newImage = await compressImage(newImage);
-
-    print('image');
-    print(newImage);
-    print('image');
 
     setState(() {
       _image = newImage;
@@ -85,16 +82,17 @@ class _FormItemPageState extends State<FormItemPage> {
     FormData formData = FormData.fromMap({});
 
     print(formData);
+    print(hostImg);
 
     formData.files.add(
       MapEntry(
-          'image', 
+          'file', 
           await MultipartFile.fromFile(_image.path)
       )
     );
           
     var response = await dio.post(
-        '$hostImg/img?d=$image',
+        '$hostImg/upload?d=$image',
         data: formData,
         options: Options(headers: {
           "Content-Type": "multipart/form-data"
@@ -128,22 +126,22 @@ class _FormItemPageState extends State<FormItemPage> {
       'title': nome.text,
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
-      'price': isSwitched ? double.parse(preco.text) : 0.0,
+      'price': isSwitched ? double.parse(preco.text) : double.parse('0.0'),
       'latitude': position.latitude,
       'longitude': position.longitude,
-      'image': changeImage == true ? await uploadImage() : image
+      'image': changeImage == true ? await uploadImage() : ''
       // 'avatar': await MultipartFile.fromFile(_image,   )
       // 'avatar': await MultipartFile.fromFile(_image.path,
       //     filename: nome.text + ".png"),
     });
 
-    if (_image != null) {
+    // if (_image != null) {
 
-      formData.files.add(MapEntry(
-          'avatar',
-          await MultipartFile.fromFile(_image.path,
-              filename: nome.text + ".png")));
-    }
+    //   formData.files.add(MapEntry(
+    //       'avatar',
+    //       await MultipartFile.fromFile(_image.path,
+    //           filename: nome.text + ".png")));
+    // }
 
     print('DATA');
     print(formData.fields);
@@ -193,8 +191,7 @@ class _FormItemPageState extends State<FormItemPage> {
       } else {
         Get.snackbar("Sucesso", "${nome.text} registrado(a) com sucesso!",
             snackPosition: SnackPosition.BOTTOM);
-      }
-          
+      }          
       await Navigator.pushNamed(context, '/home');
     }
 
@@ -243,7 +240,7 @@ class _FormItemPageState extends State<FormItemPage> {
       return;
     }    
     setState(() {
-        _image = File('$hostImg/uploads/${item.thumbnail}');
+        _image = File(item.thumbnail);
         image = item.thumbnail;
     });
   }
@@ -287,6 +284,7 @@ class _FormItemPageState extends State<FormItemPage> {
           labelMaterial = 'Editar Material';
           isSwitched = item.nature == 'ARTE' ? true : false;
           nome.text = item.title;
+          index = item.index;
           descricao.text = item.description;
           preco.text = item.price.toString();
           // _image = item.thumbnail;
@@ -427,12 +425,12 @@ class _FormItemPageState extends State<FormItemPage> {
                                 Container(
                                   padding: EdgeInsets.symmetric(vertical: 20),
                                   child: edit && !changeImage
-                                      ? Image.network(
+                                      ? Hero( tag:'Thumbnail$index', child:Image.network(
                                           _image.path,
                                           width: MediaQuery.of(context).size.width,
                                           height: 240,
                                           fit: BoxFit.fitWidth,
-                                        )
+                                        ))
                                       : Image.file(
                                           _image,
                                           width: MediaQuery.of(context).size.width,

@@ -10,4 +10,8 @@ String host = 'https://ae-teste.herokuapp.com';
 // LOCAL
 // String hostImg = 'http://172.17.43.113:3333';
 
+// LOCAL
+// String hostImg = 'http://192.168.100.5:3000';
+
+// CLOUD
 String hostImg = 'https://ecarto-image-provider.herokuapp.com';

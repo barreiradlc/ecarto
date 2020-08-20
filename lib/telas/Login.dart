@@ -37,8 +37,13 @@ class _MyCustomFormState extends State<Login> {
 
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final myController = TextEditingController(text: '');
-  final myController2 = TextEditingController(text: '');
+
+
+  // final myController = TextEditingController(text: '');
+  // final myController2 = TextEditingController(text: '');
+
+  final myController = TextEditingController(text: 'test4@example.com');
+  final myController2 = TextEditingController(text: 'password');
 
   // final myController = TextEditingController(text: 'elBarrero');
   // final myController2 = TextEditingController(text: '123123');
@@ -64,7 +69,6 @@ class _MyCustomFormState extends State<Login> {
             print(res2['error']);
           if(res2['error'] == null){
             setLoginData(res2).then((response) {
-
               Navigator.pushReplacementNamed(context, '/home');
             }).catchError((err) {
               print(err);

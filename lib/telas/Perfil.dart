@@ -170,7 +170,7 @@ class _PerfilState extends State<Perfil> {
               placeholder: kTransparentImage,
               image:(profile['image'] == null || profile['image'] == '')
                   ? imgUrl
-                  : '$hostImg/uploads/${profile['image']}'
+                  : profile['image']
               )
             : CircularProgressIndicator(),
         new BackdropFilter(
@@ -211,7 +211,7 @@ class _PerfilState extends State<Perfil> {
                               profile['image'] == null || profile['image'] == ''
                                   ?
                                   imgUrl
-                                  : '$hostImg/uploads/${profile['image']}'),
+                                  : profile['image']),
                         )
                       : Container(
                           height: 205,

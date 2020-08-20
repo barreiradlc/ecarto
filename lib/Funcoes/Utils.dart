@@ -54,30 +54,42 @@ dialogoAlerta(String msg, context,{ bool loading = true}) {
 
   compressImage(image) async{
     final dir = await path_provider.getTemporaryDirectory();
-    File file = createFile("${dir.absolute.path}/${path.basename(image.path)}");
+    File file = createFile("${dir.absolute.path}/a${path.basename(image.path)}");
     Uint8List bytes = image.readAsBytesSync();
     file.writeAsBytes(bytes);
 
     return await testCompressAndGetFile(image, file.path);
   }
 
-  Future<File> testCompressAndGetFile(File file, String targetPath) async {    
+  Future testCompressAndGetFile(File file, String targetPath) async {    
+
+    var quality = file.lengthSync() / 100000;
+    int qualityInt = quality.round();
+
     var result = await FlutterImageCompress.compressAndGetFile(
         file.absolute.path, targetPath,
-        quality: 25,
-        // inSampleSize: 5
+        quality: qualityInt == 0 || qualityInt == 1 ? 20 : qualityInt,
+        // inSampleSize: 2
         // rotate: 180,
       );
 
     print("FILE");
     print('ORIGINAL -> ${file.lengthSync()}');
     print('CONVERTED -> ${result.lengthSync()}');
-    print("FILE");
-    if(file.lengthSync() > 50000){
+
+    print("FILE = ${qualityInt}");
+
+    if(qualityInt < 5){
+      return file;
+    }
+
+    if(result.lengthSync() > 25000){
       print('COMPRIMIR');
-      return result;
+      return compressImage(result);
+      // return result;
+    } else {
+      print('NÂO COMPRIMIR');
+      return file;
     }
     
-    print('NÂO COMPRIMIR');
-    return file;
   }

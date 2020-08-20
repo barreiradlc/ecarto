@@ -72,7 +72,7 @@ getLocation() async {
                 if (widget.materiais[index]['image'] == null) {
                   bg = AssetImage("assets/logo.png");
                 } else {
-                  bg = NetworkImage('$hostImg/uploads/${widget.materiais[index]['image']}');
+                  bg = NetworkImage(widget.materiais[index]['image']);
                 }
               } else {
                 bg = AssetImage("assets/logo.png");
