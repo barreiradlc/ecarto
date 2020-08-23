@@ -23,8 +23,10 @@ class _DistanciaState extends State<Distancia> {
     print(widget.position.latitude);
     print(widget.position.longitude);
 
-    var startLat = double.parse(arte['latitude']);
-    var startLong = double.parse(arte['longitude']);
+    // var startLat = double.parse(arte['latitude']);
+    var startLat = arte['location']['coordinates'][1];
+    // var startLong = double.parse(arte['longitude']);
+    var startLong = arte['location']['coordinates'][0];
 
     var endLat = widget.position.latitude;
     var endLong = widget.position.longitude;
@@ -35,7 +37,7 @@ class _DistanciaState extends State<Distancia> {
     print('DISTANCIA');
     print(distanceInMeters);
     print('DISTANCIA');
-    return distanceInMeters.toInt();
+    return distanceInMeters.floor() / 1000;
   }
 
   @override
@@ -52,7 +54,7 @@ class _DistanciaState extends State<Distancia> {
       getDistancia(widget.arte).then((d) {
       print('d');
       print(d);
-      if (d == 0) {
+      if (d < 999) {
         setState(() {
           distancia = 'A menos de um kilômetro de distância';
           load = false;
@@ -73,7 +75,7 @@ class _DistanciaState extends State<Distancia> {
     print(distancia == '');
     }
 
-    return Container();
+    // return Container();
 
     if (load) {
       return Container(

@@ -38,12 +38,11 @@ class _MyCustomFormState extends State<Login> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
 
+  final myController = TextEditingController(text: '');
+  final myController2 = TextEditingController(text: '');
 
-  // final myController = TextEditingController(text: '');
-  // final myController2 = TextEditingController(text: '');
-
-  final myController = TextEditingController(text: 'test4@example.com');
-  final myController2 = TextEditingController(text: 'password');
+  // final myController = TextEditingController(text: 'barreira26323236@hotmail.com');
+  // final myController2 = TextEditingController(text: '213123');
 
   // final myController = TextEditingController(text: 'elBarrero');
   // final myController2 = TextEditingController(text: '123123');
@@ -74,11 +73,13 @@ class _MyCustomFormState extends State<Login> {
               print(err);
             });
           } else {
+          
           return Get.snackbar(
               "Usuário não encontrato", "Email ou senha inválidos");
-
           }
+
         }).catchError((err) {
+          Get.back();
           return Get.snackbar(
               "Erro de conexão", "Não foi possível conectar ao servidor");
         });
@@ -88,7 +89,7 @@ class _MyCustomFormState extends State<Login> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     myController.dispose();
-    myController2.dispose();
+    myController2.dispose();  
     super.dispose();
   }
 
@@ -113,8 +114,7 @@ class _MyCustomFormState extends State<Login> {
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.topCenter,
               // padding: new EdgeInsets.all(2.0),
-              // color: Colors.white,              
-                
+              // color: Colors.white,                              
                 child: Hero(
                   tag: "LogoHome",
                   child: Image.asset(

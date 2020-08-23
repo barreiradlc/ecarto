@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:universal_html/prefer_universal/html.dart' as web;
 
 import './Tabs.dart';
 import '../Funcoes/UserData.dart';
+import '../Funcoes/Utils.dart';
 
 class Home extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -28,23 +30,11 @@ class HomeState extends StatefulWidget {
 class CollapsingList extends State<HomeState> {
   var materiais;
   var artes;
+  var user;
   bool loading = true;
-  String token = 'testeJWT';
-  String login = '';
-  String loadQuote = '';
-  int id;
+  String loadQuote = '';  
 
-  var myPref = web.window.localStorage['mypref'];
-
-  getLocation() async {
-    var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    print('p');
-    print(p);
-    print(p.latitude);
-    return p;
-  }
+  var myPref = web.window.localStorage['mypref'];  
 
   getQuote(){
     var length = listCitacoes.length;
@@ -55,8 +45,27 @@ class CollapsingList extends State<HomeState> {
   }
 
   getData() async {
+    var data = await getHomeData();
+    
+    setState(() {
+          user = data['user'];
+          materiais = data['materiais'];
+          artes = data['artes'];
+          // loading = false;
+        });
+
+        Future.delayed(const Duration(milliseconds: 500), () {
+          setState(() {
+              loading = false;
+          });
+        });
+
+  }
+
+  getData2() async {
     getLocation().then((location) {
       void_getJWT().then((jwt) async {
+
         final authJwt = await SharedPreferences.getInstance();
 
         String token = await authJwt.getString("jwt");
@@ -84,13 +93,18 @@ class CollapsingList extends State<HomeState> {
                 host + '/material?longitude=$long&latitude=$lat&radius=20'),
             headers: {"Authorization": token});
 
+        // var responseArtes = await http.get(
+        //     Uri.encodeFull(
+        //         host + '/arte?longitude=$long&latitude=$lat&radius=20'),
+        //     headers: {"Authorization": token});
+
         print('url');
         print(host + '/material?longitude=$long&latitude=$lat&radius=20');
 
         setState(() {
-          this.token = token;
-          this.login = login;
-          this.id = id;
+          // this.token = token;
+          // this.login = login;
+          // this.id = id;
           artes = jsonDecode(responseArtes.body);
           materiais = jsonDecode(responseMateriais.body);
           // loading = false;
@@ -162,7 +176,7 @@ class CollapsingList extends State<HomeState> {
           itemExtent: height,
           delegate: SliverChildListDelegate(
             [
-              Tabs(this.id, this.token, this.login, artes, materiais),
+              Tabs(user, artes, materiais),
               // Container(color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0).withOpacity(1.0)),
             ],
           ),

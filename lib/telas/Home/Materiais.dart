@@ -94,7 +94,8 @@ getLocation() async {
                             widget.materiais[index]['description'],
                             widget.materiais[index]['image'],
                             DateTime.parse(
-                            widget.materiais[index]['updated_at']),
+                              widget.materiais[index]['updated_at']
+                            ),
                             widget.materiais[index]['nature'],
                             widget.materiais[index]['user_id'],
                             widget.materiais[index]['id'],

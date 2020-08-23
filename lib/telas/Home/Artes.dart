@@ -148,7 +148,7 @@ class ArteState extends State<Artes> {
                               DateTime.parse(widget.artes[index]['updated_at']),
                               widget.artes[index]['nature'],
                               widget.artes[index]['user_id'],
-                              widget.artes[index]['id'],
+                              widget.artes[index]['_id'],
                               widget.artes[index]['price'],
                               index,
                             ),

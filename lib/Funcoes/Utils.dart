@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:geolocator/geolocator.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -92,4 +93,15 @@ dialogoAlerta(String msg, context,{ bool loading = true}) {
       return file;
     }
     
+  }
+
+
+  getLocation() async {
+    var p = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print('p');
+    print(p);
+    print(p.latitude);
+    return p;
   }

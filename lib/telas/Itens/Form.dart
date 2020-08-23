@@ -75,6 +75,11 @@ class _FormItemPageState extends State<FormItemPage> {
   }
 
   uploadImage() async {
+
+    if(image != ''){
+      return image;
+    }
+
     Dio dio = new Dio();
 
     print(dio);
@@ -104,6 +109,10 @@ class _FormItemPageState extends State<FormItemPage> {
     print(response.data);
     print('UPLOAD');
 
+    setState(() {
+      image = response.data['img'];
+    });
+
     return response.data['img'];
   }
 
@@ -122,7 +131,22 @@ class _FormItemPageState extends State<FormItemPage> {
 
     print(position);
 
-    FormData formData = FormData.fromMap({
+    // FormData formData = FormData.fromMap({
+    //   'title': nome.text,
+    //   'description': descricao.text,
+    //   'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
+    //   'price': isSwitched ? double.parse(preco.text) : double.parse('0.0'),
+    //   'latitude': position.latitude,
+    //   'longitude': position.longitude,
+    //   'image': _image
+    //   // 'image': changeImage == true ? await uploadImage() : ''
+
+    //   // 'avatar': await MultipartFile.fromFile(_image,   )
+    //   // 'avatar': await MultipartFile.fromFile(_image.path,
+    //   //     filename: nome.text + ".png"),
+    // });
+
+    var data = {
       'title': nome.text,
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
@@ -130,11 +154,22 @@ class _FormItemPageState extends State<FormItemPage> {
       'latitude': position.latitude,
       'longitude': position.longitude,
       'image': changeImage == true ? await uploadImage() : ''
+      // 'image': _image
+
       // 'avatar': await MultipartFile.fromFile(_image,   )
       // 'avatar': await MultipartFile.fromFile(_image.path,
       //     filename: nome.text + ".png"),
-    });
+    };
 
+    // FormData formData = FormData.fromMap({});
+
+    // formData.files.add(
+    //   MapEntry(
+    //       'file', 
+    //       await MultipartFile.fromFile(_image.path)
+    //   )
+    // );
+   
     // if (_image != null) {
 
     //   formData.files.add(MapEntry(
@@ -144,47 +179,66 @@ class _FormItemPageState extends State<FormItemPage> {
     // }
 
     print('DATA');
-    print(formData.fields);
+    // print(formData);
     print('DATA');
 
     // return;
 
+
     if (!edit) {
-      response = await dio.post(
-        host + endpoint,
-        data: formData,
-        options: Options(headers: {
-          "Authorization": this.jwt,
-          "Content-Type": "multipart/form-data"
-        }),
+      
+      // response = await dio.post(
+      //   '$host$endpoint',
+      //   data: formData,
+      //   options: Options(headers: {
+      //     "Authorization": 'Bearer ${this.jwt}',
+      //     "Content-Type": "multipart/form-data"
+      //   }),
+      // );
+
+      response = await http.post('$host$endpoint', 
+      headers : { 
+        "Authorization": 'Bearer ${this.jwt}',
+        'Content-Type': 'application/json' 
+        },
+        body: json.encode(data)
       );
+
     } else {
       print('################');
       print('PUT');
       print('################');
 
-      response = await dio.put(
-        host + endpoint + '/${item.id.toString()}',
-        data: formData,
-        options: Options(headers: {
-          "Authorization": this.jwt,
-          "Content-Type": "multipart/form-data"
-        }),
+      // response = await dio.put(
+      //   host + endpoint + '/${item.id.toString()}',
+      //   data: formData,
+      //   options: Options(headers: {
+      //     "Authorization": this.jwt,
+      //     "Content-Type": "multipart/form-data"
+      //   }),
+      // );
+
+      response = await http.put('$host$endpoint/${item.id.toString()}', 
+      headers : { 
+        "Authorization": 'Bearer ${this.jwt}',
+        'Content-Type': 'application/json' 
+        },
+        body: json.encode(data)
       );
     }
     print('formData');
-    print(response.data);
+    print(response.body);
     print(response);
     print('re sponse');
     print('response');
-    var res = response.data;
+    var res = response.body;
     // var id = int.parse(res['id']);
 
     // print(id);
 
     Navigator.pop(context);
 
-    if (res['id'] != null) {
+    
       if(edit){
         Get.snackbar("Sucesso", "${nome.text} editado(a) com sucesso!",
           snackPosition: SnackPosition.BOTTOM);        
@@ -193,7 +247,7 @@ class _FormItemPageState extends State<FormItemPage> {
             snackPosition: SnackPosition.BOTTOM);
       }          
       await Navigator.pushNamed(context, '/home');
-    }
+    
 
     // http.Response response = await http.post(Uri.encodeFull(url + endpoint),
     //     body: {

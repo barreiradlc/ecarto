@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecarto/Construtores/UserArguments.dart';
 import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,12 +15,11 @@ import '../Funcoes/UserData.dart';
 
 class Tabs extends StatefulWidget {
   var tema = 0;
-  final id;
-  final token;
-  final login;
+  
+  final user;
   final artes;
   final materiais;
-  Tabs(this.id, this.token, this.login, this.artes, this.materiais);
+  Tabs(this.user, this.artes, this.materiais);
 
   @override
   TabsState createState() => new TabsState();
@@ -35,7 +35,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
   bool _activeTabIndex = true;
   bool loading = true;
-  var bg = AssetImage("assets/logo-white.png");
+  var bg;
 
 
 
@@ -54,6 +54,17 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
     if (mounted) {
+
+      if(widget.user['image'] != null && widget.user['image'] != ""){
+        setState(() {
+          bg = NetworkImage(widget.user['image']);
+        });
+      } else {
+        setState(() {
+          bg = AssetImage("assets/logo-white.png");
+        });
+      }
+
       setState(() {
         loading = false;
       });
@@ -80,14 +91,14 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(            
-            child: Text("Bem Vindo(a): ${widget.login}"),
+            child: Text("Bem Vindo(a): ${widget.user['name']}"),
             decoration: BoxDecoration(
               color: Colors.white,              
               image: DecorationImage(
                 image: bg,
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    _activeTabIndex ? Theme.of(context).primaryColor.withOpacity(0.5) : Theme.of(context).accentColor.withOpacity(0.5),
+                    _activeTabIndex ? Theme.of(context).primaryColor.withOpacity(0.5) : Theme.of(context).accentColor.withOpacity(0.3),
                     BlendMode.color),
               ),
             ),
@@ -96,7 +107,17 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             title: Text('Perfil'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/perfil');
+              Navigator.pushNamed(context, '/perfil', arguments: UserArguments(
+                widget.user['id'],
+                widget.user['name'],
+                widget.user['username'],
+                widget.user['email'],
+                widget.user['phone'],
+                widget.user['instagram'],
+                widget.user['pinterest'],
+                widget.user['about'],
+                widget.user['image'],
+              ));
             },
           ),
           ListTile(

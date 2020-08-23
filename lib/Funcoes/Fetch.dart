@@ -1,4 +1,7 @@
+import 'package:ecarto/Funcoes/UserData.dart';
+import 'package:ecarto/Funcoes/Utils.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import '../Recursos/Api.dart';
@@ -81,13 +84,13 @@ Future login(email, senha) async {
     Get.dialog(alertWidget(),
         barrierDismissible: false, useRootNavigator: false);
 
-    http.Response response =
-        await http.post(Uri.encodeFull(host + endpoint), body: {
-      // 'username': usuarioCred.text,
-      'email': email,
-      'password': senha
-    });
-    const bool kIsWeb = identical(0, 0.0);
+    var response = await http.post('$host$endpoint', 
+      headers : { 'Content-Type': 'application/json' },
+      body: json.encode({      
+        "email": email,
+        "password": senha
+      })
+    );
     var res = jsonDecode(response.body);
 
     Get.back();
@@ -95,6 +98,34 @@ Future login(email, senha) async {
     return res;
   }
   Get.snackbar("Atenção", "Deve preeencher com seus dados para continuar");
+}
+
+handleUnauthorized(){
+  Get.toNamed('/login');
+}
+
+Future getHomeData() async {
+    String endpoint = '/items/list';
+    var location = await getLocation();
+    var jwt = await void_getJWT();
+
+    String query = '?longitude=${location.longitude}&latitude=${location.latitude}';
+
+    http.Response response = await  http.get(Uri.encodeFull('$host$endpoint$query'), headers: {
+      "Authorization": 'Bearer $jwt'
+    });
+    
+    print(response);
+    print(response.statusCode);
+
+    if(response.statusCode == 401){
+      return handleUnauthorized();
+    } 
+
+    var res = jsonDecode(response.body);
+    
+    return res;
+    
 }
 
 // Future<http.Response> fetchPost() async {

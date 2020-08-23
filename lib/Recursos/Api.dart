@@ -1,7 +1,8 @@
 //TESTE
-String host = 'https://ae-teste.herokuapp.com';
+// String host = 'https://ae-teste.herokuapp.com';
 
-// String host = 'http://192.168.0.141:3000';
+String host = 'http://192.168.100.5:3333';
+// String host = 'http://localhost:3333';
 
 //PRODUÇÃO
 // String host = 'https://ecarto-app.herokuapp.com';

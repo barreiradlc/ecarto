@@ -55,7 +55,9 @@ class _PerfilState extends State<Perfil> {
     });
   }
 
-  Future<String> getPerfil() async {
+  getPerfil() async {}
+
+  Future<String> getPerfil2() async {
     void_getJWT().then((token) async {
       void_getID().then((id) async {
         print(token);
@@ -68,7 +70,7 @@ class _PerfilState extends State<Perfil> {
         // dio.options.headers["authorization"] = "token ${token}";
         var response = await dio.get(host + '/perfil');
         // print(response);
-        
+
         print('response.data');
         print(response.data);
         print('response.data');
@@ -82,10 +84,9 @@ class _PerfilState extends State<Perfil> {
 
         Future.delayed(const Duration(milliseconds: 1000), () {
           setState(() {
-              loading = false;
+            loading = false;
           });
         });
-
       });
     });
 
@@ -123,11 +124,18 @@ class _PerfilState extends State<Perfil> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
+    final UserArguments item = ModalRoute.of(context).settings.arguments;
+
+    setState(() {
+      loading = false;
+      profile = item;
+    });
+
 
 
     if (loading) {
       return Scaffold(
-          body: Container(
+          body:  new Container(
               color: Theme.of(context).primaryColor,
               padding: EdgeInsets.all(20),
               child: Column(
@@ -154,24 +162,30 @@ class _PerfilState extends State<Perfil> {
                     textAlign: TextAlign.center,
                   )
                 ],
-              )));
+              )
+              )
+             
+
+          
+          );
     }
 
-    return new Stack(
+
+    return Stack(
+      overflow: Overflow.visible,
       children: <Widget>[
         new Container(
           height: _height,
           color: Theme.of(context).accentColor,
         ),
         imgUrl != ''
-            ? FadeInImage.memoryNetwork(              
-              height: _height,
-              fit: BoxFit.contain,
-              placeholder: kTransparentImage,
-              image:(profile['image'] == null || profile['image'] == '')
-                  ? imgUrl
-                  : profile['image']
-              )
+            ? FadeInImage.memoryNetwork(
+                height: _height,
+                fit: BoxFit.contain,
+                placeholder: kTransparentImage,
+                image: (profile.avatar == null || profile.avatar == '')
+                    ? imgUrl
+                    : profile.avatar)
             : CircularProgressIndicator(),
         new BackdropFilter(
             filter: new ui.ImageFilter.blur(
@@ -185,10 +199,11 @@ class _PerfilState extends State<Perfil> {
               ),
             )),
         new Scaffold(
-            appBar: new AppBar(
+            appBar: new AppBar(              
               brightness: Brightness.dark,
               iconTheme: new IconThemeData(color: Colors.white),
-              title: new Text('Perfil', style: TextStyle(color: Colors.white)),
+              
+              title: new Text('Perfil', style: TextStyle(color: Colors.white),),
               centerTitle: false,
               elevation: 0.0,
               backgroundColor: Colors.transparent,
@@ -197,7 +212,12 @@ class _PerfilState extends State<Perfil> {
             //   child: new Container(),
             // ),
             backgroundColor: Colors.transparent,
-            body: new Center(
+            body: 
+            ListView(
+              children: <Widget>[
+
+              
+            new Center(
               child: new Column(
                 children: <Widget>[
                   new SizedBox(
@@ -208,10 +228,9 @@ class _PerfilState extends State<Perfil> {
                           backgroundColor: Colors.transparent,
                           radius: _width < _height ? _width / 4 : _height / 4,
                           backgroundImage: NetworkImage(
-                              profile['image'] == null || profile['image'] == ''
-                                  ?
-                                  imgUrl
-                                  : profile['image']),
+                              profile.avatar == null || profile.avatar == ''
+                                  ? imgUrl
+                                  : profile.avatar),
                         )
                       : Container(
                           height: 205,
@@ -224,14 +243,14 @@ class _PerfilState extends State<Perfil> {
                     height: _height / 25.0,
                   ),
                   new Text(
-                    profile['name'] != null ? profile['name'] : "",
+                    profile.name != null ? profile.name : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 15,
                         color: Colors.white),
                   ),
                   new Text(
-                    profile['username'] != null ? profile['username'] : "",
+                    profile.username != null ? profile.username : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 15,
@@ -246,7 +265,7 @@ class _PerfilState extends State<Perfil> {
                     thickness: 5,
                   ),
                   new Text(
-                    profile['email'] != null ? profile['email'] : "",
+                    profile.email != null ? profile.email : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 35,
@@ -256,7 +275,7 @@ class _PerfilState extends State<Perfil> {
                     padding: EdgeInsets.all(5),
                   ),
                   new Text(
-                    profile['phone'] != null ? profile['phone'] : "",
+                    profile.phone != null ? profile.phone : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 35,
@@ -266,14 +285,14 @@ class _PerfilState extends State<Perfil> {
                     padding: EdgeInsets.all(5),
                   ),
                   new Text(
-                    profile['instagram'] != null ? profile['instagram'] : "",
+                    profile.instagram != null ? profile.instagram : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 35,
                         color: Colors.white),
                   ),
                   new Text(
-                    profile['pinterest'] != null ? profile['pinterest'] : "",
+                    profile.pinterest != null ? profile.pinterest : "",
                     style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: _width / 35,
@@ -283,8 +302,8 @@ class _PerfilState extends State<Perfil> {
                     padding: new EdgeInsets.only(
                         top: _height / 30, left: _width / 8, right: _width / 8),
                     child: new Text(
-                      profile['about'] != null
-                          ? profile['about']
+                      profile.about != null
+                          ? profile.about
                           : 'Sobre mim... ',
                       style: new TextStyle(
                           fontWeight: FontWeight.normal,
@@ -297,14 +316,14 @@ class _PerfilState extends State<Perfil> {
                     height: _height / 30,
                     color: Colors.white,
                   ),
-                  new Row(
-                    children: <Widget>[
-                      rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L'),
-                      rowCell(status[1]['Artes'], 'ARTE', 'S', '')
-                    ],
-                  ),
+                  // new Row(
+                  //   children: <Widget>[
+                  //     rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L'),
+                  //     rowCell(status[1]['Artes'], 'ARTE', 'S', '')
+                  //   ],
+                  // ),
                   new Divider(height: _height / 30, color: Colors.white),
-                  id.toString() != profile['id'].toString()
+                  id.toString() != profile.id.toString()
                       ? Padding(
                           padding: new EdgeInsets.only(
                               left: _width / 8, right: _width / 8),
@@ -333,15 +352,15 @@ class _PerfilState extends State<Perfil> {
                             onPressed: () {
                               Navigator.pushNamed(context, '/formperfil',
                                   arguments: UserArguments(
-                                    profile['id'],
-                                    profile['name'],
-                                    profile['username'],
-                                    profile['email'],
-                                    profile['phone'],
-                                    profile['instagram'],
-                                    profile['pinterest'],
-                                    profile['about'],
-                                    profile['image'],
+                                    profile.id,
+                                    profile.name,
+                                    profile.username,
+                                    profile.email,
+                                    profile.phone,
+                                    profile.instagram,
+                                    profile.pinterest,
+                                    profile.about,
+                                    profile.avatar,
                                   ));
                             },
                             child: new Container(
@@ -364,7 +383,10 @@ class _PerfilState extends State<Perfil> {
                         ),
                 ],
               ),
-            ))
+            )
+            ],
+            )
+            )
       ],
     );
   }

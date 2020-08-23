@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../Recursos/Api.dart';
+
+import 'package:http/http.dart' as http;
 
 class FormPerfilPage extends StatefulWidget {
   @override
@@ -75,11 +78,9 @@ class FormPerfilPageState extends State<FormPerfilPage> {
       });
   }
     
-      Future<String> reqEdit() async {}
-    
       uploadImage() async {
 
-        if(!changeImage){
+        if(!changeImage && !edit){
           return _image.path;
         }
 
@@ -113,6 +114,9 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     
         return response.data['img'];
       }
+      
+      Future<String> reqEdit() async {}
+    
     
       Future<String> req() async {
         Get.dialog(alertWidget(),
@@ -120,12 +124,12 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     
         Dio dio = new Dio();
         var response;
-        var endpoint = '/users/${id.text.toString()}';
+        var endpoint = '/user';
     
         print(jwt);
         print(endpoint);
     
-        FormData formData = FormData.fromMap({
+        var data = {
           'name': name.text,
           // 'username': username.text,
           'email': email.text,
@@ -143,34 +147,45 @@ class FormPerfilPageState extends State<FormPerfilPage> {
     
           // 'avatar': await MultipartFile.fromFile(_image.path,
           //     filename: nome.text + ".png"),
-        });
+        };
     
-        print(formData.fields);
     
-        response = await dio.put(
-          host + endpoint,
-          data: formData,
-          options: Options(headers: {
-            "Authorization": this.jwt,
-            "Content-Type": "multipart/form-data"
-          }),
+    
+        response = await http.put('$host$endpoint',           
+          body: json.encode(data),
+          headers: {
+            "Authorization": 'Bearer ${this.jwt}',
+            'Content-Type': 'application/json' 
+          },
         );
         print('formData');
-        print(response.data);
+        print(response.body);
         print(response);
         print('re sponse');
         print('response');
-        var res = response.data;
+        var res = jsonDecode(response.body)['values'];
         // var id = int.parse(res['id']);
     
         // print(id);
 
         Navigator.pop(context);
     
-        if (res['id'] != null) {
+        if (res['email'] != null) {
           // await Navigator.pop(context);
+        Navigator.pop(context);
 
-          await Navigator.pushReplacementNamed(context, '/perfil');
+          await Navigator.pushReplacementNamed(context, '/perfil', 
+          arguments: UserArguments(
+            res['id'],
+            res['name'],
+            res['username'],
+            res['email'],
+            res['phone'],
+            res['instagram'],
+            res['pinterest'],
+            res['about'],
+            res['image'],
+          ));
           
           // Future.delayed(const Duration(milliseconds: 1000), () {
           //   Navigator.pop(context, '/perfil');
