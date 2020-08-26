@@ -51,14 +51,15 @@ class CollapsingList extends State<HomeState> {
           user = data['user'];
           materiais = data['materiais'];
           artes = data['artes'];
-          // loading = false;
+          loading = false;
         });
+        
 
-        Future.delayed(const Duration(milliseconds: 500), () {
-          setState(() {
-              loading = false;
-          });
-        });
+        // Future.delayed(const Duration(milliseconds: 500), () {
+        //   setState(() {
+        //       loading = false;
+        //   });
+        // });
 
   }
 
