@@ -118,7 +118,7 @@ Future getHomeData() async {
     print(response);
     print(response.statusCode);
 
-    if(response.statusCode == 401){
+    if(response.statusCode == 401 || response.statusCode == 503){
       return handleUnauthorized();
     } 
 

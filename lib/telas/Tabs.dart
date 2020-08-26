@@ -90,16 +90,18 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(            
-            child: Text("Bem Vindo(a): ${widget.user['name']}"),
+          DrawerHeader(
+            child: Text("Bem Vindo(a): ${widget.user['name']}",          
+              style: TextStyle(color: Colors.white),
+            ),
             decoration: BoxDecoration(
-              color: Colors.white,              
+              color: Colors.black,              
               image: DecorationImage(
                 image: bg,
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    _activeTabIndex ? Theme.of(context).primaryColor.withOpacity(0.5) : Theme.of(context).accentColor.withOpacity(0.3),
-                    BlendMode.color),
+                    Colors.black.withOpacity(0.65),
+                    BlendMode.dstOut),
               ),
             ),
           ),
