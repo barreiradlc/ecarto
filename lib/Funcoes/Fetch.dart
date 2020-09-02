@@ -59,16 +59,23 @@ alertWidget({String msg = "Aguarde"}) {
 }
 
 Future register(usuario, email, senha, confirmaSenha) async {
-  var endpoint = '/users';
+  var endpoint = '/auth/register';
 
   if (senha == confirmaSenha) {
     Get.dialog(alertWidget(),
         barrierDismissible: false, useRootNavigator: false);
 
-    http.Response response = await http.post(Uri.encodeFull(host + endpoint),
-        body: {'username': usuario, 'email': email, 'password': senha});
+    http.Response response = await http.post('$host$endpoint',
+        headers : { 'Content-Type': 'application/json' },
+        body: json.encode({
+          'username': usuario, 
+          'email': email, 
+          'password': senha
+        })
+    );
 
-    const bool kIsWeb = identical(0, 0.0);
+
+    // const bool kIsWeb = identical(0, 0.0);
     var res = jsonDecode(response.body);
 
     return res;
@@ -86,7 +93,7 @@ Future login(email, senha) async {
 
     var response = await http.post('$host$endpoint', 
       headers : { 'Content-Type': 'application/json' },
-      body: json.encode({      
+      body: json.encode({
         "email": email,
         "password": senha
       })
@@ -127,6 +134,8 @@ Future getHomeData() async {
     return res;
     
 }
+
+
 
 // Future<http.Response> fetchPost() async {
 //   final http.Response response = await http.get('https://jsonplaceholder.typicode.com/posts/1');

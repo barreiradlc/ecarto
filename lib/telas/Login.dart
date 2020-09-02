@@ -38,11 +38,11 @@ class _MyCustomFormState extends State<Login> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
 
-  final myController = TextEditingController(text: '');
-  final myController2 = TextEditingController(text: '');
+  // final myController = TextEditingController(text: '');
+  // final myController2 = TextEditingController(text: '');
 
-  // final myController = TextEditingController(text: 'barreira26323236@hotmail.com');
-  // final myController2 = TextEditingController(text: '213123');
+  final myController = TextEditingController(text: 'barreiro123@hotmail.com');
+  final myController2 = TextEditingController(text: '213123');
 
   // final myController = TextEditingController(text: 'elBarrero');
   // final myController2 = TextEditingController(text: '123123');

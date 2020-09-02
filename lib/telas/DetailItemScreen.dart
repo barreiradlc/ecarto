@@ -247,7 +247,17 @@ class DetailItems extends State<DetailItemScreen> {
                               )
                             ),
                           )
-                        : Container(),
+                        :
+                        ListTile(
+                          title: Text(
+                            autor['username'],
+                            style: TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.bold,
+                                color: textColor
+                            )
+                          ),
+                        ),
                         Divider(height: dividerHeigth, color: dividerColor, thickness: 3,),
                     autor['phone'] != null
                         ? ListTile(
@@ -289,6 +299,7 @@ class DetailItems extends State<DetailItemScreen> {
     }
 
     Future<String> contatarAutor(userId) async {
+
       Get.dialog(alertWidget(msg:"Buscando dados do autor"),
         barrierDismissible: false, useRootNavigator: false);
 
@@ -298,9 +309,9 @@ class DetailItems extends State<DetailItemScreen> {
         print(userId);
         Dio dio = new Dio();
         // dio.options.headers['content-Type'] = 'application/json';
-        dio.options.headers["authorization"] = token;
+        dio.options.headers["authorization"] = 'Bearer $token';
         // dio.options.headers["authorization"] = "token ${token}";
-        var response = await dio.get(host + '/usuario/' + userId.toString());
+        var response = await dio.get('$host/user?outerUserId=$userId');
         // print(response);
         print('response.data');
         print(response.data);

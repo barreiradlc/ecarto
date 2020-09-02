@@ -6,13 +6,13 @@ import 'dart:convert';
 
 Future<String> void_getJWT() async {
   final authJwt = await SharedPreferences.getInstance();
-  String jwt = authJwt.getString("jwt");
+  String jwt = await authJwt.getString("jwt");
   return jwt;
 }
 
-Future<int> void_getID() async {
+Future<String> void_getID() async {
   final authid = await SharedPreferences.getInstance();
-  int id = authid.getInt("id");
+  String id = authid.getString("id");
   return id;
 }
 

@@ -39,7 +39,7 @@ class _FormItemPageState extends State<FormItemPage> {
   var position;
 
   File _image;
-  String image;
+  String image = '';
 
   var nome = TextEditingController(text: '');
   var preco = TextEditingController(text: '20.00');
@@ -76,8 +76,9 @@ class _FormItemPageState extends State<FormItemPage> {
 
   uploadImage() async {
 
-    if(image != ''){
-      return image;
+    if(!changeImage){
+      print('NÂO SOBE');
+      return;
     }
 
     Dio dio = new Dio();
@@ -153,7 +154,7 @@ class _FormItemPageState extends State<FormItemPage> {
       'price': isSwitched ? double.parse(preco.text) : double.parse('0.0'),
       'latitude': position.latitude,
       'longitude': position.longitude,
-      'image': changeImage == true ? await uploadImage() : ''
+      'image': await uploadImage()
       // 'image': _image
 
       // 'avatar': await MultipartFile.fromFile(_image,   )
@@ -179,7 +180,7 @@ class _FormItemPageState extends State<FormItemPage> {
     // }
 
     print('DATA');
-    // print(formData);
+    print(data);
     print('DATA');
 
     // return;

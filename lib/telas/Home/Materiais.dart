@@ -97,7 +97,7 @@ getLocation() async {
                               widget.materiais[index]['updated_at']
                             ),
                             widget.materiais[index]['nature'],
-                            widget.materiais[index]['user_id'],
+                            widget.materiais[index]['user']['_id'],
                             widget.materiais[index]['id'],
                             widget.materiais[index]['price'],
                             index,

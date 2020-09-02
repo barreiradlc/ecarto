@@ -8,7 +8,7 @@ setLoginData(res) async{
 
   await data.setString('jwt', res['token']);
   await data.setString('username', res['username']);
-  await data.setInt('id', res['id']);
+  await data.setString('id', res['id']);
 
   return data;
 }
