@@ -67,71 +67,67 @@ class DetailItems extends State<DetailItemScreen> {
     print(item.nature);
     print(item.index);
 
-
-    if (item.thumbnail != null) {      
-      thumb = Hero( tag:'Thumbnail${item.index}', child:Image.network(item.thumbnail,
-          fit: BoxFit.cover, alignment: Alignment.center));
+    if (item.thumbnail != null) {
+      thumb = Hero(
+          tag: 'Thumbnail${item.index}',
+          child: Image.network(item.thumbnail,
+              fit: BoxFit.cover, alignment: Alignment.center));
     } else {
       thumb = Image.asset('assets/logo.png', fit: BoxFit.cover);
     }
 
-    
-  removeImage(image) async {
-    Dio dio = new Dio();
+    removeImage(image) async {
+      Dio dio = new Dio();
 
-    print(dio);
-    
+      print(dio);
 
+      var response = await dio.get('$hostImg/img/$image');
 
-    
-    
-    var response = await dio.get(
-      '$hostImg/img/$image'        
-    );
+      print('UPLOAD');
+      print(response);
+      print(response.data);
+      print('UPLOAD');
 
-    print('UPLOAD');
-    print(response);
-    print(response.data);
-    print('UPLOAD');
-
-    return response.data['img'];
-  }
-
+      return response.data['img'];
+    }
 
     delete(id) async {
       final authJwt = await SharedPreferences.getInstance();
       String token = await authJwt.getString("jwt");
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              // Retrieve the text the that user has entered by using the
-              content: Container(
-                  padding: EdgeInsetsDirectional.only(top: 50),
-                  height: 150,
-                  child: Column(
-                    children: <Widget>[
-                      CircularProgressIndicator(),
-                      Text(
-                        "Aguarde...",
-                      )
-                    ],
-                  )));
-        },
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return AlertDialog(
+      //         // Retrieve the text the that user has entered by using the
+      //         content: Container(
+      //             padding: EdgeInsetsDirectional.only(top: 50),
+      //             height: 150,
+      //             child: Column(
+      //               children: <Widget>[
+      //                 CircularProgressIndicator(),
+      //                 Text(
+      //                   "Aguarde...",
+      //                 )
+      //               ],
+      //             )));
+      //   },
+      // );
+
+      Get.dialog(alertWidget(),
+          barrierDismissible: false, useRootNavigator: false);
 
       print(token);
-      var endpoint = '/items/${id}';
+      var endpoint = '/items/$id';
 
       print(endpoint);
-      
-      if(item.thumbnail != null){
+
+      if (item.thumbnail != null) {
         removeImage(item.thumbnail);
       }
 
-      var response =
-          await http.delete(host + endpoint, headers: {"Authorization": token});
+      var response = await http.delete('$host$endpoint',
+          headers: {"Authorization": 'Bearer $token'});
 
       print(response);
 
@@ -142,58 +138,55 @@ class DetailItems extends State<DetailItemScreen> {
       // print(res);
       print('###');
 
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, '/home');
+      Get.back();
+
+
+      Get.toNamed('/home');
+      // Navigator.pushReplacementNamed(context, '/home');
+    }
+
+    back() {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Get.back();
+      });
     }
 
     deleteAction(idItem) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return Container(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                height: 60,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+      return delete(idItem);
+
+      Get.dialog(Container(
+          color: Colors.white24.withOpacity(0.5),
+          height: MediaQuery.of(context).size.height / 2,
+          child: Scaffold(
+
+              // backgroundColor: Colors.white.withOpacity(0.5),
+              body: Container(
+            color: Colors.transparent,
+            padding: EdgeInsets.all(20),
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text('Deseja realmente remover? \n \n'),
+                // Text('$idItem'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    AlertDialog(
-                      // buttonPadd ing: EdgeInsets.all(40),
-                      contentPadding: EdgeInsets.symmetric(vertical: 20),
-                      content: Container(
-                        padding: EdgeInsets.all(20),
-                        child: 
-
-                      Column(
-
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-
-                          Text('Deseja realmente remover? \n \n'),
-
-                          // Text('$idItem'),
-                          Row(
-
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              RaisedButton(
-                                  padding: EdgeInsets.all(5),
-                                  onPressed: () => delete(idItem),
-                                  child: Text('Remover')),
-                              RaisedButton(
-                                  padding: EdgeInsets.all(5),
-                                  onPressed: () => Navigator.pop(context),
-                                  child: Text('Cancelar'))
-                            ],
-                          )
-                        ],
-                      ),
-                      ) 
-                    )
+                    RaisedButton(
+                        padding: EdgeInsets.all(5),
+                        onPressed: () => delete(idItem),
+                        child: Text('Remover')),
+                    RaisedButton(
+                        padding: EdgeInsets.all(5),
+                        onPressed: () => back(),
+                        child: Text('Cancelar'))
                   ],
-                ));
-          });
+                )
+              ],
+            ),
+          ))));        
     }
 
     editAction(item) {
@@ -203,105 +196,96 @@ class DetailItems extends State<DetailItemScreen> {
         context,
         '/itens/form',
         arguments: ScreenArguments(
-          item.title,
-          item.description,
-          item.thumbnail,
-          null, // DateTime.parse(widget.artes[index]['updated_at']),
-          item.nature,
-          item.user_id,
-          item.id,
-          item.price,
-          item.index
-        ),
+            item.title,
+            item.description,
+            item.thumbnail,
+            null, // DateTime.parse(widget.artes[index]['updated_at']),
+            item.nature,
+            item.user_id,
+            item.id,
+            item.price,
+            item.index),
       );
     }
 
     alertAutor() {
       double dividerHeigth = 20;
-      var dividerColor = item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor;
-      var textColor = item.nature != 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor;
+      var dividerColor = item.nature == 'ARTE'
+          ? Theme.of(context).primaryColor
+          : Theme.of(context).accentColor;
+      var textColor = item.nature != 'ARTE'
+          ? Theme.of(context).primaryColor
+          : Theme.of(context).accentColor;
 
       print('autor');
       print(autor['email']);
       print('autor');
       // print(autor.email);
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return Container(
-              height: 60,
-              child: AlertDialog(
-                content: Container(
-                    child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    autor['name'] != null
-                        ? ListTile(
-                            title: Text(
-                              autor['name'],
-                              style: TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor
-                              )
-                            ),
-                          )
-                        :
-                        ListTile(
-                          title: Text(
-                            autor['username'],
-                            style: TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold,
-                                color: textColor
-                            )
-                          ),
-                        ),
-                        Divider(height: dividerHeigth, color: dividerColor, thickness: 3,),
-                    autor['phone'] != null
-                        ? ListTile(
-                            onTap: () => launch(
-                                "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
-                            title: Text('Telefone: ' + autor['phone']),
-                          )
-                        : Container(),
-                        Divider(height: dividerHeigth),
-                    autor['email'] != null
-                        ? ListTile(
-                            onTap: () => launch(
-                                "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
-                            title: Text('Email: ' + autor['email']),
-                          )
-                        : Container(),
-                        Divider(height: dividerHeigth),
-                    autor['instagram'] != null
-                        ? ListTile(
-                            onTap: () => launch(
-                                "https://instagram.com/${autor['instagram']}"),
-                            title: Text('Instagram: ' + autor['instagram']),
-                          )
-                        : Container(),
+      Get.dialog( Container(
+            height: MediaQuery.of(context).size.height / 2,
+              child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          autor['name'] != null
+              ? ListTile(
+                  title: Text(autor['name'],
+                      style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold,
+                          color: textColor)),
+                )
+              : ListTile(
+                  title: Text(autor['username'],
+                      style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold,
+                          color: textColor)),
+                ),
+          Divider(
+            height: dividerHeigth,
+            color: dividerColor,
+            thickness: 3,
+          ),
+          autor['phone'] != null
+              ? ListTile(
+                  onTap: () => launch(
+                      "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
+                  title: Text('Telefone: ' + autor['phone']),
+                )
+              : Container(),
+          Divider(height: dividerHeigth),
+          autor['email'] != null
+              ? ListTile(
+                  onTap: () => launch(
+                      "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
+                  title: Text('Email: ' + autor['email']),
+                )
+              : Container(),
+          Divider(height: dividerHeigth),
+          autor['instagram'] != null
+              ? ListTile(
+                  onTap: () =>
+                      launch("https://instagram.com/${autor['instagram']}"),
+                  title: Text('Instagram: ' + autor['instagram']),
+                )
+              : Container(),
 
-                    // Center(
-                    //     child: Container(
-                    //         child: ListTile(
-                    //   onLongPress:
-                    //     () => Navigator.pop(context)
-                    //   ,
-                    //   title: Text('Fechar'),
-                    // )))
-                  ],
-                )),
-              ),
-            );
-          });
+          // Center(
+          //     child: Container(
+          //         child: ListTile(
+          //   onLongPress:
+          //     () => Navigator.pop(context)
+          //   ,
+          //   title: Text('Fechar'),
+          // )))
+        ],
+      )));
     }
 
     Future<String> contatarAutor(userId) async {
-
-      Get.dialog(alertWidget(msg:"Buscando dados do autor"),
-        barrierDismissible: false, useRootNavigator: false);
+      Get.dialog(alertWidget(msg: "Buscando dados do autor"),
+          barrierDismissible: false, useRootNavigator: false);
 
       void_getJWT().then((token) async {
         print(token);
@@ -371,7 +355,7 @@ class DetailItems extends State<DetailItemScreen> {
     print(item.nature);
 
     botAcao = Container(
-      child: Row(
+        child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         RaisedButton(
@@ -398,20 +382,27 @@ class DetailItems extends State<DetailItemScreen> {
       botAcao = Container(
           margin: EdgeInsets.all(20),
           child: RaisedButton(
-
-            padding: EdgeInsets.all(15),
-              color: item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+              padding: EdgeInsets.all(15),
+              color: item.nature == 'ARTE'
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).accentColor,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[Icon(Icons.chat, color: Colors.white), Text("   Contatar autor", style: TextStyle(color: Colors.white))],
+                children: <Widget>[
+                  Icon(Icons.chat, color: Colors.white),
+                  Text("   Contatar autor",
+                      style: TextStyle(color: Colors.white))
+                ],
               ),
               onPressed: () => contatarAutor(item.user_id)));
     }
 
     return Theme(
         data: new ThemeData(
-            primaryColor: item.nature == 'ARTE' ? Theme.of(context).primaryColor : Theme.of(context).accentColor),
+            primaryColor: item.nature == 'ARTE'
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).accentColor),
         child: Scaffold(
           appBar: AppBar(
             iconTheme: new IconThemeData(color: Colors.white),
@@ -428,17 +419,16 @@ class DetailItems extends State<DetailItemScreen> {
                 Padding(
                   padding: EdgeInsets.all(25),
                   child: Text(item.description), //
-                ),      
-                item.price != 0 ?      
-                Padding(
-                  padding: EdgeInsets.all(25),
-                  child: Text('Preço: R\$ ${item.price.toString()}'), //
-                )
-                :
-                Padding(
-                  padding: EdgeInsets.all(25),
-                  child: Text('Preço: Gratuito'), //
                 ),
+                item.price != 0
+                    ? Padding(
+                        padding: EdgeInsets.all(25),
+                        child: Text('Preço: R\$ ${item.price.toString()}'), //
+                      )
+                    : Padding(
+                        padding: EdgeInsets.all(25),
+                        child: Text('Preço: Gratuito'), //
+                      ),
                 botAcao,
                 // MateriaisList(),
                 // passoAPasso,

@@ -235,9 +235,9 @@ class _PerfilState extends State<Perfil> {
                       : Container(
                           height: 205,
                           width: 205,
-                          // child: CircularProgressIndicator(
-                          //   strokeWidth: 5,
-                          // )
+                          child: CircularProgressIndicator(
+                            strokeWidth: 5,
+                          )
                         ),
                   new SizedBox(
                     height: _height / 25.0,

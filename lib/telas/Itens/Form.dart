@@ -78,6 +78,9 @@ class _FormItemPageState extends State<FormItemPage> {
 
     if(!changeImage){
       print('NÂO SOBE');
+      if(edit && image != ''){
+        return image;
+      }
       return;
     }
 
