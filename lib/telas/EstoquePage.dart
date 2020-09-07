@@ -85,7 +85,7 @@ class _EstoquePageState extends State<EstoquePage> {
                 RaisedButton(
                     color: Theme.of(context).primaryColor,
                     padding: EdgeInsets.all(5),
-                    onPressed: add,
+                    onPressed: () => add(),
                     child: Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -138,7 +138,8 @@ class _EstoquePageState extends State<EstoquePage> {
           .insertDog(dog, d, id.text != '' ? int.parse(id.text) : null)
           .then((v) {
         list();
-        Navigator.pop(context, v);
+        Navigator.of(context, rootNavigator: true).pop();
+
       });
     });
   }

@@ -15,13 +15,13 @@ class _DistanciaState extends State<Distancia> {
   var distancia = '';
   bool load = true;
 
-  getDistancia(arte) async {
-    print('arte');
-    print(arte['latitude']);
-    print(arte['longitude']);
+  getDistancia(arte) async {    
+    // print(arte['nature']);
+    // print(arte['position']['latitude']);
+    // print(arte['longitude']);
 
-    print(widget.position.latitude);
-    print(widget.position.longitude);
+    // print(widget.position.latitude);
+    // print(widget.position.longitude);
 
     // var startLat = double.parse(arte['latitude']);
     var startLat = arte['location']['coordinates'][1];

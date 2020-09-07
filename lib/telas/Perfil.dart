@@ -163,10 +163,7 @@ class _PerfilState extends State<Perfil> {
                   )
                 ],
               )
-              )
-             
-
-          
+              )             
           );
     }
 

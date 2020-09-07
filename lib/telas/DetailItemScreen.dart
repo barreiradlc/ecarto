@@ -140,7 +140,6 @@ class DetailItems extends State<DetailItemScreen> {
 
       Get.back();
 
-
       Get.toNamed('/home');
       // Navigator.pushReplacementNamed(context, '/home');
     }
@@ -152,7 +151,6 @@ class DetailItems extends State<DetailItemScreen> {
     }
 
     deleteAction(idItem) {
-
       return delete(idItem);
 
       Get.dialog(Container(
@@ -186,7 +184,7 @@ class DetailItems extends State<DetailItemScreen> {
                 )
               ],
             ),
-          ))));        
+          ))));
     }
 
     editAction(item) {
@@ -221,66 +219,70 @@ class DetailItems extends State<DetailItemScreen> {
       print(autor['email']);
       print('autor');
       // print(autor.email);
-      Get.dialog( Container(
-            height: MediaQuery.of(context).size.height / 2,
+      Get.dialog(Card(
+        margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height / 4, horizontal: 35),
+          child: Container(
+              // height: MediaQuery.of(context).size.height / 2,
               child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          autor['name'] != null
-              ? ListTile(
-                  title: Text(autor['name'],
-                      style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                          color: textColor)),
-                )
-              : ListTile(
-                  title: Text(autor['username'],
-                      style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                          color: textColor)),
-                ),
-          Divider(
-            height: dividerHeigth,
-            color: dividerColor,
-            thickness: 3,
-          ),
-          autor['phone'] != null
-              ? ListTile(
-                  onTap: () => launch(
-                      "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
-                  title: Text('Telefone: ' + autor['phone']),
-                )
-              : Container(),
-          Divider(height: dividerHeigth),
-          autor['email'] != null
-              ? ListTile(
-                  onTap: () => launch(
-                      "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
-                  title: Text('Email: ' + autor['email']),
-                )
-              : Container(),
-          Divider(height: dividerHeigth),
-          autor['instagram'] != null
-              ? ListTile(
-                  onTap: () =>
-                      launch("https://instagram.com/${autor['instagram']}"),
-                  title: Text('Instagram: ' + autor['instagram']),
-                )
-              : Container(),
-
-          // Center(
-          //     child: Container(
-          //         child: ListTile(
-          //   onLongPress:
-          //     () => Navigator.pop(context)
-          //   ,
-          //   title: Text('Fechar'),
-          // )))
-        ],
-      )));
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  autor['name'] != ""
+                      ? ListTile(
+                          title: Text(autor['name'],
+                              style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor)),
+                        )
+                      : ListTile(
+                          title: Text(autor['username'],
+                              style: TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor)),
+                        ),
+                  Divider(
+                    height: dividerHeigth,
+                    color: dividerColor,
+                    thickness: 3,
+                  ),
+                  autor['phone'] != ""
+                      ? ListTile(
+                          onTap: () => launch(
+                              "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
+                          title: Text('Telefone: ' + autor['phone']),
+                        )
+                      : Container(),
+                  // Divider(height: dividerHeigth),
+                  autor['email'] != ""
+                      ? ListTile(
+                          onTap: () => launch(
+                              "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
+                          title: Text('Email: ' + autor['email']),
+                        )
+                      : Container(),
+                  // Divider(height: dividerHeigth),
+                  autor['instagram'] != ""
+                      ? ListTile(
+                          onTap: () => launch(
+                              "https://instagram.com/${autor['instagram']}"),
+                          title: Text('Instagram: ' + autor['instagram']),
+                        )
+                      : Container(),
+                  // Divider(height: dividerHeigth),
+                  
+                  // Center(
+                  //     child: Container(
+                  //         child: ListTile(
+                  //   onLongPress:
+                  //     () => Navigator.pop(context)
+                  //   ,
+                  //   title: Text('Fechar'),
+                  // )))
+                ],
+              ))));
     }
 
     Future<String> contatarAutor(userId) async {
