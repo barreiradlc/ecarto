@@ -19,10 +19,12 @@ import './telas/Cadastro.dart';
 import 'package:ecarto/telas/Home/ExtractArgumentsScreen.dart';
 
 import 'telas/Perfil/FormPerfilPage.dart';
+import 'telas/Perfil/ChangePassword.dart';
 import './Funcoes/UserData.dart';
 import 'telas/DetailItemScreen.dart';
 import 'telas/Itens/Form.dart';
 import 'telas/Perfil.dart';
+import 'telas/RecoverPassword.dart';
 
 void main() {
   // See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override
@@ -94,6 +96,8 @@ class _HomeScreen extends State<HomeScreen> {
   var estoque = new EstoquePage();
   var perfil = new Perfil();
   var formperfil = new FormPerfilPage();
+var editPassword = new ChangePassword();
+  var recoverPassword = new RecoverPassword();
 
   var formItem = new FormItemPage();
   var formWiki = new FormWikiPage();
@@ -145,6 +149,8 @@ class _HomeScreen extends State<HomeScreen> {
         '/estoque': (context) => estoque,
         '/perfil': (context) => perfil,
         '/formperfil': (context) => formperfil,
+        '/editPassword': (context) => editPassword,
+        '/recoverPassword': (context) => recoverPassword,
 
         '/itens/form': (context) => formItem,
 

@@ -42,7 +42,7 @@ class _FormItemPageState extends State<FormItemPage> {
   String image = '';
 
   var nome = TextEditingController(text: '');
-  var preco = TextEditingController(text: '20.00');
+  var preco = TextEditingController(text: '20,00');
   var descricao = TextEditingController(text: '');
 
   String jwt;
@@ -120,6 +120,10 @@ class _FormItemPageState extends State<FormItemPage> {
     return response.data['img'];
   }
 
+  getPrice(String price){
+    return price.replaceAll(',', '.');
+  }
+
   Future req() async {
     if (nome.text == '') {
       return Get.snackbar("Erro", "Nome do Item é obrigatório!",
@@ -154,7 +158,7 @@ class _FormItemPageState extends State<FormItemPage> {
       'title': nome.text,
       'description': descricao.text,
       'nature': isSwitched == true ? 'ARTE' : 'MATERIAL',
-      'price': isSwitched ? double.parse(preco.text) : double.parse('0.0'),
+      'price': isSwitched ? getPrice(preco.text) : double.parse('0.0'),
       'latitude': position.latitude,
       'longitude': position.longitude,
       'image': await uploadImage()

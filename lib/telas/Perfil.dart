@@ -378,6 +378,30 @@ class _PerfilState extends State<Perfil> {
                             color: Colors.transparent,
                           ),
                         ),
+
+                        new Divider(height: _height / 30, color: Colors.white),
+
+                        FlatButton(
+                            onPressed: () {
+                             Navigator.pushNamed(context, '/editPassword');
+                            },
+                            child: new Container(
+                                padding: EdgeInsets.all(40),
+                                child: new Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    new Icon(Icons.lock_outline, color: Colors.white),
+                                    new SizedBox(
+                                      width: _width / 30,
+                                    ),
+                                    new Text('EDITAR SENHA',
+                                        style: TextStyle(color: Colors.white))
+                                  ],
+                                )),
+                            // color: Theme.of(context).accentColor,
+                            color: Colors.transparent,
+                          ),
                 ],
               ),
             )

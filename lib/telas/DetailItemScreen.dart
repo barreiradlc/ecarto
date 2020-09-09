@@ -228,6 +228,7 @@ class DetailItems extends State<DetailItemScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Divider(),
                   autor['name'] != ""
                       ? ListTile(
                           title: Text(autor['name'],
@@ -244,7 +245,7 @@ class DetailItems extends State<DetailItemScreen> {
                                   color: textColor)),
                         ),
                   Divider(
-                    height: dividerHeigth,
+                    // height: dividerHeigth,
                     color: dividerColor,
                     thickness: 3,
                   ),
@@ -255,7 +256,7 @@ class DetailItems extends State<DetailItemScreen> {
                           title: Text('Telefone: ' + autor['phone']),
                         )
                       : Container(),
-                  // Divider(height: dividerHeigth),
+                  Divider(),
                   autor['email'] != ""
                       ? ListTile(
                           onTap: () => launch(
@@ -263,6 +264,7 @@ class DetailItems extends State<DetailItemScreen> {
                           title: Text('Email: ' + autor['email']),
                         )
                       : Container(),
+                  Divider(),
                   // Divider(height: dividerHeigth),
                   autor['instagram'] != ""
                       ? ListTile(
@@ -271,6 +273,7 @@ class DetailItems extends State<DetailItemScreen> {
                           title: Text('Instagram: ' + autor['instagram']),
                         )
                       : Container(),
+                  Divider(),
                   // Divider(height: dividerHeigth),
                   
                   // Center(

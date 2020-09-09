@@ -107,6 +107,64 @@ Future login(email, senha) async {
   Get.snackbar("Atenção", "Deve preeencher com seus dados para continuar");
 }
 
+Future newPasswordCall(currentPassword, senha) async {
+  var endpoint = '/user/';
+  var jwt = await void_getJWT();
+
+  if (senha != null && currentPassword != null) {
+    Get.dialog(alertWidget(),
+        barrierDismissible: false, useRootNavigator: false);
+
+    var response = await http.patch('$host$endpoint', 
+      headers: { 
+        'Content-Type': 'application/json',
+        "Authorization": 'Bearer $jwt'
+      },
+      body: json.encode({
+        "currentPassword": currentPassword,
+        "password": senha
+      })
+    );
+    
+    var res = jsonDecode(response.body);
+
+    Get.back();
+
+    return response;
+    return res;
+  }
+
+  Get.snackbar("Atenção", "Deve preeencher com seus dados para continuar");
+}
+
+Future generatePasswordCall(email) async {
+  var endpoint = '/user/';
+  var jwt = await void_getJWT();
+
+  if (email != null) {
+    Get.dialog(alertWidget(),
+        barrierDismissible: false, useRootNavigator: false);
+
+    var response = await http.post('$host$endpoint', 
+      headers: { 
+        'Content-Type': 'application/json',        
+      },
+      body: json.encode({
+        "email": email,        
+      })
+    );
+    
+    var res = jsonDecode(response.body);
+
+    Get.back();
+
+    return response;
+    return res;
+  }
+
+  Get.snackbar("Atenção", "Deve preeencher com seus dados para continuar");
+}
+
 handleUnauthorized(){
   Get.toNamed('/login');
 }

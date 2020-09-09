@@ -204,6 +204,22 @@ class _MyCustomFormState extends State<Login> {
               ),
             ),
           ),
+          Padding(
+            // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            padding: const EdgeInsets.only(bottom: 30.0),
+            child: RaisedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/recoverPassword');
+              },
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(                  
+                    'Esqueci minha senha',
+                    style: TextStyle(fontSize: 10,color: Theme.of(context).primaryColor)),
+              ),
+            ),
+          ),
 
           // ÍCONES SOCIAIS
 
