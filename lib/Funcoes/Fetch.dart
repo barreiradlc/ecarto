@@ -108,14 +108,14 @@ Future login(email, senha) async {
 }
 
 Future newPasswordCall(currentPassword, senha) async {
-  var endpoint = '/user/';
+  var endpoint = '/user/editPassword';
   var jwt = await void_getJWT();
 
   if (senha != null && currentPassword != null) {
     Get.dialog(alertWidget(),
         barrierDismissible: false, useRootNavigator: false);
 
-    var response = await http.patch('$host$endpoint', 
+    var response = await http.post('$host$endpoint', 
       headers: { 
         'Content-Type': 'application/json',
         "Authorization": 'Bearer $jwt'

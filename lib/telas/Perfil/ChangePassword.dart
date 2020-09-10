@@ -25,7 +25,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
       print(response);
 
-      if (response.statusCode == 200) { 
+      if (response.statusCode == 200) {
         Get.back();
         return Get.snackbar("Sucesso!", "Senha alterada com sucesso!");
       } else {

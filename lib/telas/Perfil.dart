@@ -261,6 +261,7 @@ class _PerfilState extends State<Perfil> {
                     height: 30,
                     thickness: 5,
                   ),
+                  
                   new Text(
                     profile.email != null ? profile.email : "",
                     style: new TextStyle(
@@ -280,7 +281,7 @@ class _PerfilState extends State<Perfil> {
                   ),
                   Padding(
                     padding: EdgeInsets.all(5),
-                  ),
+                  ),                  
                   new Text(
                     profile.instagram != null ? profile.instagram : "",
                     style: new TextStyle(
