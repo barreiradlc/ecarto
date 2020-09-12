@@ -1,4 +1,48 @@
+import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+setProfile(res) async{
+  SharedPreferences data = await SharedPreferences.getInstance();
+
+  String image = res['image'] != '' || res['image'] != null ? res['image'] : await getThumbPlaceholder();
+
+  await data.setString('id', res['_id']);
+  await data.setString('username', res['username']);
+  await data.setString('email', res['email']);
+  await data.setString('image', image);
+  await data.setString('instagram', res['instagram']);
+  await data.setString('name', res['name']);
+  await data.setString('phone', res['phone']);
+  await data.setString('about', res['about']);
+
+}
+
+getProfile() async{
+  SharedPreferences data = await SharedPreferences.getInstance();
+
+  var user = {
+    'id': '',
+    'username': '',
+    'email': '',
+    'image': '',
+    'instagram': '',
+    'name': '',
+    'phone': '',
+    'about': '',
+  };
+
+  user['id'] = data.getString('id');
+  user['username'] = data.getString('username');
+  user['email']  = data.getString('email');
+  user['image']  = data.getString('image');
+  user['instagram']  = data.getString('instagram');
+  user['name']  = data.getString('name');
+  user['phone']  = data.getString('phone');
+  user['about']  = data.getString('about');
+
+  return user;
+}
+
 
 setLoginData(res) async{
   print(res);
@@ -7,7 +51,7 @@ setLoginData(res) async{
   SharedPreferences data = await SharedPreferences.getInstance();
 
   await data.setString('jwt', res['token']);
-  await data.setString('username', res['username']);
+  await data.setString('email', res['username']);
   await data.setString('id', res['id']);
 
   return data;

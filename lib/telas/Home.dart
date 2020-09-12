@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:ecarto/Funcoes/Fetch.dart';
+import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,8 @@ class CollapsingList extends State<HomeState> {
   getData() async {
     var data = await getHomeData();
     
+    await setProfile(data['user']);
+
     setState(() {
           user = data['user'];
           materiais = data['materiais'];

@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:ecarto/Construtores/UserArguments.dart';
 import 'package:ecarto/Funcoes/UserPreferences.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:ecarto/Recursos/Api.dart';
@@ -36,9 +39,8 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   bool _activeTabIndex = true;
   bool loading = true;
   var bg;
-
-
-
+  String id;
+  String error;
   var materiais;
   var artes;
   String username = '';
@@ -47,6 +49,41 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     setState(() {
       _activeTabIndex = _tabController.index == 0 ? true : false;
     });
+  }
+  
+  goToProfile(context) {
+    String userId = id;
+    setState(() {
+      id = '';
+    });
+    Navigator.pushNamed(context, '/perfil', arguments: userId);    
+  }
+
+  _scan() async {
+
+    // return Get.toNamed('/perfil/5f4067fab504e91ce49ca9e9');    
+
+    try {
+      var barcode = await BarcodeScanner.scan();
+      if(barcode.rawContent != ''){
+        // setState(() => id = barcode.rawContent);
+        Get.toNamed('/perfil/${barcode.rawContent}');    
+        // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);    
+      }
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        setState(() {
+          error = 'The user dids not grant the camera permission!';
+        });
+      } else {
+        setState(() => error = 'Unknown error: $e');
+      }
+    } on FormatException {
+      setState(() => error =
+          'null (User returned using the "back"-button before scanning anything. Result)');
+    } catch (e) {
+      setState(() => error = 'Unknown error: $e');
+    }
   }
 
   @override
@@ -157,6 +194,10 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
       ));
     }
 
+    // if (id != null) {
+    //   goToProfile(context);
+    // }
+
     return Theme(
         data: ThemeData(            
             accentColor: Colors.black,
@@ -165,7 +206,12 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
         child: Scaffold(
 
           drawer: drawerScaff,
-          appBar: AppBar(
+          appBar: AppBar(            
+            actions: [
+              FlatButton(
+                onPressed: _scan, 
+                child: Icon(Icons.center_focus_weak, color: Colors.white))
+            ],
             brightness: Brightness.dark, // status bar brightness
             iconTheme: new IconThemeData(color: Colors.white),
             bottom: TabBar(

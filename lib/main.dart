@@ -25,6 +25,7 @@ import 'telas/DetailItemScreen.dart';
 import 'telas/Itens/Form.dart';
 import 'telas/Perfil.dart';
 import 'telas/RecoverPassword.dart';
+import 'telas/ScanScreen.dart';
 
 void main() {
   // See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override
@@ -96,8 +97,9 @@ class _HomeScreen extends State<HomeScreen> {
   var estoque = new EstoquePage();
   var perfil = new Perfil();
   var formperfil = new FormPerfilPage();
-var editPassword = new ChangePassword();
+  var editPassword = new ChangePassword();
   var recoverPassword = new RecoverPassword();
+  var scanScreen = new ScanScreen();
 
   var formItem = new FormItemPage();
   var formWiki = new FormWikiPage();
@@ -138,6 +140,7 @@ var editPassword = new ChangePassword();
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: this.homePage,
+      
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         '/home': (context) => inicio,
@@ -147,10 +150,11 @@ var editPassword = new ChangePassword();
         '/details': (context) => detalhes,
         '/item': (context) => item,
         '/estoque': (context) => estoque,
-        '/perfil': (context) => perfil,
+        // '/perfil': (context) => perfil,
         '/formperfil': (context) => formperfil,
         '/editPassword': (context) => editPassword,
         '/recoverPassword': (context) => recoverPassword,
+        '/scanScreen': (context) => scanScreen,
 
         '/itens/form': (context) => formItem,
 
@@ -161,9 +165,15 @@ var editPassword = new ChangePassword();
         '/cadastro': (context) => cadastro,
         // '/camera': (context) => camera,
       },
+      getPages: [
+        GetPage(name: '/home', page: () => jwt == null ? Login() : Home()),
+        GetPage(name: '/perfil/:id', page: () => Perfil() )
+      ],
     );
   }
 }
+
+class Inicio {}
 
 Widget _introScreen() {
   return Stack(
@@ -188,10 +198,10 @@ Widget _introScreen() {
             alignment: Alignment.bottomCenter,
             margin: EdgeInsets.all(50),
             height: 350,
-            width: 350,            
+            width: 350,
             decoration: BoxDecoration(
               boxShadow: [
-                BoxShadow(                  
+                BoxShadow(
                   color: Colors.white30,
                   spreadRadius: 5,
                   blurRadius: 7,

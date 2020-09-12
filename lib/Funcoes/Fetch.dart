@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Funcoes/Utils.dart';
 import 'package:flutter/material.dart';
@@ -192,6 +193,31 @@ Future getHomeData() async {
     return res;
     
 }
+
+Future fetchProfile(id) async {
+    String endpoint = '/user';
+    var jwt = await void_getJWT();
+    String query = '?outerUserId=$id';
+    http.Response response = await  http.get(Uri.encodeFull('$host$endpoint$query'), 
+    headers: {
+      "Authorization": 'Bearer $jwt'
+    });        
+    if(response.statusCode == 401 || response.statusCode == 503){
+      return handleUnauthorized();
+    } 
+    var res = jsonDecode(response.body);    
+
+    res['id'] = res['_id'];
+
+    return res;    
+}
+
+getThumbPlaceholder() async {
+    var url = 'https://source.unsplash.com/random/?craft';
+    Dio dio = new Dio();
+    var response = await dio.get(url);
+    return response.realUri;
+  }
 
 
 

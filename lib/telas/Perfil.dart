@@ -1,33 +1,26 @@
-import 'dart:collection';
-import 'package:flutter/rendering.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-
-import 'package:wc_flutter_share/wc_flutter_share.dart';
-
-import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter/services.dart';
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'dart:io';
-import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
-
-
-import 'package:transparent_image/transparent_image.dart';
-import 'dart:math';
-
-import 'package:ecarto/Construtores/UserArguments.dart';
-import 'package:ecarto/Parcial/citacoes.dart';
-import 'package:ecarto/Recursos/Api.dart';
-import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:dio/dio.dart';
-import 'package:dio/adapter.dart';
-import 'package:http/http.dart' as http;
+import 'package:ecarto/Construtores/UserArguments.dart';
+import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
+import 'package:ecarto/Funcoes/UserPreferences.dart';
+import 'package:ecarto/Parcial/citacoes.dart';
+import 'package:ecarto/Recursos/Api.dart';
+import 'package:ecarto/Widgets/ItensWidget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class Perfil extends StatefulWidget {
   Perfil({Key key, this.title}) : super(key: key);
@@ -43,9 +36,10 @@ class _PerfilState extends State<Perfil> {
   String imgUrl = '';
   var loading = true;
   var profile;
+  String fetchProfileId;
   var loadQuote;
   var status;
-  var id = '123123';
+  String id;
 
   getThumb() async {
     var url = 'https://source.unsplash.com/random/?craft';
@@ -73,7 +67,27 @@ class _PerfilState extends State<Perfil> {
     });
   }
 
-  getPerfil() async {}
+  getPerfil() async {
+    String localId = await void_getID();
+
+    setState(() {
+      id = localId;
+    });
+
+    String paramId = Get.parameters['id'];
+    var user;
+
+    if (paramId == localId) {
+      user = await getProfile();
+    } else {
+      user = await fetchProfile(paramId);
+    }
+
+    setState(() {
+      loading = false;
+      profile = user;
+    });
+  }
 
   // Future<void> _captureAndSharePng() async {
   //   try {
@@ -94,29 +108,30 @@ class _PerfilState extends State<Perfil> {
   //   }
   // }
 
-    Future<void> _captureAndSharePng() async { 
-      try {    
-          RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject(); 
-          var image = await boundary.toImage();
-          ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
-          Uint8List pngBytes = byteData.buffer.asUint8List();       
-          final tempDir = await getTemporaryDirectory();
-          final file = await new File('${tempDir.path}/image.png').create();
-          await file.writeAsBytes(pngBytes);
+  Future<void> _captureAndSharePng() async {
+    try {
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
+      var image = await boundary.toImage();
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      final tempDir = await getTemporaryDirectory();
+      final file = await new File('${tempDir.path}/image.png').create();
+      await file.writeAsBytes(pngBytes);
 
-          await WcFlutterShare.share(
-            sharePopupTitle: 'share',  
-            fileName: 'share.png',  
-            mimeType: 'image/png',  
-            bytesOfFile: pngBytes);
-            // bytesOfFile: bytes.buffer.asUint8List());
+      await WcFlutterShare.share(
+          sharePopupTitle: 'share',
+          fileName: 'share.png',
+          mimeType: 'image/png',
+          bytesOfFile: pngBytes);
+      // bytesOfFile: bytes.buffer.asUint8List());
 
-          // final channel = const MethodChannel('channel:me.ecarto.share/share');
-          // channel.invokeMethod('shareFile', 'image.png');
-        } catch(e) {
-          print(e.toString());
-      }
+      // final channel = const MethodChannel('channel:me.ecarto.share/share');
+      // channel.invokeMethod('shareFile', 'image.png');
+    } catch (e) {
+      print(e.toString());
     }
+  }
 
   Future<String> getPerfil2() async {
     void_getJWT().then((token) async {
@@ -158,6 +173,9 @@ class _PerfilState extends State<Perfil> {
   void initState() {
     super.initState();
     getQuote();
+
+    // final String barcodeId = ModalRoute.of(context).settings.arguments;
+
     // getThumb().then((value) {
     //   setState(() {
     //     imgUrl = value.toString();
@@ -165,18 +183,18 @@ class _PerfilState extends State<Perfil> {
     // }).catchError((err) {
     //   print(err);
     // });
+    print(Get.parameters['id']);
 
     getThumb();
 
-    var p = getPerfil();
+    getPerfil();
+  }
 
-    void_getID().then((id) {
-      print('ID USER');
-      print(id);
-      print('ID USER');
-      setState(() {
-        id = id;
-      });
+  fetchId() async {
+    var localId = await void_getID();
+
+    setState(() {
+      id = localId;
     });
   }
 
@@ -185,11 +203,9 @@ class _PerfilState extends State<Perfil> {
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
-    final UserArguments item = ModalRoute.of(context).settings.arguments;
-
     setState(() {
-      loading = false;
-      profile = item;
+      // loading = false;
+      // id = Get.parameters['id'];
     });
 
     if (loading) {
@@ -211,15 +227,15 @@ class _PerfilState extends State<Perfil> {
                   Container(
                     height: 20,
                   ),
-                  Text(
-                    loadQuote,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                        fontSize: 20,
-                        fontStyle: FontStyle.italic),
-                    textAlign: TextAlign.center,
-                  )
+                  // Text(
+                  //   loadQuote,
+                  //   style: TextStyle(
+                  //       color: Colors.white,
+                  //       fontFamily: 'Montserrat',
+                  //       fontSize: 20,
+                  //       fontStyle: FontStyle.italic),
+                  //   textAlign: TextAlign.center,
+                  // )
                 ],
               )));
     }
@@ -236,9 +252,9 @@ class _PerfilState extends State<Perfil> {
                 height: _height,
                 fit: BoxFit.contain,
                 placeholder: kTransparentImage,
-                image: (profile.avatar == null || profile.avatar == '')
+                image: (profile['image'] == null || profile['image'] == '')
                     ? imgUrl
-                    : profile.avatar)
+                    : profile['image'])
             : CircularProgressIndicator(),
         new BackdropFilter(
             filter: new ui.ImageFilter.blur(
@@ -256,7 +272,7 @@ class _PerfilState extends State<Perfil> {
               brightness: Brightness.dark,
               iconTheme: new IconThemeData(color: Colors.white),
               title: new Text(
-                'Perfil',
+                "${profile['username']} - ${profile['name']}",
                 style: TextStyle(color: Colors.white),
               ),
               centerTitle: false,
@@ -281,9 +297,10 @@ class _PerfilState extends State<Perfil> {
                               radius:
                                   _width < _height ? _width / 4 : _height / 4,
                               backgroundImage: NetworkImage(
-                                  profile.avatar == null || profile.avatar == ''
+                                  profile['image'] == null ||
+                                          profile['image'] == ''
                                       ? imgUrl
-                                      : profile.avatar),
+                                      : profile['image']),
                             )
                           : Container(
                               height: 205,
@@ -295,14 +312,14 @@ class _PerfilState extends State<Perfil> {
                         height: _height / 25.0,
                       ),
                       new Text(
-                        profile.name != null ? profile.name : "",
+                        profile['name'] != null ? profile['name'] : "",
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: _width / 15,
                             color: Colors.white),
                       ),
                       new Text(
-                        profile.username != null ? profile.username : "",
+                        profile['username'] != null ? profile['username'] : "",
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: _width / 15,
@@ -318,7 +335,7 @@ class _PerfilState extends State<Perfil> {
                       ),
 
                       new Text(
-                        profile.email != null ? profile.email : "",
+                        profile['email'] != null ? profile['email'] : "",
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: _width / 35,
@@ -328,7 +345,7 @@ class _PerfilState extends State<Perfil> {
                         padding: EdgeInsets.all(5),
                       ),
                       new Text(
-                        profile.phone != null ? profile.phone : "",
+                        profile['phone'] != null ? profile['phone'] : "",
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: _width / 35,
@@ -338,27 +355,23 @@ class _PerfilState extends State<Perfil> {
                         padding: EdgeInsets.all(5),
                       ),
                       new Text(
-                        profile.instagram != null ? profile.instagram : "",
+                        profile['instagram'] != null
+                            ? profile['instagram']
+                            : "",
                         style: new TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: _width / 35,
                             color: Colors.white),
                       ),
-                      new Text(
-                        profile.pinterest != null ? profile.pinterest : "",
-                        style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: _width / 35,
-                            color: Colors.white),
-                      ),
+
                       new Padding(
                         padding: new EdgeInsets.only(
                             top: _height / 30,
                             left: _width / 8,
                             right: _width / 8),
                         child: new Text(
-                          profile.about != null
-                              ? profile.about
+                          profile['about'] != null
+                              ? profile['about']
                               : 'Sobre mim... ',
                           style: new TextStyle(
                               fontWeight: FontWeight.normal,
@@ -367,65 +380,79 @@ class _PerfilState extends State<Perfil> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      new Divider(
-                        height: _height / 30,
-                        color: Colors.white,
-                      ),           
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10) ,
-                        child:
-                      RaisedButton(                   
-                        color: Colors.white,     
-                        padding: EdgeInsets.all(5),
-                        onPressed: _captureAndSharePng, 
-                        child: Container(                          
-                          padding: EdgeInsets.all(5), 
-                          
-                          width: _width / 2.25,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(Icons.share),
-                              Text('Compartilhar perfil', style:TextStyle(fontSize: 10,color: Theme.of(context).primaryColor)),
-                            ],
-                          )
-                        )
-                      ),
-                      ),  
-                      Center(
 
-                        child: RepaintBoundary(
-                          key: globalKey,
-                          // child: QrImage(
-                          //   data: id,
-                          //   size: 0.5 * _height,
-                          //   // embeddedImage: AssetImage('assets/logo-colorida.png'),
-                          //   // embeddedImageStyle: QrEmbeddedImageStyle(
-                          //   //   size: Size(80, 80),
-                          //   // ),
+                      profile['id'] == id
+                          ? Column(
+                              children: [
+                                new Divider(
+                                  height: _height / 30,
+                                  color: Colors.white,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: RaisedButton(
+                                      color: Colors.white,
+                                      padding: EdgeInsets.all(5),
+                                      onPressed: _captureAndSharePng,
+                                      child: Container(
+                                          padding: EdgeInsets.all(5),
+                                          width: _width / 2.25,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Icon(Icons.share),
+                                              Text('Compartilhar perfil',
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      color: Theme.of(context)
+                                                          .primaryColor)),
+                                            ],
+                                          ))),
+                                ),
+                                Center(
+                                  child: RepaintBoundary(
+                                      key: globalKey,
+                                      // child: QrImage(
+                                      //   data: id,
+                                      //   size: 0.5 * _height,
+                                      //   // embeddedImage: AssetImage('assets/logo-colorida.png'),
+                                      //   // embeddedImageStyle: QrEmbeddedImageStyle(
+                                      //   //   size: Size(80, 80),
+                                      //   // ),
 
-                          //   // onError: (ex) {
-                          //   //   print("[QR] ERROR - $ex");
-                          //   // },
-                          // ),
-                          child: QrImage(
-                            backgroundColor: Colors.white,                            
-                            data: id,
-                            version: QrVersions.auto,
-                            padding: EdgeInsets.all(60),
-                            size: 250.0,
-                            embeddedImage:
-                                AssetImage('assets/logo-colorida.png'),
-                            embeddedImageStyle: QrEmbeddedImageStyle(
-                              size: Size(225, 225),
-                            ),
-                          ),
-                        ),
-                      ),
-                      new Divider(
-                        height: _height / 30,
-                        color: Colors.white,
-                      ),
+                                      //   // onError: (ex) {
+                                      //   //   print("[QR] ERROR - $ex");
+                                      //   // },
+                                      // ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(25.0))),
+                                        child: QrImage(
+                                          // backgroundColor: Colors.white,
+                                          data: profile['id'],
+                                          version: QrVersions.auto,
+                                          padding: EdgeInsets.all(50),
+                                          size: 200.0,
+                                          embeddedImage: AssetImage(
+                                              'assets/logo-pontos.png'),
+                                          embeddedImageStyle:
+                                              QrEmbeddedImageStyle(
+                                            size: Size(175, 175),
+                                          ),
+                                        ),
+                                      )),
+                                ),
+                                new Divider(
+                                  height: _height / 30,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            )
+                          : Container(),
+
                       // new Row(
                       //   children: <Widget>[
                       //     rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L'),
@@ -433,28 +460,8 @@ class _PerfilState extends State<Perfil> {
                       //   ],
                       // ),
                       new Divider(height: _height / 30, color: Colors.white),
-                      id.toString() != profile.id.toString()
-                          ? Padding(
-                              padding: new EdgeInsets.only(
-                                  left: _width / 8, right: _width / 8),
-                              child: new FlatButton(
-                                onPressed: () {
-                                  print('a implementar');
-                                },
-                                child: new Container(
-                                    child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Icon(Icons.person),
-                                    new SizedBox(
-                                      width: _width / 30,
-                                    ),
-                                    new Text('SEGUIR')
-                                  ],
-                                )),
-                                color: Theme.of(context).accentColor,
-                              ),
-                            )
+                      id != profile['id']
+                          ? ItensWidget(profile)
                           : Padding(
                               padding: new EdgeInsets.only(
                                   left: _width / 8, right: _width / 8),
@@ -462,15 +469,15 @@ class _PerfilState extends State<Perfil> {
                                 onPressed: () {
                                   Navigator.pushNamed(context, '/formperfil',
                                       arguments: UserArguments(
-                                        profile.id,
-                                        profile.name,
-                                        profile.username,
-                                        profile.email,
-                                        profile.phone,
-                                        profile.instagram,
-                                        profile.pinterest,
-                                        profile.about,
-                                        profile.avatar,
+                                        profile['id'],
+                                        profile['name'],
+                                        profile['username'],
+                                        profile['email'],
+                                        profile['phone'],
+                                        profile['instagram'],
+                                        profile['pinterest'],
+                                        profile['about'],
+                                        profile['image'],
                                       ));
                                 },
                                 child: new Container(
@@ -498,6 +505,8 @@ class _PerfilState extends State<Perfil> {
 
                       new Divider(height: _height / 30, color: Colors.white),
 
+                      id != profile['id'] ?
+                      Container() :
                       FlatButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/editPassword');
