@@ -1,4 +1,20 @@
 import 'dart:collection';
+import 'package:flutter/rendering.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+import 'package:wc_flutter_share/wc_flutter_share.dart';
+
+import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui';
+import 'dart:io';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+
+
 import 'package:transparent_image/transparent_image.dart';
 import 'dart:math';
 
@@ -22,12 +38,14 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
+  GlobalKey globalKey = new GlobalKey();
+
   String imgUrl = '';
   var loading = true;
   var profile;
   var loadQuote;
   var status;
-  var id;
+  var id = '123123';
 
   getThumb() async {
     var url = 'https://source.unsplash.com/random/?craft';
@@ -56,6 +74,49 @@ class _PerfilState extends State<Perfil> {
   }
 
   getPerfil() async {}
+
+  // Future<void> _captureAndSharePng() async {
+  //   try {
+  //     RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+  //     var image = await boundary.toImage();
+  //     ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+  //     Uint8List pngBytes = byteData.buffer.asUint8List();
+
+  //     final tempDir = await getTemporaryDirectory();
+  //     final file = await new File('${tempDir.path}/image.png').create();
+  //     await file.writeAsBytes(pngBytes);
+
+  //     final channel = const MethodChannel('channel:me.alfian.share/share');
+  //     channel.invokeMethod('shareFile', 'image.png');
+
+  //   } catch(e) {
+  //     print(e.toString());
+  //   }
+  // }
+
+    Future<void> _captureAndSharePng() async { 
+      try {    
+          RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject(); 
+          var image = await boundary.toImage();
+          ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+          Uint8List pngBytes = byteData.buffer.asUint8List();       
+          final tempDir = await getTemporaryDirectory();
+          final file = await new File('${tempDir.path}/image.png').create();
+          await file.writeAsBytes(pngBytes);
+
+          await WcFlutterShare.share(
+            sharePopupTitle: 'share',  
+            fileName: 'share.png',  
+            mimeType: 'image/png',  
+            bytesOfFile: pngBytes);
+            // bytesOfFile: bytes.buffer.asUint8List());
+
+          // final channel = const MethodChannel('channel:me.ecarto.share/share');
+          // channel.invokeMethod('shareFile', 'image.png');
+        } catch(e) {
+          print(e.toString());
+      }
+    }
 
   Future<String> getPerfil2() async {
     void_getJWT().then((token) async {
@@ -131,11 +192,9 @@ class _PerfilState extends State<Perfil> {
       profile = item;
     });
 
-
-
     if (loading) {
       return Scaffold(
-          body:  new Container(
+          body: new Container(
               color: Theme.of(context).primaryColor,
               padding: EdgeInsets.all(20),
               child: Column(
@@ -162,11 +221,8 @@ class _PerfilState extends State<Perfil> {
                     textAlign: TextAlign.center,
                   )
                 ],
-              )
-              )             
-          );
+              )));
     }
-
 
     return Stack(
       overflow: Overflow.visible,
@@ -196,11 +252,13 @@ class _PerfilState extends State<Perfil> {
               ),
             )),
         new Scaffold(
-            appBar: new AppBar(              
+            appBar: new AppBar(
               brightness: Brightness.dark,
               iconTheme: new IconThemeData(color: Colors.white),
-              
-              title: new Text('Perfil', style: TextStyle(color: Colors.white),),
+              title: new Text(
+                'Perfil',
+                style: TextStyle(color: Colors.white),
+              ),
               centerTitle: false,
               elevation: 0.0,
               backgroundColor: Colors.transparent,
@@ -209,206 +267,264 @@ class _PerfilState extends State<Perfil> {
             //   child: new Container(),
             // ),
             backgroundColor: Colors.transparent,
-            body: 
-            ListView(
+            body: ListView(
               children: <Widget>[
+                new Center(
+                  child: new Column(
+                    children: <Widget>[
+                      new SizedBox(
+                        height: _height / 12,
+                      ),
+                      imgUrl != ''
+                          ? new CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              radius:
+                                  _width < _height ? _width / 4 : _height / 4,
+                              backgroundImage: NetworkImage(
+                                  profile.avatar == null || profile.avatar == ''
+                                      ? imgUrl
+                                      : profile.avatar),
+                            )
+                          : Container(
+                              height: 205,
+                              width: 205,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 5,
+                              )),
+                      new SizedBox(
+                        height: _height / 25.0,
+                      ),
+                      new Text(
+                        profile.name != null ? profile.name : "",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _width / 15,
+                            color: Colors.white),
+                      ),
+                      new Text(
+                        profile.username != null ? profile.username : "",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _width / 15,
+                            color: Colors.white),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                        height: 30,
+                        thickness: 5,
+                      ),
 
-              
-            new Center(
-              child: new Column(
-                children: <Widget>[
-                  new SizedBox(
-                    height: _height / 12,
-                  ),
-                  imgUrl != ''
-                      ? new CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          radius: _width < _height ? _width / 4 : _height / 4,
-                          backgroundImage: NetworkImage(
-                              profile.avatar == null || profile.avatar == ''
-                                  ? imgUrl
-                                  : profile.avatar),
-                        )
-                      : Container(
-                          height: 205,
-                          width: 205,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 5,
-                          )
+                      new Text(
+                        profile.email != null ? profile.email : "",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _width / 35,
+                            color: Colors.white),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      new Text(
+                        profile.phone != null ? profile.phone : "",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _width / 35,
+                            color: Colors.white),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      new Text(
+                        profile.instagram != null ? profile.instagram : "",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _width / 35,
+                            color: Colors.white),
+                      ),
+                      new Text(
+                        profile.pinterest != null ? profile.pinterest : "",
+                        style: new TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: _width / 35,
+                            color: Colors.white),
+                      ),
+                      new Padding(
+                        padding: new EdgeInsets.only(
+                            top: _height / 30,
+                            left: _width / 8,
+                            right: _width / 8),
+                        child: new Text(
+                          profile.about != null
+                              ? profile.about
+                              : 'Sobre mim... ',
+                          style: new TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: _width / 25,
+                              color: Colors.white),
+                          textAlign: TextAlign.center,
                         ),
-                  new SizedBox(
-                    height: _height / 25.0,
-                  ),
-                  new Text(
-                    profile.name != null ? profile.name : "",
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / 15,
-                        color: Colors.white),
-                  ),
-                  new Text(
-                    profile.username != null ? profile.username : "",
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / 15,
-                        color: Colors.white),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                  ),
-                  Divider(
-                    color: Colors.white,
-                    height: 30,
-                    thickness: 5,
-                  ),
-                  
-                  new Text(
-                    profile.email != null ? profile.email : "",
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / 35,
-                        color: Colors.white),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                  ),
-                  new Text(
-                    profile.phone != null ? profile.phone : "",
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / 35,
-                        color: Colors.white),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                  ),                  
-                  new Text(
-                    profile.instagram != null ? profile.instagram : "",
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / 35,
-                        color: Colors.white),
-                  ),
-                  new Text(
-                    profile.pinterest != null ? profile.pinterest : "",
-                    style: new TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: _width / 35,
-                        color: Colors.white),
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.only(
-                        top: _height / 30, left: _width / 8, right: _width / 8),
-                    child: new Text(
-                      profile.about != null
-                          ? profile.about
-                          : 'Sobre mim... ',
-                      style: new TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: _width / 25,
-                          color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  new Divider(
-                    height: _height / 30,
-                    color: Colors.white,
-                  ),
-                  // new Row(
-                  //   children: <Widget>[
-                  //     rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L'),
-                  //     rowCell(status[1]['Artes'], 'ARTE', 'S', '')
-                  //   ],
-                  // ),
-                  new Divider(height: _height / 30, color: Colors.white),
-                  id.toString() != profile.id.toString()
-                      ? Padding(
-                          padding: new EdgeInsets.only(
-                              left: _width / 8, right: _width / 8),
-                          child: new FlatButton(
-                            onPressed: () {
-                              print('a implementar');
-                            },
-                            child: new Container(
-                                child: new Row(
+                      ),
+                      new Divider(
+                        height: _height / 30,
+                        color: Colors.white,
+                      ),           
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10) ,
+                        child:
+                      RaisedButton(                   
+                        color: Colors.white,     
+                        padding: EdgeInsets.all(5),
+                        onPressed: _captureAndSharePng, 
+                        child: Container(                          
+                          padding: EdgeInsets.all(5), 
+                          
+                          width: _width / 2.25,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.share),
+                              Text('Compartilhar perfil', style:TextStyle(fontSize: 10,color: Theme.of(context).primaryColor)),
+                            ],
+                          )
+                        )
+                      ),
+                      ),  
+                      Center(
+
+                        child: RepaintBoundary(
+                          key: globalKey,
+                          // child: QrImage(
+                          //   data: id,
+                          //   size: 0.5 * _height,
+                          //   // embeddedImage: AssetImage('assets/logo-colorida.png'),
+                          //   // embeddedImageStyle: QrEmbeddedImageStyle(
+                          //   //   size: Size(80, 80),
+                          //   // ),
+
+                          //   // onError: (ex) {
+                          //   //   print("[QR] ERROR - $ex");
+                          //   // },
+                          // ),
+                          child: QrImage(
+                            backgroundColor: Colors.white,                            
+                            data: id,
+                            version: QrVersions.auto,
+                            padding: EdgeInsets.all(60),
+                            size: 250.0,
+                            embeddedImage:
+                                AssetImage('assets/logo-colorida.png'),
+                            embeddedImageStyle: QrEmbeddedImageStyle(
+                              size: Size(225, 225),
+                            ),
+                          ),
+                        ),
+                      ),
+                      new Divider(
+                        height: _height / 30,
+                        color: Colors.white,
+                      ),
+                      // new Row(
+                      //   children: <Widget>[
+                      //     rowCell(status[0]['Material'], 'MATERIA', 'IS', 'L'),
+                      //     rowCell(status[1]['Artes'], 'ARTE', 'S', '')
+                      //   ],
+                      // ),
+                      new Divider(height: _height / 30, color: Colors.white),
+                      id.toString() != profile.id.toString()
+                          ? Padding(
+                              padding: new EdgeInsets.only(
+                                  left: _width / 8, right: _width / 8),
+                              child: new FlatButton(
+                                onPressed: () {
+                                  print('a implementar');
+                                },
+                                child: new Container(
+                                    child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    new Icon(Icons.person),
+                                    new SizedBox(
+                                      width: _width / 30,
+                                    ),
+                                    new Text('SEGUIR')
+                                  ],
+                                )),
+                                color: Theme.of(context).accentColor,
+                              ),
+                            )
+                          : Padding(
+                              padding: new EdgeInsets.only(
+                                  left: _width / 8, right: _width / 8),
+                              child: new FlatButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/formperfil',
+                                      arguments: UserArguments(
+                                        profile.id,
+                                        profile.name,
+                                        profile.username,
+                                        profile.email,
+                                        profile.phone,
+                                        profile.instagram,
+                                        profile.pinterest,
+                                        profile.about,
+                                        profile.avatar,
+                                      ));
+                                },
+                                child: new Container(
+                                    padding: EdgeInsets.all(40),
+                                    child: new Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        new Icon(Icons.person,
+                                            color: Colors.white),
+                                        new SizedBox(
+                                          width: _width / 30,
+                                        ),
+                                        new Text('EDITAR PERFIL',
+                                            style:
+                                                TextStyle(color: Colors.white))
+                                      ],
+                                    )),
+                                // color: Theme.of(context).accentColor,
+                                color: Colors.transparent,
+                              ),
+                            ),
+
+                      new Divider(height: _height / 30, color: Colors.white),
+
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/editPassword');
+                        },
+                        child: new Container(
+                            padding: EdgeInsets.all(40),
+                            child: new Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                new Icon(Icons.person),
+                                new Icon(Icons.lock_outline,
+                                    color: Colors.white),
                                 new SizedBox(
                                   width: _width / 30,
                                 ),
-                                new Text('SEGUIR')
+                                new Text('EDITAR SENHA',
+                                    style: TextStyle(color: Colors.white))
                               ],
                             )),
-                            color: Theme.of(context).accentColor,
-                          ),
-                        )
-                      : Padding(
-                          padding: new EdgeInsets.only(
-                              left: _width / 8, right: _width / 8),
-                          child: new FlatButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/formperfil',
-                                  arguments: UserArguments(
-                                    profile.id,
-                                    profile.name,
-                                    profile.username,
-                                    profile.email,
-                                    profile.phone,
-                                    profile.instagram,
-                                    profile.pinterest,
-                                    profile.about,
-                                    profile.avatar,
-                                  ));
-                            },
-                            child: new Container(
-                                padding: EdgeInsets.all(40),
-                                child: new Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Icon(Icons.person, color: Colors.white),
-                                    new SizedBox(
-                                      width: _width / 30,
-                                    ),
-                                    new Text('EDITAR PERFIL',
-                                        style: TextStyle(color: Colors.white))
-                                  ],
-                                )),
-                            // color: Theme.of(context).accentColor,
-                            color: Colors.transparent,
-                          ),
-                        ),
-
-                        new Divider(height: _height / 30, color: Colors.white),
-
-                        FlatButton(
-                            onPressed: () {
-                             Navigator.pushNamed(context, '/editPassword');
-                            },
-                            child: new Container(
-                                padding: EdgeInsets.all(40),
-                                child: new Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Icon(Icons.lock_outline, color: Colors.white),
-                                    new SizedBox(
-                                      width: _width / 30,
-                                    ),
-                                    new Text('EDITAR SENHA',
-                                        style: TextStyle(color: Colors.white))
-                                  ],
-                                )),
-                            // color: Theme.of(context).accentColor,
-                            color: Colors.transparent,
-                          ),
-                ],
-              ),
-            )
-            ],
-            )
-            )
+                        // color: Theme.of(context).accentColor,
+                        color: Colors.transparent,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ))
       ],
     );
   }
