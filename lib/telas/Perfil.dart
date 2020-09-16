@@ -272,7 +272,7 @@ class _PerfilState extends State<Perfil> {
               brightness: Brightness.dark,
               iconTheme: new IconThemeData(color: Colors.white),
               title: new Text(
-                "${profile['username']} - ${profile['name']}",
+                "${profile['username']} - ${profile['name'] != null ? profile['name'] : ''}",
                 style: TextStyle(color: Colors.white),
               ),
               centerTitle: false,
@@ -410,6 +410,10 @@ class _PerfilState extends State<Perfil> {
                                             ],
                                           ))),
                                 ),
+
+
+
+
                                 Center(
                                   child: RepaintBoundary(
                                       key: globalKey,
@@ -445,6 +449,9 @@ class _PerfilState extends State<Perfil> {
                                         ),
                                       )),
                                 ),
+
+
+
                                 new Divider(
                                   height: _height / 30,
                                   color: Colors.white,

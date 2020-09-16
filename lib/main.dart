@@ -143,9 +143,10 @@ class _HomeScreen extends State<HomeScreen> {
       
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/home': (context) => inicio,
+        // '/home': (context) => inicio,
 
         // When navigating to the "/second" route, build the SecondScreen widget.
+
 
         '/details': (context) => detalhes,
         '/item': (context) => item,
@@ -161,12 +162,14 @@ class _HomeScreen extends State<HomeScreen> {
         '/wiki/form': (context) => formWiki,
         '/steps/form': (context) => formSteps,
 
-        '/login': (context) => login,
+        // '/login': (context) => login,
         '/cadastro': (context) => cadastro,
         // '/camera': (context) => camera,
       },
       getPages: [
-        GetPage(name: '/home', page: () => jwt == null ? Login() : Home()),
+        GetPage(name: '/home', page: () => Home()),
+        GetPage(name: '/login', page: () => Login() ),
+        
         GetPage(name: '/perfil/:id', page: () => Perfil() )
       ],
     );

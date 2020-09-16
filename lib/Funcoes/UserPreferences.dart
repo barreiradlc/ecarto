@@ -51,7 +51,8 @@ setLoginData(res) async{
   SharedPreferences data = await SharedPreferences.getInstance();
 
   await data.setString('jwt', res['token']);
-  await data.setString('email', res['username']);
+  await data.setString('email', res['email']);
+  await data.setString('username', res['username']);
   await data.setString('id', res['id']);
 
   return data;
@@ -62,8 +63,15 @@ removeLoginData() async{
   SharedPreferences data = await SharedPreferences.getInstance();
 
   await data.remove('jwt');
+
   await data.remove('username');
   await data.remove('id');
+  await data.remove('email');
+  await data.remove('image');
+  await data.remove('instagram');
+  await data.remove('name');
+  await data.remove('phone');
+  await data.remove('about');
 
   return data;
 }

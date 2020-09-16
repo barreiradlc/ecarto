@@ -100,6 +100,8 @@ class ArteState extends State<Artes> {
             padding: EdgeInsets.only(top: 25),
             // crossAxisCount is the number of columns
             crossAxisCount: 2,
+            
+
             // This creates two columns with two items in each column
             children: List.generate(widget.artes.length, (index) {
               var bg;
@@ -221,7 +223,8 @@ class ArteState extends State<Artes> {
                                   // Text(widget.artes[index]['description'])
                                 ],
                               ),
-                            ))));
+                            )))
+                            );
               } else {
                 print('alou');
                 

@@ -379,10 +379,6 @@ class DetailItems extends State<DetailItemScreen> {
       ],
     ));
 
-    print('id');
-    print(id);
-    print(this.id);
-
     if (item.user_id != id) {
       botAcao = Container(
           margin: EdgeInsets.all(20),

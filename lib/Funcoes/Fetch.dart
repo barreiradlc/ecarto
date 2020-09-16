@@ -60,7 +60,7 @@ alertWidget({String msg = "Aguarde"}) {
 }
 
 Future register(usuario, email, senha, confirmaSenha) async {
-  var endpoint = '/auth/register';
+  var endpoint = '/auth/v2/register';
 
   if (senha == confirmaSenha) {
     Get.dialog(alertWidget(),
@@ -86,7 +86,7 @@ Future register(usuario, email, senha, confirmaSenha) async {
 }
 
 Future login(email, senha) async {
-  var endpoint = '/auth/login';
+  var endpoint = '/auth/v2/login';
 
   if (senha != null && email != null) {
     Get.dialog(alertWidget(),

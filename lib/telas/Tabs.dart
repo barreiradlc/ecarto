@@ -51,12 +51,10 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     });
   }
   
-  goToProfile(context) {
-    String userId = id;
-    setState(() {
-      id = '';
-    });
-    Navigator.pushNamed(context, '/perfil', arguments: userId);    
+  goToProfile() async{    
+    String userId = await void_getID();    
+
+    Get.toNamed('/perfil/${userId}');        
   }
 
   _scan() async {
@@ -66,6 +64,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     try {
       var barcode = await BarcodeScanner.scan();
       if(barcode.rawContent != ''){
+        
         // setState(() => id = barcode.rawContent);
         Get.toNamed('/perfil/${barcode.rawContent}');    
         // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);    
@@ -146,17 +145,19 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             title: Text('Perfil'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/perfil', arguments: UserArguments(
-                widget.user['id'],
-                widget.user['name'],
-                widget.user['username'],
-                widget.user['email'],
-                widget.user['phone'],
-                widget.user['instagram'],
-                widget.user['pinterest'],
-                widget.user['about'],
-                widget.user['image'],
-              ));
+              goToProfile();
+
+              // Navigator.pushNamed(context, '/perfil', arguments: UserArguments(
+              //   widget.user['id'],
+              //   widget.user['name'],
+              //   widget.user['username'],
+              //   widget.user['email'],
+              //   widget.user['phone'],
+              //   widget.user['instagram'],
+              //   widget.user['pinterest'],
+              //   widget.user['about'],
+              //   widget.user['image'],
+              // ));
             },
           ),
           ListTile(

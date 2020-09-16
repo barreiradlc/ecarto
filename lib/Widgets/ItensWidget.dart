@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'ListArtesCard.dart';
 
 class ItensWidget extends StatefulWidget {
   
@@ -15,12 +18,22 @@ class _ItensWidgetState extends State<ItensWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = widget.profile;
+    final artes = widget.profile['artes'];
 
-    return Container();
+    if(artes.length == 0){
+      return Container();
+    }
 
     return Container(
-       child: Text("Alou"),
+        padding: EdgeInsets.only(left: 25),
+        child: Column(         
+         crossAxisAlignment: CrossAxisAlignment.start,
+         mainAxisAlignment: MainAxisAlignment.start,
+         children: [
+           Text('Artes', style: TextStyle( color: Colors.white, fontSize: 23 ),),
+           ListArtesCard(artes),
+         ],
+       )
     );
   }
 }
