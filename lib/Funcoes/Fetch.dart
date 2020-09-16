@@ -198,18 +198,16 @@ Future fetchProfile(id) async {
     String endpoint = '/user';
     var jwt = await void_getJWT();
     String query = '?outerUserId=$id';
-    http.Response response = await  http.get(Uri.encodeFull('$host$endpoint$query'), 
+    http.Response response = await  http.get(Uri.encodeFull('$host$endpoint$query'),
     headers: {
       "Authorization": 'Bearer $jwt'
-    });        
-    if(response.statusCode == 401 || response.statusCode == 503){
+    });
+    if(response.statusCode == 401){
       return handleUnauthorized();
-    } 
-    var res = jsonDecode(response.body);    
-
+    }
+    var res = jsonDecode(response.body);
     res['id'] = res['_id'];
-
-    return res;    
+    return res;
 }
 
 getThumbPlaceholder() async {

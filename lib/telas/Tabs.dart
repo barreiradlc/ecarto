@@ -51,10 +51,9 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     });
   }
   
-  goToProfile() async{    
-    String userId = await void_getID();    
-
-    Get.toNamed('/perfil/${userId}');        
+  goToProfile() async{
+    String userId = await void_getID();
+    Get.toNamed('/perfil/${userId}');
   }
 
   _scan() async {
@@ -63,10 +62,10 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
     try {
       var barcode = await BarcodeScanner.scan();
-      if(barcode.rawContent != ''){
-        
+      if(barcode.rawContent.contains("ecartoQR:")){      
+        String qrCode = barcode.rawContent.replaceAll("ecartoQR:", "");
         // setState(() => id = barcode.rawContent);
-        Get.toNamed('/perfil/${barcode.rawContent}');    
+        Get.toNamed('/perfil/${qrCode}');    
         // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);    
       }
     } on PlatformException catch (e) {
@@ -208,7 +207,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
           drawer: drawerScaff,
           appBar: AppBar(            
-            actions: [
+            actions: [              
               FlatButton(
                 onPressed: _scan, 
                 child: Icon(Icons.center_focus_weak, color: Colors.white))

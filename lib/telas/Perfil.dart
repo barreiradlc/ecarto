@@ -8,6 +8,7 @@ import 'dart:ui' as ui;
 import 'package:dio/dio.dart';
 import 'package:ecarto/Construtores/UserArguments.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
+import 'package:ecarto/Funcoes/ModalWidget.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:ecarto/Parcial/citacoes.dart';
@@ -83,10 +84,15 @@ class _PerfilState extends State<Perfil> {
       user = await fetchProfile(paramId);
     }
 
-    setState(() {
-      loading = false;
-      profile = user;
-    });
+    if(user['id'] != null){
+      setState(() {
+        loading = false;
+        profile = user;
+      });
+    } else {
+      Get.back();            
+      return Get.snackbar("Erro de conexão", "Usuário não encontrado");
+    }
   }
 
   // Future<void> _captureAndSharePng() async {
@@ -208,8 +214,13 @@ class _PerfilState extends State<Perfil> {
       // id = Get.parameters['id'];
     });
 
+    _modalContato(){
+      modalContatoAutor(profile);
+    }
+
     if (loading) {
       return Scaffold(
+        
           body: new Container(
               color: Theme.of(context).primaryColor,
               padding: EdgeInsets.all(20),
@@ -436,7 +447,7 @@ class _PerfilState extends State<Perfil> {
                                                 Radius.circular(25.0))),
                                         child: QrImage(
                                           // backgroundColor: Colors.white,
-                                          data: profile['id'],
+                                          data: 'ecartoQR:${profile['id']}',
                                           version: QrVersions.auto,
                                           padding: EdgeInsets.all(50),
                                           size: 200.0,
@@ -458,7 +469,13 @@ class _PerfilState extends State<Perfil> {
                                 ),
                               ],
                             )
-                          : Container(),
+                          : Container(
+                            child: RaisedButton(
+                              padding: EdgeInsets.all(15),
+                              onPressed: _modalContato,
+                              child: Text('Contatar autor', style: TextStyle(fontSize: 15,color: Theme.of(context).primaryColor),)
+                            ),
+                          ),
 
                       // new Row(
                       //   children: <Widget>[
