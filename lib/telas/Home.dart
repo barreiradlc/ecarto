@@ -6,6 +6,7 @@ import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,6 +146,17 @@ class CollapsingList extends State<HomeState> {
 
   @override
   Widget build(BuildContext context) {
+
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarDividerColor: Colors.black,
+        systemNavigationBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.black,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark));
+
+
     double height = MediaQuery.of(context).size.height;
 
     if (loading) {

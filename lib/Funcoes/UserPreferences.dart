@@ -6,15 +6,17 @@ setProfile(res) async{
 
   String image = res['image'] != '' || res['image'] != null ? res['image'] : await getThumbPlaceholder();
 
-  await data.setString('id', res['_id']);
-  await data.setString('username', res['username']);
+  if(res['_id'] != null){
+    await data.setString('id', res['_id']);
+    await data.setString('username', res['username']);
+  }
+
   await data.setString('email', res['email']);
   await data.setString('image', image);
   await data.setString('instagram', res['instagram']);
   await data.setString('name', res['name']);
   await data.setString('phone', res['phone']);
   await data.setString('about', res['about']);
-
 }
 
 getProfile() async{

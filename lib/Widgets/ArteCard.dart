@@ -13,27 +13,132 @@ class ArteCard extends StatefulWidget {
 }
 
 class _ArteCardState extends State<ArteCard> {
+
+  // _tween<Rect>({Rect: a, Rect: b}) {
+
+  // }
+
   @override
   Widget build(BuildContext context) {
     var arte = widget.arte;
 
     var bg;
+    var fit = BoxFit.cover;
+    var alignment = Alignment.topCenter;
+    var placeholder = Image.asset("assets/logo.png",fit: fit, alignment: alignment);
 
     if (arte['image'] != null) {
       if (arte['image'] == null) {
-        bg = AssetImage("assets/logo.png");
+        bg = placeholder;
+        // bg = AssetImage("assets/logo.png");
       } else {
-        bg = NetworkImage(arte['image']);
+        bg = Image.network(arte['image'],fit: fit, alignment: alignment, width: 350, height: 350);
+        // bg = NetworkImage(arte['image']);
       }
     } else {
-      bg = AssetImage("assets/logo.png");
+      bg = placeholder;
+      // bg = AssetImage("assets/logo.png");
     }
 
     // ITEM
-    
+
+    return Container( 
+      decoration: BoxDecoration(          
+          borderRadius: BorderRadius.all(Radius.circular(2)),
+      ),
+      margin: EdgeInsets.only(right: 25),
+      child: Stack(      
+        overflow: Overflow.clip,
+      children: [
+        ClipPath(child: 
+          Hero(tag: 'Thumbnail${arte['_id']}', child: bg),        
+        ),
+        RaisedButton(
+            padding: EdgeInsets.all(0),
+            color: Colors.white12,
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/item',
+                arguments: ScreenArguments(
+                  arte['title'],
+                  arte['description'],
+                  arte['image'],
+                  DateTime.parse(arte['updated_at']),
+                  arte['nature'],
+                  arte['user'],
+                  arte['_id'],
+                  arte['price'],
+                  arte['_id'],
+                ),
+              );
+              print('pokebola vai');
+            },
+            child: Container(
+                padding: EdgeInsets.all(5),
+                // decoration: BoxDecoration(
+                //   image: DecorationImage(
+                //     // scale: 0.25,
+                //     // image: bg,
+                //     fit: BoxFit.cover,
+                //     colorFilter: new ColorFilter.mode(
+                //         Colors.white.withOpacity(0.3), BlendMode.srcOver),
+                //   ),
+                // ),
+                child: new Container(
+                  padding: EdgeInsets.all(5),
+                  child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            
+                            Text(
+                              widget.arte['title'],
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(left: 20, bottom: 15),
+                              child:
+                              Hero(
+                                // createRectTween: _tween,                                
+                                tag: 'Price${arte['_id']}', child:         
+                              Text(
+                                'R\$ ${widget.arte['price'].toString()}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                      // Text(widget.arte['description'])
+                    ],
+                  ),
+                )))
+      ],
+    )
+    );
+
     return new Container(
         decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(25.0))),
+            borderRadius: BorderRadius.all(Radius.circular(25.0))),
         padding: EdgeInsets.only(right: 15),
         child: RaisedButton(
             padding: EdgeInsets.all(0),
@@ -78,29 +183,28 @@ class _ArteCardState extends State<ArteCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                                Text(
-                                widget.arte['title'],
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                            ),
+                            Text(
+                              widget.arte['title'],
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                             Container(
-                                  padding: const EdgeInsets.only( left: 20, bottom: 15),
-                                  child: Text(
-                                    'R\$ ${widget.arte['price'].toString()}',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                  ),
+                              padding:
+                                  const EdgeInsets.only(left: 20, bottom: 15),
+                              child: Text(
+                                'R\$ ${widget.arte['price'].toString()}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
                                 ),
-                                )
-                              
-                            
+                              ),
+                            )
                           ],
                         ),
                       )

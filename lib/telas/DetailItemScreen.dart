@@ -5,6 +5,7 @@ import 'package:ecarto/Parcial/Carousel.dart';
 import 'package:ecarto/Parcial/MateriaisList.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,6 +54,15 @@ class DetailItems extends State<DetailItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+      
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarDividerColor: Colors.white,
+      systemNavigationBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.white,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark));
+
     // var todo = ModalRoute.of(context).settings.arguments;
     final ScreenArguments item = ModalRoute.of(context).settings.arguments;
     String formatDate(DateTime date) =>
@@ -89,7 +99,7 @@ class DetailItems extends State<DetailItemScreen> {
       print('UPLOAD');
 
       return response.data['img'];
-    }
+    }    
 
     delete(id) async {
       final authJwt = await SharedPreferences.getInstance();
@@ -220,72 +230,73 @@ class DetailItems extends State<DetailItemScreen> {
       print('autor');
       // print(autor.email);
       Get.dialog(Card(
-        margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height / 4, horizontal: 35),
+          margin: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).size.height / 4, horizontal: 35),
           child: Container(
               // height: MediaQuery.of(context).size.height / 2,
               child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Divider(),
-                  autor['name'] != ""
-                      ? ListTile(
-                          title: Text(autor['name'],
-                              style: TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor)),
-                        )
-                      : ListTile(
-                          title: Text(autor['username'],
-                              style: TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold,
-                                  color: textColor)),
-                        ),
-                  Divider(
-                    // height: dividerHeigth,
-                    color: dividerColor,
-                    thickness: 3,
-                  ),
-                  autor['phone'] != ""
-                      ? ListTile(
-                          onTap: () => launch(
-                              "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
-                          title: Text('Telefone: ' + autor['phone']),
-                        )
-                      : Container(),
-                  Divider(),
-                  autor['email'] != ""
-                      ? ListTile(
-                          onTap: () => launch(
-                              "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
-                          title: Text('Email: ' + autor['email']),
-                        )
-                      : Container(),
-                  Divider(),
-                  // Divider(height: dividerHeigth),
-                  autor['instagram'] != ""
-                      ? ListTile(
-                          onTap: () => launch(
-                              "https://instagram.com/${autor['instagram']}"),
-                          title: Text('Instagram: ' + autor['instagram']),
-                        )
-                      : Container(),
-                  Divider(),
-                  // Divider(height: dividerHeigth),
-                  
-                  // Center(
-                  //     child: Container(
-                  //         child: ListTile(
-                  //   onLongPress:
-                  //     () => Navigator.pop(context)
-                  //   ,
-                  //   title: Text('Fechar'),
-                  // )))
-                ],
-              ))));
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Divider(),
+              autor['name'] != ""
+                  ? ListTile(
+                      title: Text(autor['name'],
+                          style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              color: textColor)),
+                    )
+                  : ListTile(
+                      title: Text(autor['username'],
+                          style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              color: textColor)),
+                    ),
+              Divider(
+                // height: dividerHeigth,
+                color: dividerColor,
+                thickness: 3,
+              ),
+              autor['phone'] != ""
+                  ? ListTile(
+                      onTap: () => launch(
+                          "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
+                      title: Text('Telefone: ' + autor['phone']),
+                    )
+                  : Container(),
+              Divider(),
+              autor['email'] != ""
+                  ? ListTile(
+                      onTap: () => launch(
+                          "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
+                      title: Text('Email: ' + autor['email']),
+                    )
+                  : Container(),
+              Divider(),
+              // Divider(height: dividerHeigth),
+              autor['instagram'] != ""
+                  ? ListTile(
+                      onTap: () =>
+                          launch("https://instagram.com/${autor['instagram']}"),
+                      title: Text('Instagram: ' + autor['instagram']),
+                    )
+                  : Container(),
+              Divider(),
+              // Divider(height: dividerHeigth),
+
+              // Center(
+              //     child: Container(
+              //         child: ListTile(
+              //   onLongPress:
+              //     () => Navigator.pop(context)
+              //   ,
+              //   title: Text('Fechar'),
+              // )))
+            ],
+          ))));
     }
 
     Future<String> contatarAutor(userId) async {
@@ -419,13 +430,16 @@ class DetailItems extends State<DetailItemScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(25),
+
                   child: Text(item.description), //
                 ),
                 item.price != 0
                     ? Padding(
                         padding: EdgeInsets.all(25),
-                        child: Text('Preço: R\$ ${item.price.toString()}'), //
-                      )
+                        child: Hero(
+                          tag: 'Price${item.id}',
+                          child: Text('Preço: R\$ ${item.price.toString()}'), //
+                        ))
                     : Padding(
                         padding: EdgeInsets.all(25),
                         child: Text('Preço: Gratuito'), //

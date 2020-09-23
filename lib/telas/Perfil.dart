@@ -17,6 +17,7 @@ import 'package:ecarto/Widgets/ItensWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -84,13 +85,13 @@ class _PerfilState extends State<Perfil> {
       user = await fetchProfile(paramId);
     }
 
-    if(user['id'] != null){
+    if (user['id'] != null) {
       setState(() {
         loading = false;
         profile = user;
       });
     } else {
-      Get.back();            
+      Get.back();
       return Get.snackbar("Erro de conexão", "Usuário não encontrado");
     }
   }
@@ -206,6 +207,15 @@ class _PerfilState extends State<Perfil> {
 
   @override
   Widget build(BuildContext context) {
+
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //     systemNavigationBarDividerColor: Color(0xff558b2f),
+    //     systemNavigationBarColor: Color(0xff558b2f),
+    //     statusBarIconBrightness: Brightness.dark,
+    //     statusBarColor: Color(0xff558b2f),
+    //     statusBarBrightness: Brightness.dark,
+    //     systemNavigationBarIconBrightness: Brightness.dark));
+
     final _width = MediaQuery.of(context).size.width;
     final _height = MediaQuery.of(context).size.height;
 
@@ -214,13 +224,12 @@ class _PerfilState extends State<Perfil> {
       // id = Get.parameters['id'];
     });
 
-    _modalContato(){
+    _modalContato() {
       modalContatoAutor(profile);
     }
-
+    
     if (loading) {
       return Scaffold(
-        
           body: new Container(
               color: Theme.of(context).primaryColor,
               padding: EdgeInsets.all(20),
@@ -252,56 +261,88 @@ class _PerfilState extends State<Perfil> {
     }
 
     return Stack(
+      alignment: Alignment.topCenter,
       overflow: Overflow.visible,
       children: <Widget>[
+        AppBar(
+          bottomOpacity: 0.2,
+          brightness: Brightness.dark,
+          iconTheme: new IconThemeData(color: Colors.white),
+          // title: new Text(
+          //   "${profile['username']} - ${profile['name'] != null ? profile['name'] : ''}",
+          //   style: TextStyle(color: Colors.white),
+          // ),
+          centerTitle: false,
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+        ),
         new Container(
-          height: _height,
-          color: Theme.of(context).accentColor,
+          height: _height * 1.5,
+          color: Theme.of(context).primaryColor,
         ),
         imgUrl != ''
-            ? FadeInImage.memoryNetwork(
+            ? 
+            Padding(
+              padding: EdgeInsets.only(top:2),
+              child: FadeInImage.memoryNetwork(
                 height: _height,
-                fit: BoxFit.contain,
+                alignment: Alignment.topCenter,
+                fit: BoxFit.cover,
                 placeholder: kTransparentImage,
                 image: (profile['image'] == null || profile['image'] == '')
                     ? imgUrl
-                    : profile['image'])
-            : CircularProgressIndicator(),
+                    : profile['image']),
+            ) : CircularProgressIndicator(),
         new BackdropFilter(
             filter: new ui.ImageFilter.blur(
-              sigmaX: 6.0,
-              sigmaY: 6.0,
+              sigmaX: 2.0,
+              sigmaY: 2.0,
             ),
             child: new Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor.withOpacity(0.9),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                color: Theme.of(context).accentColor.withOpacity(0.6),
+                // borderRadius: BorderRadius.all(Radius.circular(50.0)),
               ),
             )),
-        new Scaffold(
-            appBar: new AppBar(
-              brightness: Brightness.dark,
-              iconTheme: new IconThemeData(color: Colors.white),
-              title: new Text(
-                "${profile['username']} - ${profile['name'] != null ? profile['name'] : ''}",
-                style: TextStyle(color: Colors.white),
-              ),
-              centerTitle: false,
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
-            ),
+        Scaffold(
+
+            //   bottomOpacity: 0.2,
+
+            //   brightness: Brightness.dark,
+            //   iconTheme: new IconThemeData(color: Colors.white),
+            //   title: new Text(
+            //     "${profile['username']} - ${profile['name'] != null ? profile['name'] : ''}",
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            //   centerTitle: false,
+            //   elevation: 0.0,
+            //   backgroundColor: Colors.transparent,
+            // ),
             // drawer: new Drawer(
             //   child: new Container(),
             // ),
             backgroundColor: Colors.transparent,
             body: ListView(
               children: <Widget>[
+                AppBar(
+                  bottomOpacity: 0.2,
+                  brightness: Brightness.dark,
+                  iconTheme: new IconThemeData(color: Colors.white),
+                  // title: new Text(
+                  //   "${profile['username']} - ${profile['name'] != null ? profile['name'] : ''}",
+                  //   style: TextStyle(color: Colors.white),
+                  // ),
+                  centerTitle: false,
+                  elevation: 0.0,
+                  backgroundColor: Color(0xff558b2f),
+                ),
                 new Center(
                   child: new Column(
                     children: <Widget>[
                       new SizedBox(
-                        height: _height / 12,
-                      ),
+                          // height: _height / 15,
+                            height: 15,
+                          ),
                       imgUrl != ''
                           ? new CircleAvatar(
                               backgroundColor: Colors.transparent,
@@ -344,35 +385,56 @@ class _PerfilState extends State<Perfil> {
                         height: 30,
                         thickness: 5,
                       ),
-
-                      new Text(
-                        profile['email'] != null ? profile['email'] : "",
-                        style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: _width / 35,
-                            color: Colors.white),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(FontAwesomeIcons.envelope,
+                                color: Colors.white),
+                            Text(
+                              profile['email'] != null
+                                  ? '   ${profile['email']}'
+                                  : "",
+                              style: new TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: _width / 35,
+                                  color: Colors.white),
+                            ),
+                          ]),
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(FontAwesomeIcons.whatsapp, color: Colors.white),
+                          Text(
+                            profile['phone'] != null
+                                ? '   ${profile['phone']}'
+                                : "",
+                            style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: _width / 35,
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.all(5),
                       ),
-                      new Text(
-                        profile['phone'] != null ? profile['phone'] : "",
-                        style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: _width / 35,
-                            color: Colors.white),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                      ),
-                      new Text(
-                        profile['instagram'] != null
-                            ? profile['instagram']
-                            : "",
-                        style: new TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: _width / 35,
-                            color: Colors.white),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(FontAwesomeIcons.instagram, color: Colors.white),
+                          Text(
+                            profile['instagram'] != null
+                                ? '   @${profile['instagram']}'
+                                : "",
+                            style: new TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: _width / 35,
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
 
                       new Padding(
@@ -421,10 +483,6 @@ class _PerfilState extends State<Perfil> {
                                             ],
                                           ))),
                                 ),
-
-
-
-
                                 Center(
                                   child: RepaintBoundary(
                                       key: globalKey,
@@ -460,9 +518,6 @@ class _PerfilState extends State<Perfil> {
                                         ),
                                       )),
                                 ),
-
-
-
                                 new Divider(
                                   height: _height / 30,
                                   color: Colors.white,
@@ -470,12 +525,16 @@ class _PerfilState extends State<Perfil> {
                               ],
                             )
                           : Container(
-                            child: RaisedButton(
-                              padding: EdgeInsets.all(15),
-                              onPressed: _modalContato,
-                              child: Text('Contatar autor', style: TextStyle(fontSize: 15,color: Theme.of(context).primaryColor),)
+                              child: RaisedButton(
+                                  padding: EdgeInsets.all(15),
+                                  onPressed: _modalContato,
+                                  child: Text(
+                                    'Entrar em contato',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor),
+                                  )),
                             ),
-                          ),
 
                       // new Row(
                       //   children: <Widget>[
@@ -483,7 +542,7 @@ class _PerfilState extends State<Perfil> {
                       //     rowCell(status[1]['Artes'], 'ARTE', 'S', '')
                       //   ],
                       // ),
-                      new Divider(height: _height / 30, color: Colors.white),
+                      new Divider(height: 30, color: Colors.white),
                       id != profile['id']
                           ? ItensWidget(profile)
                           : Padding(
@@ -491,6 +550,9 @@ class _PerfilState extends State<Perfil> {
                                   left: _width / 8, right: _width / 8),
                               child: new FlatButton(
                                 onPressed: () {
+                                  setState(() {
+                                    loading = true;
+                                  });
                                   Navigator.pushNamed(context, '/formperfil',
                                       arguments: UserArguments(
                                         profile['id'],
@@ -529,35 +591,36 @@ class _PerfilState extends State<Perfil> {
 
                       new Divider(height: _height / 30, color: Colors.white),
 
-                      id != profile['id'] ?
-                      Container() :
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/editPassword');
-                        },
-                        child: new Container(
-                            padding: EdgeInsets.all(40),
-                            child: new Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                new Icon(Icons.lock_outline,
-                                    color: Colors.white),
-                                new SizedBox(
-                                  width: _width / 30,
-                                ),
-                                new Text('EDITAR SENHA',
-                                    style: TextStyle(color: Colors.white))
-                              ],
-                            )),
-                        // color: Theme.of(context).accentColor,
-                        color: Colors.transparent,
-                      ),
+                      id != profile['id']
+                          ? Container()
+                          : FlatButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/editPassword');
+                              },
+                              child: new Container(
+                                  padding: EdgeInsets.all(40),
+                                  child: new Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      new Icon(Icons.lock_outline,
+                                          color: Colors.white),
+                                      new SizedBox(
+                                        width: _width / 30,
+                                      ),
+                                      new Text('EDITAR SENHA',
+                                          style: TextStyle(color: Colors.white))
+                                    ],
+                                  )),
+                              // color: Theme.of(context).accentColor,
+                              color: Colors.transparent,
+                            ),
                     ],
                   ),
                 )
               ],
-            ))
+            )),
       ],
     );
   }

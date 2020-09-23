@@ -6,6 +6,7 @@ import 'package:ecarto/Construtores/UserArguments.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
 
 import 'package:ecarto/Funcoes/UserData.dart';
+import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:ecarto/Funcoes/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -171,21 +172,25 @@ class FormPerfilPageState extends State<FormPerfilPage> {
         Navigator.pop(context);
     
         if (res['email'] != null) {
+        await setProfile(res);
           // await Navigator.pop(context);
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        Get.back();
+        Get.back();
+        Get.toNamed('/perfil/${id.text}');
 
-          await Navigator.pushReplacementNamed(context, '/perfil', 
-          arguments: UserArguments(
-            res['id'],
-            res['name'],
-            res['username'],
-            res['email'],
-            res['phone'],
-            res['instagram'],
-            res['pinterest'],
-            res['about'],
-            res['image'],
-          ));
+          // await Navigator.pushReplacementNamed(context, '/perfil', 
+          // arguments: UserArguments(
+          //   res['id'],
+          //   res['name'],
+          //   res['username'],
+          //   res['email'],
+          //   res['phone'],
+          //   res['instagram'],
+          //   res['pinterest'],
+          //   res['about'],
+          //   res['image'],
+          // ));
           
           // Future.delayed(const Duration(milliseconds: 1000), () {
           //   Navigator.pop(context, '/perfil');

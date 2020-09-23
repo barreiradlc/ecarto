@@ -62,11 +62,13 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
     try {
       var barcode = await BarcodeScanner.scan();
-      if(barcode.rawContent.contains("ecartoQR:")){      
+      if(barcode.rawContent.contains("ecartoQR:")){
         String qrCode = barcode.rawContent.replaceAll("ecartoQR:", "");
         // setState(() => id = barcode.rawContent);
         Get.toNamed('/perfil/${qrCode}');    
         // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);    
+      } else {
+        _scan();
       }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
