@@ -119,7 +119,7 @@ class _PerfilState extends State<Perfil> {
     try {
       RenderRepaintBoundary boundary =
           globalKey.currentContext.findRenderObject();
-      var image = await boundary.toImage();
+      var image = await boundary.toImage(pixelRatio:5.0);
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
       final tempDir = await getTemporaryDirectory();
@@ -439,7 +439,7 @@ class _PerfilState extends State<Perfil> {
 
                       new Padding(
                         padding: new EdgeInsets.only(
-                            top: _height / 30,
+                            top: 30,
                             left: _width / 8,
                             right: _width / 8),
                         child: new Text(

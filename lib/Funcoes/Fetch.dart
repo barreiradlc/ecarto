@@ -11,6 +11,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
+import 'LocalStorage.dart';
 // print(host);
 
 Future<http.Response> fetchPost() async {
@@ -207,6 +209,64 @@ Future fetchProfile(id) async {
     }
     var res = jsonDecode(response.body);
     res['id'] = res['_id'];
+    return res;
+}
+
+Future fetchChats() async {
+    String endpoint = '/chat';
+    var jwt = await void_getJWT();
+
+    http.Response response = await  http.get(Uri.encodeFull('$host$endpoint'),
+    headers: {
+      "Authorization": 'Bearer $jwt'
+    });
+    if(response.statusCode == 401){
+      return handleUnauthorized();
+    }
+    var res = jsonDecode(response.body);
+    
+    return res;
+}
+
+
+Future sendMessage(message, chatId) async {
+    var endpoint = '/chat/$chatId';
+    var jwt = await void_getJWT();
+
+    Get.dialog(alertWidget(),
+        barrierDismissible: false, useRootNavigator: false);
+    var response = await http.post('$host$endpoint', 
+      headers : {
+        'Content-Type': 'application/json',
+        "Authorization": 'Bearer $jwt'
+      },
+      body: json.encode({
+        "message": message        
+      })
+    );
+    var res = jsonDecode(response.body);
+    if(response.statusCode != 200){
+      return;
+    }
+    handleStoreMessage(res);
+    Get.back();
+    return res;
+}
+
+
+Future fetchChatMessages(id) async {
+    String endpoint = '/chat/$id';
+    var jwt = await void_getJWT();
+
+    http.Response response = await  http.get(Uri.encodeFull('$host$endpoint'),
+    headers: {
+      "Authorization": 'Bearer $jwt'
+    });
+    if(response.statusCode == 401){
+      return handleUnauthorized();
+    }
+    var res = jsonDecode(response.body);
+    
     return res;
 }
 

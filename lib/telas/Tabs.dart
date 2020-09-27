@@ -18,7 +18,7 @@ import '../Funcoes/UserData.dart';
 
 class Tabs extends StatefulWidget {
   var tema = 0;
-  
+
   final user;
   final artes;
   final materiais;
@@ -30,8 +30,18 @@ class Tabs extends StatefulWidget {
 
 class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   final List<Tab> myTabs = <Tab>[
-    Tab(icon: Icon(Icons.brush), child: Text('Artes', style: TextStyle(fontWeight: FontWeight.bold ),)),
-    Tab(icon: Icon(Icons.extension), child: Text('Materiais', style: TextStyle(fontWeight: FontWeight.bold),)),
+    Tab(
+        icon: Icon(Icons.brush),
+        child: Text(
+          'Artes',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )),
+    Tab(
+        icon: Icon(Icons.extension),
+        child: Text(
+          'Materiais',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        )),
   ];
 
   TabController _tabController;
@@ -50,25 +60,45 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
       _activeTabIndex = _tabController.index == 0 ? true : false;
     });
   }
-  
-  goToProfile() async{
+
+  goToProfile() async {
     String userId = await void_getID();
     Get.toNamed('/perfil/${userId}');
   }
 
-  _scan() async {
+  handleLogout() async {
+    removeLoginData().then((response) {
+      print('LOGOUT');
+      print(response);
+      print('LOGOUT');
 
-    // return Get.toNamed('/perfil/5f4067fab504e91ce49ca9e9');    
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, '/login');
+    });
+  }
+
+  _scan() async {
+    var options = ScanOptions(
+      strings: {
+        "cancel": "Cancelar",
+        "flash_on": "Habilitar flash",
+        "flash_off": "Desabilitar flash",
+      },
+    );
+
+    // return Get.toNamed('/perfil/5f4067fab504e91ce49ca9e9');
 
     try {
-      var barcode = await BarcodeScanner.scan();
-      if(barcode.rawContent.contains("ecartoQR:")){
+      var barcode = await BarcodeScanner.scan(options: options);
+      if (barcode.rawContent.contains("ecartoQR:")) {
         String qrCode = barcode.rawContent.replaceAll("ecartoQR:", "");
         // setState(() => id = barcode.rawContent);
-        Get.toNamed('/perfil/${qrCode}');    
-        // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);    
+        Get.toNamed('/perfil/${qrCode}');
+        // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);
       } else {
-        _scan();
+        if (barcode.rawContent != '') {
+          _scan();
+        }
       }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
@@ -91,8 +121,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
     if (mounted) {
-
-      if(widget.user['image'] != null && widget.user['image'] != ""){
+      if (widget.user['image'] != null && widget.user['image'] != "") {
         setState(() {
           bg = NetworkImage(widget.user['image']);
         });
@@ -122,23 +151,23 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var drawerScaff = Drawer(      
+    var drawerScaff = Drawer(
       elevation: 3,
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text("Bem Vindo(a) ${widget.user['name'] != null ? widget.user['name'] : ''}",          
+            child: Text(
+              "Bem Vindo(a) ${widget.user['name'] != null ? widget.user['name'] : ''}",
               style: TextStyle(color: Colors.white),
             ),
             decoration: BoxDecoration(
-              color: Colors.black,              
+              color: Colors.black,
               image: DecorationImage(
                 image: bg,
                 fit: BoxFit.cover,
                 colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.65),
-                    BlendMode.dstOut),
+                    Colors.black.withOpacity(0.65), BlendMode.dstOut),
               ),
             ),
           ),
@@ -169,20 +198,48 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             },
           ),
           ListTile(
+            title: Text('Chat'),
+            onTap: () {
+              const chatId = '';
+              Navigator.pop(context);
+              Get.toNamed('/chat/5f406bb21df33b3ae80b8149');
+            },
+          ),
+          Divider(height: 25),
+          ListTile(
             title: Text('Sair'),
             onTap: () {
-              
-
-              removeLoginData().then((response) {
-                
-                print('LOGOUT');
-                print(response);
-                print('LOGOUT');
-
-                Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/login');
-              });
-
+              return showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      backgroundColor: Colors.transparent,
+                      content: Card(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 10, horizontal:10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 50),
+                              child: Text("Deseja realmente sair?"),
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FlatButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("Não")),
+                                  FlatButton(
+                                      onPressed: handleLogout,
+                                      child: Text("Sim"))
+                                ])
+                          ],
+                        ),
+                      )),
+                    );
+                  });
             },
           )
         ],
@@ -201,18 +258,18 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     // }
 
     return Theme(
-        data: ThemeData(            
+        data: ThemeData(
             accentColor: Colors.black,
-            primaryColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor
-        ),
+            primaryColor: _activeTabIndex
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).accentColor),
         child: Scaffold(
-
           drawer: drawerScaff,
-          appBar: AppBar(            
-            actions: [              
+          appBar: AppBar(
+            actions: [
               FlatButton(
-                onPressed: _scan, 
-                child: Icon(Icons.center_focus_weak, color: Colors.white))
+                  onPressed: _scan,
+                  child: Icon(Icons.center_focus_weak, color: Colors.white))
             ],
             brightness: Brightness.dark, // status bar brightness
             iconTheme: new IconThemeData(color: Colors.white),
@@ -227,15 +284,17 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             // When the user presses the button, show an alert dialog containing
             // the text that the user has entered into the text field.
             foregroundColor: Colors.white,
-            backgroundColor: _activeTabIndex ? Theme.of(context).primaryColor : Theme.of(context).accentColor,
+            backgroundColor: _activeTabIndex
+                ? Theme.of(context).primaryColor
+                : Theme.of(context).accentColor,
             onPressed: () {
-              Navigator.pushNamed(context, '/itens/form', arguments: _activeTabIndex ? "arte" : "material");
+              Navigator.pushNamed(context, '/itens/form',
+                  arguments: _activeTabIndex ? "arte" : "material");
             },
             tooltip: _activeTabIndex ? "Criar Arte" : "Criar Material",
             child: Icon(Icons.add),
           ),
           body: TabBarView(
-
             controller: _tabController,
             // children: myTabs.map((Tab tab) {
             //   final String label = tab.text.toLowerCase();

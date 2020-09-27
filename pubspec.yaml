@@ -14,11 +14,16 @@ description: A new Flutter project.
 version: 1.0.0+29
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^3.0.0+1
+  flutter_slidable: ^0.5.3
+  moor: any # use the latest version
+  moor_flutter: ^1.5.0 # use the latest version
+  sqlite3_flutter_libs: any # Also use the latest version.
   font_awesome_flutter: 8.8.1
   universal_html: 1.1.9
   dio: 3.0.8
@@ -49,8 +54,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_launcher_icons: 0.7.5
+  moor_generator:  ^1.5.0 # use the latest version
+  build_runner: 
 
 flutter_icons:
   image_path: "assets/logo-colorida.png" 
