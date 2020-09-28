@@ -202,7 +202,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             onTap: () {
               const chatId = '';
               Navigator.pop(context);
-              Get.toNamed('/chat/5f406bb21df33b3ae80b8149');
+              Get.toNamed('/chat/5f71301010ac9723a8467dd8');
             },
           ),
           Divider(height: 25),

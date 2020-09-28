@@ -23,17 +23,28 @@ Future handleStoreChatData(id) async {
 
     database.insertMessage(message);    
   }
-
-  // data['messages'].map((Message message) {
-  //   print(message);
-  //   // database.insertMessage(message);
-  // });
-
   return data['messages'];
 }
 
 
 Future handleStoreMessage(data) async {  
+    final database = AppDatabase();
+
+     final message = Message(
+      id: data['_id'],
+      body: data['body'],
+      createdAt: DateTime.parse(data['createdAt']),
+      sender: data['sender'],
+      read: true,
+      send: true
+    );
+
+    database.insertMessage(message);    
+
+    return message;
+  }
+
+Future handleStoreMessages(data) async {  
     final database = AppDatabase();
 
      final message = Message(

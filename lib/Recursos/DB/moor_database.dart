@@ -27,7 +27,7 @@ class AppDatabase extends _$AppDatabase{
   ));
   
   @override
-  int get schemaVersion => 5;
+  int get schemaVersion => 6;
 
   Future<List<Message>> getAllMessages() => select(messages).get();
   Stream<List<Message>> watchAllMessages() => select(messages).watch();

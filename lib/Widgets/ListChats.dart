@@ -22,17 +22,15 @@ class _ListChatsState extends State<ListChats> {
   Widget build(BuildContext context) {
     var localId = widget.id;
     final newMessage = TextEditingController(text: '');
-
+    
     submitMessage() {
       String message = newMessage.text;
       if (message != '') {
         setState(() {
           newMessage.text = "";
         });
-
         var response = sendMessage(message, widget.chat);
-
-        if(response == null){ 
+        if(response == null){
           setState(() {
             newMessage.text = message;
           });
@@ -124,15 +122,15 @@ Widget _buildListItem(
   return Card(
     color: self ? Color(0xff42A5F5) : Color(0xff558b2f),
     margin:
-        EdgeInsets.only(left: !self ? 35 : 10, right: self ? 35 : 10, top: 10),
+        EdgeInsets.only(left: self ? 35 : 10, right:!self ? 35 : 10, top: 10),
     child: ListTile(
       title: Text(itemMessage.body,
           style: TextStyle(color: Colors.white),
-          textAlign: !self ? TextAlign.end : TextAlign.start),
+          textAlign: self ? TextAlign.end : TextAlign.start),
       subtitle: Text(
         convertDatetimetoPT(itemMessage.createdAt) ?? 'No date',
         style: TextStyle(fontSize: 10, color: Colors.white),
-        textAlign: !self ? TextAlign.end : TextAlign.start,
+        textAlign: self ? TextAlign.end : TextAlign.start,
       ),
     ),
   );

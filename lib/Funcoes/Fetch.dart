@@ -235,13 +235,13 @@ Future sendMessage(message, chatId) async {
 
     Get.dialog(alertWidget(),
         barrierDismissible: false, useRootNavigator: false);
-    var response = await http.post('$host$endpoint', 
+    var response = await http.post('$host$endpoint',
       headers : {
         'Content-Type': 'application/json',
         "Authorization": 'Bearer $jwt'
       },
       body: json.encode({
-        "message": message        
+        "message": message
       })
     );
     var res = jsonDecode(response.body);
