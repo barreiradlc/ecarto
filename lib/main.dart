@@ -1,3 +1,4 @@
+import 'package:ecarto/telas/Chat.dart';
 import 'package:flutter/services.dart';
 
 import 'package:ecarto/telas/DetailScreen.dart';
@@ -18,7 +19,7 @@ import './telas/Cadastro.dart';
 // import  './telas/Camera.dart';
 import 'package:ecarto/telas/Home/ExtractArgumentsScreen.dart';
 
-import 'telas/Chat.dart';
+import 'telas/ChatRoom.dart';
 import 'telas/Perfil/FormPerfilPage.dart';
 import 'telas/Perfil/ChangePassword.dart';
 import './Funcoes/UserData.dart';
@@ -171,7 +172,8 @@ class _HomeScreen extends State<HomeScreen> {
         GetPage(name: '/home', page: () => Home()),
         GetPage(name: '/login', page: () => Login() ),        
         GetPage(name: '/perfil/:id', page: () => Perfil() ),
-        GetPage(name: '/chat/:id', page: () => Chat() )
+        // GetPage(name: '/chat/:id', page: () => ChatRoom() )
+        GetPage(name: '/chat', page: () => Chat() )
       ],
     );
   }

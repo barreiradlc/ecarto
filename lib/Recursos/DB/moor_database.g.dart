@@ -9,6 +9,7 @@ part of 'moor_database.dart';
 // ignore_for_file: unnecessary_brace_in_string_interps
 class Message extends DataClass implements Insertable<Message> {
   final String id;
+  final String chatId;
   final String body;
   final DateTime createdAt;
   final String sender;
@@ -16,6 +17,7 @@ class Message extends DataClass implements Insertable<Message> {
   final bool send;
   Message(
       {@required this.id,
+      @required this.chatId,
       @required this.body,
       this.createdAt,
       @required this.sender,
@@ -29,6 +31,8 @@ class Message extends DataClass implements Insertable<Message> {
     final boolType = db.typeSystem.forDartType<bool>();
     return Message(
       id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      chatId:
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}chat_id']),
       body: stringType.mapFromDatabaseResponse(data['${effectivePrefix}body']),
       createdAt: dateTimeType
           .mapFromDatabaseResponse(data['${effectivePrefix}created_at']),
@@ -42,6 +46,7 @@ class Message extends DataClass implements Insertable<Message> {
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
     return Message(
       id: serializer.fromJson<String>(json['id']),
+      chatId: serializer.fromJson<String>(json['chatId']),
       body: serializer.fromJson<String>(json['body']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       sender: serializer.fromJson<String>(json['sender']),
@@ -54,6 +59,7 @@ class Message extends DataClass implements Insertable<Message> {
       {ValueSerializer serializer = const ValueSerializer.defaults()}) {
     return {
       'id': serializer.toJson<String>(id),
+      'chatId': serializer.toJson<String>(chatId),
       'body': serializer.toJson<String>(body),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'sender': serializer.toJson<String>(sender),
@@ -66,6 +72,8 @@ class Message extends DataClass implements Insertable<Message> {
   T createCompanion<T extends UpdateCompanion<Message>>(bool nullToAbsent) {
     return MessagesCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      chatId:
+          chatId == null && nullToAbsent ? const Value.absent() : Value(chatId),
       body: body == null && nullToAbsent ? const Value.absent() : Value(body),
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
@@ -79,6 +87,7 @@ class Message extends DataClass implements Insertable<Message> {
 
   Message copyWith(
           {String id,
+          String chatId,
           String body,
           DateTime createdAt,
           String sender,
@@ -86,6 +95,7 @@ class Message extends DataClass implements Insertable<Message> {
           bool send}) =>
       Message(
         id: id ?? this.id,
+        chatId: chatId ?? this.chatId,
         body: body ?? this.body,
         createdAt: createdAt ?? this.createdAt,
         sender: sender ?? this.sender,
@@ -96,6 +106,7 @@ class Message extends DataClass implements Insertable<Message> {
   String toString() {
     return (StringBuffer('Message(')
           ..write('id: $id, ')
+          ..write('chatId: $chatId, ')
           ..write('body: $body, ')
           ..write('createdAt: $createdAt, ')
           ..write('sender: $sender, ')
@@ -109,14 +120,19 @@ class Message extends DataClass implements Insertable<Message> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          body.hashCode,
-          $mrjc(createdAt.hashCode,
-              $mrjc(sender.hashCode, $mrjc(read.hashCode, send.hashCode))))));
+          chatId.hashCode,
+          $mrjc(
+              body.hashCode,
+              $mrjc(
+                  createdAt.hashCode,
+                  $mrjc(sender.hashCode,
+                      $mrjc(read.hashCode, send.hashCode)))))));
   @override
   bool operator ==(other) =>
       identical(this, other) ||
       (other is Message &&
           other.id == id &&
+          other.chatId == chatId &&
           other.body == body &&
           other.createdAt == createdAt &&
           other.sender == sender &&
@@ -126,6 +142,7 @@ class Message extends DataClass implements Insertable<Message> {
 
 class MessagesCompanion extends UpdateCompanion<Message> {
   final Value<String> id;
+  final Value<String> chatId;
   final Value<String> body;
   final Value<DateTime> createdAt;
   final Value<String> sender;
@@ -133,6 +150,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
   final Value<bool> send;
   const MessagesCompanion({
     this.id = const Value.absent(),
+    this.chatId = const Value.absent(),
     this.body = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.sender = const Value.absent(),
@@ -141,6 +159,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
   });
   MessagesCompanion copyWith(
       {Value<String> id,
+      Value<String> chatId,
       Value<String> body,
       Value<DateTime> createdAt,
       Value<String> sender,
@@ -148,6 +167,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       Value<bool> send}) {
     return MessagesCompanion(
       id: id ?? this.id,
+      chatId: chatId ?? this.chatId,
       body: body ?? this.body,
       createdAt: createdAt ?? this.createdAt,
       sender: sender ?? this.sender,
@@ -173,13 +193,24 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
     );
   }
 
+  final VerificationMeta _chatIdMeta = const VerificationMeta('chatId');
+  GeneratedTextColumn _chatId;
+  @override
+  GeneratedTextColumn get chatId => _chatId ??= _constructChatId();
+  GeneratedTextColumn _constructChatId() {
+    return GeneratedTextColumn(
+      'chat_id',
+      $tableName,
+      false,
+    );
+  }
+
   final VerificationMeta _bodyMeta = const VerificationMeta('body');
   GeneratedTextColumn _body;
   @override
   GeneratedTextColumn get body => _body ??= _constructBody();
   GeneratedTextColumn _constructBody() {
-    return GeneratedTextColumn('body', $tableName, false,
-        minTextLength: 1, maxTextLength: 50);
+    return GeneratedTextColumn('body', $tableName, false, minTextLength: 1);
   }
 
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
@@ -223,7 +254,7 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
 
   @override
   List<GeneratedColumn> get $columns =>
-      [id, body, createdAt, sender, read, send];
+      [id, chatId, body, createdAt, sender, read, send];
   @override
   $MessagesTable get asDslTable => this;
   @override
@@ -238,6 +269,12 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
       context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
     } else if (id.isRequired && isInserting) {
       context.missing(_idMeta);
+    }
+    if (d.chatId.present) {
+      context.handle(
+          _chatIdMeta, chatId.isAcceptableValue(d.chatId.value, _chatIdMeta));
+    } else if (chatId.isRequired && isInserting) {
+      context.missing(_chatIdMeta);
     }
     if (d.body.present) {
       context.handle(
@@ -286,6 +323,9 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
     if (d.id.present) {
       map['id'] = Variable<String, StringType>(d.id.value);
     }
+    if (d.chatId.present) {
+      map['chat_id'] = Variable<String, StringType>(d.chatId.value);
+    }
     if (d.body.present) {
       map['body'] = Variable<String, StringType>(d.body.value);
     }
@@ -310,10 +350,203 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
   }
 }
 
+class Chat extends DataClass implements Insertable<Chat> {
+  final String id;
+  final String de;
+  final String photofrom;
+  Chat({@required this.id, @required this.de, @required this.photofrom});
+  factory Chat.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+      {String prefix}) {
+    final effectivePrefix = prefix ?? '';
+    final stringType = db.typeSystem.forDartType<String>();
+    return Chat(
+      id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
+      de: stringType.mapFromDatabaseResponse(data['${effectivePrefix}de']),
+      photofrom: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}photofrom']),
+    );
+  }
+  factory Chat.fromJson(Map<String, dynamic> json,
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return Chat(
+      id: serializer.fromJson<String>(json['id']),
+      de: serializer.fromJson<String>(json['de']),
+      photofrom: serializer.fromJson<String>(json['photofrom']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson(
+      {ValueSerializer serializer = const ValueSerializer.defaults()}) {
+    return {
+      'id': serializer.toJson<String>(id),
+      'de': serializer.toJson<String>(de),
+      'photofrom': serializer.toJson<String>(photofrom),
+    };
+  }
+
+  @override
+  T createCompanion<T extends UpdateCompanion<Chat>>(bool nullToAbsent) {
+    return ChatsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      de: de == null && nullToAbsent ? const Value.absent() : Value(de),
+      photofrom: photofrom == null && nullToAbsent
+          ? const Value.absent()
+          : Value(photofrom),
+    ) as T;
+  }
+
+  Chat copyWith({String id, String de, String photofrom}) => Chat(
+        id: id ?? this.id,
+        de: de ?? this.de,
+        photofrom: photofrom ?? this.photofrom,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Chat(')
+          ..write('id: $id, ')
+          ..write('de: $de, ')
+          ..write('photofrom: $photofrom')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      $mrjf($mrjc(id.hashCode, $mrjc(de.hashCode, photofrom.hashCode)));
+  @override
+  bool operator ==(other) =>
+      identical(this, other) ||
+      (other is Chat &&
+          other.id == id &&
+          other.de == de &&
+          other.photofrom == photofrom);
+}
+
+class ChatsCompanion extends UpdateCompanion<Chat> {
+  final Value<String> id;
+  final Value<String> de;
+  final Value<String> photofrom;
+  const ChatsCompanion({
+    this.id = const Value.absent(),
+    this.de = const Value.absent(),
+    this.photofrom = const Value.absent(),
+  });
+  ChatsCompanion copyWith(
+      {Value<String> id, Value<String> de, Value<String> photofrom}) {
+    return ChatsCompanion(
+      id: id ?? this.id,
+      de: de ?? this.de,
+      photofrom: photofrom ?? this.photofrom,
+    );
+  }
+}
+
+class $ChatsTable extends Chats with TableInfo<$ChatsTable, Chat> {
+  final GeneratedDatabase _db;
+  final String _alias;
+  $ChatsTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  GeneratedTextColumn _id;
+  @override
+  GeneratedTextColumn get id => _id ??= _constructId();
+  GeneratedTextColumn _constructId() {
+    return GeneratedTextColumn(
+      'id',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _deMeta = const VerificationMeta('de');
+  GeneratedTextColumn _de;
+  @override
+  GeneratedTextColumn get de => _de ??= _constructDe();
+  GeneratedTextColumn _constructDe() {
+    return GeneratedTextColumn(
+      'de',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _photofromMeta = const VerificationMeta('photofrom');
+  GeneratedTextColumn _photofrom;
+  @override
+  GeneratedTextColumn get photofrom => _photofrom ??= _constructPhotofrom();
+  GeneratedTextColumn _constructPhotofrom() {
+    return GeneratedTextColumn(
+      'photofrom',
+      $tableName,
+      false,
+    );
+  }
+
+  @override
+  List<GeneratedColumn> get $columns => [id, de, photofrom];
+  @override
+  $ChatsTable get asDslTable => this;
+  @override
+  String get $tableName => _alias ?? 'chats';
+  @override
+  final String actualTableName = 'chats';
+  @override
+  VerificationContext validateIntegrity(ChatsCompanion d,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    if (d.id.present) {
+      context.handle(_idMeta, id.isAcceptableValue(d.id.value, _idMeta));
+    } else if (id.isRequired && isInserting) {
+      context.missing(_idMeta);
+    }
+    if (d.de.present) {
+      context.handle(_deMeta, de.isAcceptableValue(d.de.value, _deMeta));
+    } else if (de.isRequired && isInserting) {
+      context.missing(_deMeta);
+    }
+    if (d.photofrom.present) {
+      context.handle(_photofromMeta,
+          photofrom.isAcceptableValue(d.photofrom.value, _photofromMeta));
+    } else if (photofrom.isRequired && isInserting) {
+      context.missing(_photofromMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Chat map(Map<String, dynamic> data, {String tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
+    return Chat.fromData(data, _db, prefix: effectivePrefix);
+  }
+
+  @override
+  Map<String, Variable> entityToSql(ChatsCompanion d) {
+    final map = <String, Variable>{};
+    if (d.id.present) {
+      map['id'] = Variable<String, StringType>(d.id.value);
+    }
+    if (d.de.present) {
+      map['de'] = Variable<String, StringType>(d.de.value);
+    }
+    if (d.photofrom.present) {
+      map['photofrom'] = Variable<String, StringType>(d.photofrom.value);
+    }
+    return map;
+  }
+
+  @override
+  $ChatsTable createAlias(String alias) {
+    return $ChatsTable(_db, alias);
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(const SqlTypeSystem.withDefaults(), e);
   $MessagesTable _messages;
   $MessagesTable get messages => _messages ??= $MessagesTable(this);
+  $ChatsTable _chats;
+  $ChatsTable get chats => _chats ??= $ChatsTable(this);
   @override
-  List<TableInfo> get allTables => [messages];
+  List<TableInfo> get allTables => [messages, chats];
 }

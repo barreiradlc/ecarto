@@ -248,7 +248,7 @@ Future sendMessage(message, chatId) async {
     if(response.statusCode != 200){
       return;
     }
-    handleStoreMessage(res);
+    handleStoreMessage(res, chatId);
     Get.back();
     return res;
 }

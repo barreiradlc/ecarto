@@ -6,18 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
-class ListChats extends StatefulWidget {
+class ListChatRoom extends StatefulWidget {
   final id;
-  final chat;
+  final chatRoom;
 
-  // ListChats(this.id);
-  ListChats(this.id, this.chat, {Key key}) : super(key: key);
+  // ListChatRoom(this.id);
+  ListChatRoom(this.id, this.chatRoom, {Key key}) : super(key: key);
 
   @override
-  _ListChatsState createState() => _ListChatsState();
+  _ListChatRoomsStat createState() => _ListChatRoomsStat();
 }
 
-class _ListChatsState extends State<ListChats> {
+class _ListChatRoomsStat extends State<ListChatRoom> {
   @override
   Widget build(BuildContext context) {
     var localId = widget.id;
@@ -29,7 +29,7 @@ class _ListChatsState extends State<ListChats> {
         setState(() {
           newMessage.text = "";
         });
-        var response = sendMessage(message, widget.chat);
+        var response = sendMessage(message, widget.chatRoom);
         if(response == null){
           setState(() {
             newMessage.text = message;
@@ -115,7 +115,7 @@ Widget _buildListItem(
   if (localId == null) {
     return Center(
       heightFactor: 65,
-      child: CircularProgressIndicator(),
+      child: LinearProgressIndicator(),
     );
   }
 
