@@ -4,6 +4,7 @@ import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Recursos/DB/moor_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ListChat extends StatefulWidget {
@@ -23,7 +24,7 @@ class _ListChatsStat extends State<ListChat> {
     var localId = widget.id;
     final newChat = TextEditingController(text: '');
     
-    submitChat() {      
+    submitChat() {
       return;
     }
 
@@ -84,7 +85,10 @@ Widget _buildListItem(Chat itemChat, AppDatabase database, String localId) {
         EdgeInsets.only(left: 10, right: 10, top: 15),
     child: Container(      
       padding: EdgeInsets.symmetric(vertical: 5),
-      child: ListTile(        
+      child: ListTile(
+        onTap: () {
+          Get.toNamed('/chat/${itemChat.id}?de=${itemChat.de}&photofrom=${itemChat.photofrom}', arguments: itemChat );
+        },     
         leading: itemChat.photofrom != "" || null ? Image.network(itemChat.photofrom, ) : Icon(Icons.person),
         title: Text(itemChat.de,
             style: TextStyle(color: Colors.black),

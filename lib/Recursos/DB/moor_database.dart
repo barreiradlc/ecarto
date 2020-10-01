@@ -37,7 +37,8 @@ class AppDatabase extends _$AppDatabase{
   int get schemaVersion => 9;
 
   Future<List<Message>> getAllMessages() => select(messages).get();
-  Stream<List<Message>> watchAllMessages() => select(messages).watch();
+  // Stream<List<Message>> watchAllMessages() => select(messages).watch();
+  Stream<List<Message>> watchAllMessages(chatRoom) => (select(messages)..where((tbl) => tbl.chatId.equals(chatRoom) ) ).watch();
   Future insertMessage(Message message) => into(messages).insert(message, orReplace: true);
 
   Future<List<Chat>> getAllChats() => select(chats).get();

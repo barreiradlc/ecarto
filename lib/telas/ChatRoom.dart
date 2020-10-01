@@ -21,6 +21,9 @@ class _ChatRoomState extends State<ChatRoom> {
   var chatRoom;
   var id;
 
+  String chatRoomOuter;
+  String chatRoomouterPhoto;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,8 @@ class _ChatRoomState extends State<ChatRoom> {
 
   getChatRoomData() async{
     String chatRoomId = Get.parameters['id'];
+    String roomOuter = Get.parameters['de'];
+    String roomouterPhoto = Get.parameters['photofrom'];
     String localId = await void_getID();
 
     // var data = await handleStoreChatRoomData(ChatRoomId);
@@ -38,6 +43,8 @@ class _ChatRoomState extends State<ChatRoom> {
       chatRoom = chatRoomId;
       id = localId;
       // chatRoomData = data;
+      chatRoomOuter = roomOuter;
+      chatRoomouterPhoto = roomouterPhoto;
     });
   }
 
@@ -49,7 +56,7 @@ class _ChatRoomState extends State<ChatRoom> {
       builder: (_) => AppDatabase(),
       child: Container(            
         height: MediaQuery.of(context).size.height,
-        child: ListChatRoom(id, chatRoom),
+        child: ListChatRoom(id, chatRoom, chatRoomOuter, chatRoomouterPhoto),
       ),
     );
   }

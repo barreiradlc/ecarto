@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 class ListChatRoom extends StatefulWidget {
   final id;
   final chatRoom;
+  final chatRoomuOter;
+  final chatRoomouterPhoto;
 
   // ListChatRoom(this.id);
-  ListChatRoom(this.id, this.chatRoom, {Key key}) : super(key: key);
+  ListChatRoom(this.id, this.chatRoom, this.chatRoomuOter, this.chatRoomouterPhoto, {Key key}) : super(key: key);
 
   @override
   _ListChatRoomsStat createState() => _ListChatRoomsStat();
@@ -21,7 +23,10 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
   @override
   Widget build(BuildContext context) {
     var localId = widget.id;
+    var chatRoom = widget.chatRoom;
     final newMessage = TextEditingController(text: '');
+    String chatRoomuOter = widget.chatRoomuOter;
+    String chatRoomouterPhoto = widget.chatRoomouterPhoto;
     
     submitMessage() {
       String message = newMessage.text;
@@ -43,14 +48,32 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
         appBar: AppBar(
           brightness: Brightness.dark,
           iconTheme: new IconThemeData(color: Colors.white),
-          title: Text(
-            'Bate papo - teste',
-            style: TextStyle(color: Colors.white),
-          ),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+
+                decoration: BoxDecoration(         
+
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(80.0),
+                  ),
+                ),
+                width: 70, height: 50,
+                child: chatRoomouterPhoto != "" || chatRoomouterPhoto != null ? Image.network(chatRoomouterPhoto) : Icon(Icons.person),                
+              ),
+              Text(
+                '$chatRoomuOter',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),          
+          
         ),
         body: Column(
           children: <Widget>[
-            Expanded(child: _buildMessageList(context, localId)),
+            Expanded(child: _buildMessageList(context, localId, chatRoom)),
             Card(
               margin: EdgeInsets.symmetric(vertical: 10),
               child: Container(
@@ -61,9 +84,11 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width - 100,
-                        child: TextField(                          
-                          textInputAction: TextInputAction.send,
-                          onSubmitted: submitMessage(), // move focus to next
+                        child: TextField(                       
+                          textInputAction: TextInputAction.newline,
+
+                          // textInputAction: TextInputAction.send,
+                          // onSubmitted: () => print('alou'),//submitMessage(), // move focus to next
                           controller: newMessage,
                           decoration: InputDecoration(
                             labelText: 'Mensagem',
@@ -86,10 +111,10 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
 }
 
 StreamBuilder<List<Message>> _buildMessageList(
-    BuildContext context, String localId) {
+    BuildContext context, String localId, String chatRoom) {
   final database = Provider.of<AppDatabase>(context);
   return StreamBuilder(
-    stream: database.watchAllMessages(),
+    stream: database.watchAllMessages(chatRoom),
     builder: (context, AsyncSnapshot<List<Message>> snapshot) {
       final messages = snapshot.data ?? List();
 
@@ -98,7 +123,7 @@ StreamBuilder<List<Message>> _buildMessageList(
         itemCount: messages.length,
         itemBuilder: (s_, index) {
           final itemTask = messages[index];
-          return _buildListItem(itemTask, database, localId);
+          return _buildListItem(itemTask, database, localId, chatRoom);
         },
       );
     },
@@ -106,7 +131,7 @@ StreamBuilder<List<Message>> _buildMessageList(
 }
 
 Widget _buildListItem(
-    Message itemMessage, AppDatabase database, String localId) {
+    Message itemMessage, AppDatabase database, String localId, String chatRoom) {
   bool self = itemMessage.sender == localId;
 
   print('self?');
@@ -118,6 +143,10 @@ Widget _buildListItem(
       child: LinearProgressIndicator(),
     );
   }
+
+  // if(chatRoom != itemMessage.chatId){
+  //   return null;
+  // }
 
   return Card(
     color: self ? Color(0xff42A5F5) : Color(0xff558b2f),

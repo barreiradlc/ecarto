@@ -172,7 +172,7 @@ class _HomeScreen extends State<HomeScreen> {
         GetPage(name: '/home', page: () => Home()),
         GetPage(name: '/login', page: () => Login() ),        
         GetPage(name: '/perfil/:id', page: () => Perfil() ),
-        // GetPage(name: '/chat/:id', page: () => ChatRoom() )
+        GetPage(name: '/chat/:id', page: () => ChatRoom() ),
         GetPage(name: '/chat', page: () => Chat() )
       ],
     );

@@ -233,8 +233,8 @@ Future sendMessage(message, chatId) async {
     var endpoint = '/chat/$chatId';
     var jwt = await void_getJWT();
 
-    Get.dialog(alertWidget(),
-        barrierDismissible: false, useRootNavigator: false);
+    // Get.dialog(alertWidget(),
+    //     barrierDismissible: false, useRootNavigator: false);
     var response = await http.post('$host$endpoint',
       headers : {
         'Content-Type': 'application/json',
@@ -249,7 +249,7 @@ Future sendMessage(message, chatId) async {
       return;
     }
     handleStoreMessage(res, chatId);
-    Get.back();
+    // Get.back();
     return res;
 }
 
