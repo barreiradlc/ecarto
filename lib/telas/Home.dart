@@ -5,6 +5,7 @@ import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,10 +16,11 @@ import 'package:universal_html/prefer_universal/html.dart' as web;
 import './Tabs.dart';
 import '../Funcoes/UserData.dart';
 import '../Funcoes/Utils.dart';
+import 'Mapa.dart';
 
 class Home extends StatelessWidget {
   Widget build(BuildContext context) {
-    return Scaffold(      
+    return Scaffold(
       body: HomeState(),
     );
   }
@@ -34,11 +36,11 @@ class CollapsingList extends State<HomeState> {
   var artes;
   var user;
   bool loading = true;
-  String loadQuote = '';  
+  String loadQuote = '';
 
-  var myPref = web.window.localStorage['mypref'];  
+  var myPref = web.window.localStorage['mypref'];
 
-  getQuote(){
+  getQuote() {
     var length = listCitacoes.length;
     var num = Random().nextInt(length);
     setState(() {
@@ -48,29 +50,26 @@ class CollapsingList extends State<HomeState> {
 
   getData() async {
     var data = await getHomeData();
-    
+
     await setProfile(data['user']);
 
     setState(() {
-          user = data['user'];
-          materiais = data['materiais'];
-          artes = data['artes'];
-          loading = false;
-        });
-        
+      user = data['user'];
+      materiais = data['materiais'];
+      artes = data['artes'];
+      loading = false;
+    });
 
-        // Future.delayed(const Duration(milliseconds: 500), () {
-        //   setState(() {
-        //       loading = false;
-        //   });
-        // });
-
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   setState(() {
+    //       loading = false;
+    //   });
+    // });
   }
 
   getData2() async {
     getLocation().then((location) {
       void_getJWT().then((jwt) async {
-
         final authJwt = await SharedPreferences.getInstance();
 
         String token = await authJwt.getString("jwt");
@@ -117,17 +116,14 @@ class CollapsingList extends State<HomeState> {
 
         Future.delayed(const Duration(milliseconds: 500), () {
           setState(() {
-              loading = false;
+            loading = false;
           });
         });
-        
-      })
-      .catchError((err) {
+      }).catchError((err) {
         print('erro em jwt');
         print(err);
       });
-    })
-    .catchError((err) {
+    }).catchError((err) {
       print('erro em location');
       print(err);
     });
@@ -146,8 +142,6 @@ class CollapsingList extends State<HomeState> {
 
   @override
   Widget build(BuildContext context) {
-
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarDividerColor: Colors.black,
         systemNavigationBarColor: Colors.black,
@@ -156,34 +150,58 @@ class CollapsingList extends State<HomeState> {
         statusBarBrightness: Brightness.dark,
         systemNavigationBarIconBrightness: Brightness.dark));
 
-
     double height = MediaQuery.of(context).size.height;
 
     if (loading) {
-      return Container(        
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 75,
-              width: 75,
-              child: CircularProgressIndicator(strokeWidth: 10,), 
-            ),          
-          Container(height: 20),
-          Wrap(
+      return Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(Icons.format_quote, size: 35, textDirection: TextDirection.rtl),
-              Text(loadQuote, style: TextStyle( 
-                fontFamily: 'Montserrat', 
-                fontSize: 20, fontStyle: FontStyle.italic), 
-              textAlign: TextAlign.center)              
+              Container(
+                height: 75,
+                width: 75,
+                child: CircularProgressIndicator(
+                  strokeWidth: 10,
+                ),
+              ),
+              Container(height: 20),
+              Wrap(
+                children: <Widget>[
+                  Icon(Icons.format_quote,
+                      size: 35, textDirection: TextDirection.rtl),
+                  Text(loadQuote,
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 20,
+                          fontStyle: FontStyle.italic),
+                      textAlign: TextAlign.center)
+                ],
+              )
             ],
-          )
-          
-        ],)
-      );
+          ));
+    }
+
+    if (!kReleaseMode) {
+      return Card(
+          child: DefaultTabController(
+              length: 2,
+              child: new Scaffold(
+                  body: TabBarView(children: [
+                    Tabs(user, artes, materiais),
+                    Mapa(),
+                  ]),
+                  bottomNavigationBar: new TabBar(tabs: [
+                    Tab(
+                        icon: new Column(children: <Widget>[
+                      Icon(Icons.home),
+                      Text('Inicio')
+                    ])),
+                    Tab(
+                        icon: new Column(
+                            children: <Widget>[Icon(Icons.map), Text('Mapa')])),
+                  ]))));
     }
 
     return CustomScrollView(

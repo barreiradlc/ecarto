@@ -307,6 +307,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
             // }).toList(),
             children: [
               // Wikis(),
+              // ArtesMap(widget.artes),
               Artes(widget.artes),
               Materiais(widget.materiais),
             ],

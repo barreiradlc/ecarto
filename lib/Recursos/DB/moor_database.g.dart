@@ -353,8 +353,13 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
 class Chat extends DataClass implements Insertable<Chat> {
   final String id;
   final String de;
+  final String idOuter;
   final String photofrom;
-  Chat({@required this.id, @required this.de, @required this.photofrom});
+  Chat(
+      {@required this.id,
+      @required this.de,
+      @required this.idOuter,
+      @required this.photofrom});
   factory Chat.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -362,6 +367,8 @@ class Chat extends DataClass implements Insertable<Chat> {
     return Chat(
       id: stringType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       de: stringType.mapFromDatabaseResponse(data['${effectivePrefix}de']),
+      idOuter: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_outer']),
       photofrom: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}photofrom']),
     );
@@ -371,6 +378,7 @@ class Chat extends DataClass implements Insertable<Chat> {
     return Chat(
       id: serializer.fromJson<String>(json['id']),
       de: serializer.fromJson<String>(json['de']),
+      idOuter: serializer.fromJson<String>(json['idOuter']),
       photofrom: serializer.fromJson<String>(json['photofrom']),
     );
   }
@@ -380,6 +388,7 @@ class Chat extends DataClass implements Insertable<Chat> {
     return {
       'id': serializer.toJson<String>(id),
       'de': serializer.toJson<String>(de),
+      'idOuter': serializer.toJson<String>(idOuter),
       'photofrom': serializer.toJson<String>(photofrom),
     };
   }
@@ -389,15 +398,20 @@ class Chat extends DataClass implements Insertable<Chat> {
     return ChatsCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       de: de == null && nullToAbsent ? const Value.absent() : Value(de),
+      idOuter: idOuter == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idOuter),
       photofrom: photofrom == null && nullToAbsent
           ? const Value.absent()
           : Value(photofrom),
     ) as T;
   }
 
-  Chat copyWith({String id, String de, String photofrom}) => Chat(
+  Chat copyWith({String id, String de, String idOuter, String photofrom}) =>
+      Chat(
         id: id ?? this.id,
         de: de ?? this.de,
+        idOuter: idOuter ?? this.idOuter,
         photofrom: photofrom ?? this.photofrom,
       );
   @override
@@ -405,37 +419,45 @@ class Chat extends DataClass implements Insertable<Chat> {
     return (StringBuffer('Chat(')
           ..write('id: $id, ')
           ..write('de: $de, ')
+          ..write('idOuter: $idOuter, ')
           ..write('photofrom: $photofrom')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      $mrjf($mrjc(id.hashCode, $mrjc(de.hashCode, photofrom.hashCode)));
+  int get hashCode => $mrjf($mrjc(id.hashCode,
+      $mrjc(de.hashCode, $mrjc(idOuter.hashCode, photofrom.hashCode))));
   @override
   bool operator ==(other) =>
       identical(this, other) ||
       (other is Chat &&
           other.id == id &&
           other.de == de &&
+          other.idOuter == idOuter &&
           other.photofrom == photofrom);
 }
 
 class ChatsCompanion extends UpdateCompanion<Chat> {
   final Value<String> id;
   final Value<String> de;
+  final Value<String> idOuter;
   final Value<String> photofrom;
   const ChatsCompanion({
     this.id = const Value.absent(),
     this.de = const Value.absent(),
+    this.idOuter = const Value.absent(),
     this.photofrom = const Value.absent(),
   });
   ChatsCompanion copyWith(
-      {Value<String> id, Value<String> de, Value<String> photofrom}) {
+      {Value<String> id,
+      Value<String> de,
+      Value<String> idOuter,
+      Value<String> photofrom}) {
     return ChatsCompanion(
       id: id ?? this.id,
       de: de ?? this.de,
+      idOuter: idOuter ?? this.idOuter,
       photofrom: photofrom ?? this.photofrom,
     );
   }
@@ -469,6 +491,18 @@ class $ChatsTable extends Chats with TableInfo<$ChatsTable, Chat> {
     );
   }
 
+  final VerificationMeta _idOuterMeta = const VerificationMeta('idOuter');
+  GeneratedTextColumn _idOuter;
+  @override
+  GeneratedTextColumn get idOuter => _idOuter ??= _constructIdOuter();
+  GeneratedTextColumn _constructIdOuter() {
+    return GeneratedTextColumn(
+      'id_outer',
+      $tableName,
+      false,
+    );
+  }
+
   final VerificationMeta _photofromMeta = const VerificationMeta('photofrom');
   GeneratedTextColumn _photofrom;
   @override
@@ -482,7 +516,7 @@ class $ChatsTable extends Chats with TableInfo<$ChatsTable, Chat> {
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, de, photofrom];
+  List<GeneratedColumn> get $columns => [id, de, idOuter, photofrom];
   @override
   $ChatsTable get asDslTable => this;
   @override
@@ -502,6 +536,12 @@ class $ChatsTable extends Chats with TableInfo<$ChatsTable, Chat> {
       context.handle(_deMeta, de.isAcceptableValue(d.de.value, _deMeta));
     } else if (de.isRequired && isInserting) {
       context.missing(_deMeta);
+    }
+    if (d.idOuter.present) {
+      context.handle(_idOuterMeta,
+          idOuter.isAcceptableValue(d.idOuter.value, _idOuterMeta));
+    } else if (idOuter.isRequired && isInserting) {
+      context.missing(_idOuterMeta);
     }
     if (d.photofrom.present) {
       context.handle(_photofromMeta,
@@ -528,6 +568,9 @@ class $ChatsTable extends Chats with TableInfo<$ChatsTable, Chat> {
     }
     if (d.de.present) {
       map['de'] = Variable<String, StringType>(d.de.value);
+    }
+    if (d.idOuter.present) {
+      map['id_outer'] = Variable<String, StringType>(d.idOuter.value);
     }
     if (d.photofrom.present) {
       map['photofrom'] = Variable<String, StringType>(d.photofrom.value);

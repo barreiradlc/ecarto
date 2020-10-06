@@ -2,8 +2,8 @@
 // String host = 'https://ecarto.herokuapp.com';
 
 // LOCAL
-String host = 'https://192.168.100.5:3333';
-// String host = 'http://192.168.100.5:3333';
+// String host = 'https://192.168.100.5:3333';
+String host = 'http://192.168.0.104:3333';
 
 //PRODUÇÃO
 // String host = 'https://ecarto-app.herokuapp.com';

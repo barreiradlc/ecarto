@@ -1,9 +1,11 @@
 import 'package:ecarto/Construtores/ItemsConstructor.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
+import 'package:ecarto/Funcoes/LocalStorage.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Parcial/Carousel.dart';
 import 'package:ecarto/Parcial/MateriaisList.dart';
 import 'package:ecarto/Recursos/Api.dart';
+import 'package:ecarto/Recursos/DB/moor_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -216,6 +218,82 @@ class DetailItems extends State<DetailItemScreen> {
       );
     }
 
+    goToChat(id, context) async{
+      final database = AppDatabase();
+      
+      var chat = await database.getChat(id);
+      var chats = await database.getAllChats();
+
+      
+      print(chat);
+      if(chat != null){
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        return Get.toNamed('/chat/${chat.id}?de=${chat.de}&photofrom=${chat.photofrom}', arguments: chat );
+      }
+
+      var newChat = await handleStoreChatData(id);
+      
+      if(newChat != null){
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();          
+        Get.toNamed('/chat/${newChat.id}?de=${newChat.de}&photofrom=${newChat.photofrom}', arguments: newChat );          
+      }
+        
+      
+
+      // TODO - Criar sala
+    }
+
+    goToProfile(id, context){      
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Get.toNamed('/perfil/${id}');
+    }
+
+    profileMgsModal(id){
+      print('Autor $id');
+      
+      return showDialog(
+      context: context,
+      builder: (context) {
+        return Card(                      
+            color: Colors.transparent,
+            child: AlertDialog(              
+            content:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                FlatButton(
+                  onPressed: () => goToProfile(id, context),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.person),
+                      Text("Ver Perfil", style: TextStyle(fontSize: 12),)
+                    ],
+                  ),
+                ),
+                FlatButton(
+                  onPressed: () => goToChat(id, context),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.message),
+                      Text("Enviar mensagem", style: TextStyle(fontSize: 12))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),        
+        
+        );
+      }
+      );
+      
+      
+    }
+
     alertAutor() {
       double dividerHeigth = 20;
       var dividerColor = item.nature == 'ARTE'
@@ -229,32 +307,33 @@ class DetailItems extends State<DetailItemScreen> {
       print(autor['email']);
       print('autor');
       // print(autor.email);
-      Get.dialog(Card(
-          margin: EdgeInsets.symmetric(
-              vertical: MediaQuery.of(context).size.height / 4, horizontal: 35),
-          child: Container(
-              // height: MediaQuery.of(context).size.height / 2,
+
+      return showDialog(
+      context: context,
+      builder: (context) {
+        return Card(            
+
+            color: Colors.transparent,
+            child: AlertDialog(
+
+            content: Container(
+          
+            child: Container(
+              height: MediaQuery.of(context).size.height / 2,
               child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Divider(),
-              autor['name'] != ""
-                  ? ListTile(
-                      title: Text(autor['name'],
-                          style: TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.bold,
-                              color: textColor)),
-                    )
-                  : ListTile(
-                      title: Text(autor['username'],
-                          style: TextStyle(
-                              fontSize: 21,
-                              fontWeight: FontWeight.bold,
-                              color: textColor)),
-                    ),
+              ListTile(
+                onTap: () => profileMgsModal(autor['_id']) ,
+                title: Text(autor['name'] != '' || autor['name'] != null ? autor['name'] : autor['username'],
+                    style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                        color: textColor)),
+              ),                  
               Divider(
                 // height: dividerHeigth,
                 color: dividerColor,
@@ -296,7 +375,13 @@ class DetailItems extends State<DetailItemScreen> {
               //   title: Text('Fechar'),
               // )))
             ],
-          ))));
+          )
+          )
+          )
+          )                  
+          );                  
+          }
+          );
     }
 
     Future<String> contatarAutor(userId) async {

@@ -13,7 +13,10 @@ class ListChatRoom extends StatefulWidget {
   final chatRoomouterPhoto;
 
   // ListChatRoom(this.id);
-  ListChatRoom(this.id, this.chatRoom, this.chatRoomuOter, this.chatRoomouterPhoto, {Key key}) : super(key: key);
+  ListChatRoom(
+      this.id, this.chatRoom, this.chatRoomuOter, this.chatRoomouterPhoto,
+      {Key key})
+      : super(key: key);
 
   @override
   _ListChatRoomsStat createState() => _ListChatRoomsStat();
@@ -27,7 +30,7 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
     final newMessage = TextEditingController(text: '');
     String chatRoomuOter = widget.chatRoomuOter;
     String chatRoomouterPhoto = widget.chatRoomouterPhoto;
-    
+
     submitMessage() {
       String message = newMessage.text;
       if (message != '') {
@@ -35,7 +38,7 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
           newMessage.text = "";
         });
         var response = sendMessage(message, widget.chatRoom);
-        if(response == null){
+        if (response == null) {
           setState(() {
             newMessage.text = message;
           });
@@ -50,26 +53,23 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
           iconTheme: new IconThemeData(color: Colors.white),
           title: Row(
             mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-
-                decoration: BoxDecoration(         
-
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(80.0),
-                  ),
-                ),
-                width: 70, height: 50,
-                child: chatRoomouterPhoto != "" || chatRoomouterPhoto != null ? Image.network(chatRoomouterPhoto) : Icon(Icons.person),                
+                padding: EdgeInsets.only(right: 35),                
+                child: chatRoomouterPhoto != "" || chatRoomouterPhoto != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(200.0),
+                        child: Image.network(chatRoomouterPhoto, width: 50,
+                height: 50,))
+                    : Icon(Icons.person),
               ),
               Text(
                 '$chatRoomuOter',
                 style: TextStyle(color: Colors.white),
               ),
             ],
-          ),          
-          
+          ),
         ),
         body: Column(
           children: <Widget>[
@@ -84,7 +84,7 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width - 100,
-                        child: TextField(                       
+                        child: TextField(
                           textInputAction: TextInputAction.newline,
 
                           // textInputAction: TextInputAction.send,
@@ -94,8 +94,8 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
                             labelText: 'Mensagem',
                           ),
                         ),
-                      ),                      
-                      FlatButton(                        
+                      ),
+                      FlatButton(
                           onPressed: submitMessage,
                           child: Icon(
                             Icons.send,
@@ -130,8 +130,8 @@ StreamBuilder<List<Message>> _buildMessageList(
   );
 }
 
-Widget _buildListItem(
-    Message itemMessage, AppDatabase database, String localId, String chatRoom) {
+Widget _buildListItem(Message itemMessage, AppDatabase database, String localId,
+    String chatRoom) {
   bool self = itemMessage.sender == localId;
 
   print('self?');
@@ -151,7 +151,7 @@ Widget _buildListItem(
   return Card(
     color: self ? Color(0xff42A5F5) : Color(0xff558b2f),
     margin:
-        EdgeInsets.only(left: self ? 35 : 10, right:!self ? 35 : 10, top: 10),
+        EdgeInsets.only(left: self ? 35 : 10, right: !self ? 35 : 10, top: 10),
     child: ListTile(
       title: Text(itemMessage.body,
           style: TextStyle(color: Colors.white),

@@ -1,14 +1,32 @@
 import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Recursos/DB/moor_database.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'Fetch.dart';
 
 Future handleStoreChatData(id) async {
+  Get.dialog(alertWidget(),
+        barrierDismissible: false, useRootNavigator: false);
   var data = await fetchChatMessages(id);
+
+    final database = AppDatabase();
+    var chatData = data;
+    var photofrom = await getphotofrom(chatData['users']);
+    var idfrom = await getIdfrom(chatData['users']);
+    var namefrom = await getNamefrom(chatData['users']);      
+    
+    final chat = Chat(       
+      id: chatData['_id'],
+      de: namefrom,
+      idOuter: idfrom,
+      photofrom: photofrom
+    );
+        
+    await database.insertChat(chat);
+
   final count = data['messages'].length;
   final messages = data['messages'];
-  final database = AppDatabase();
 
   for (var i = 0; i < count; i++) {
     print(messages[i]);
@@ -18,13 +36,17 @@ Future handleStoreChatData(id) async {
       body: messages[i]['body'],
       createdAt: DateTime.parse(messages[i]['createdAt']),
       sender: messages[i]['sender'],
+      chatId: chatData['_id'],
       read: true,
       send: true
     );
 
     database.insertMessage(message);    
   }
-  return data['messages'];
+
+  Get.back();
+
+  return chat;
 }
 // Future handleStoreChatData(id) async {
 //   var data = await fetchChatMessages(id);
@@ -60,6 +82,17 @@ getphotofrom(users) async{
   }
 }
 
+getIdfrom(users) async{
+  var localId = await void_getID();
+  var count = users.length;
+
+  for (var i = 0; i < count; i++) {
+    if(localId != users[i]['_id']){
+      return users[i]['_id'];
+    }
+  }
+}
+
 getNamefrom(users) async{
   var localId = await void_getID();
   var count = users.length;
@@ -83,15 +116,17 @@ Future handleStoreChatsListData() async {
   for (var i = 0; i < count; i++) {
     var chatData = chats[i];
     var photofrom = await getphotofrom(chatData['users']);
+    var idfrom = await getIdfrom(chatData['users']);
     var namefrom = await getNamefrom(chatData['users']);      
     
      final chat = Chat(       
       id: chatData['_id'],
       de: namefrom,
+      idOuter: idfrom,
       photofrom: photofrom
     );
         
-    var resultSaveChat = await database.insertChat(chat);
+    await database.insertChat(chat);
 
     var messageCount = chatData['messages'].length;
     final messages = chatData['messages'];

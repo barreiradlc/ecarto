@@ -20,6 +20,7 @@ class Messages extends Table{
 class Chats extends Table{  
   TextColumn get id => text()();  
   TextColumn get de => text()();
+  TextColumn get idOuter => text()();
   TextColumn get photofrom => text()();  
   
   @override
@@ -42,6 +43,7 @@ class AppDatabase extends _$AppDatabase{
   Future insertMessage(Message message) => into(messages).insert(message, orReplace: true);
 
   Future<List<Chat>> getAllChats() => select(chats).get();
+  Future<Chat> getChat(id) { return (select(chats)..where((t) => t.idOuter.equals(id))).getSingle(); }
   Stream<List<Chat>> watchAllChats() => select(chats).watch();
   Future insertChat(Chat chat) => into(chats).insert(chat, orReplace: true);
 
