@@ -24,8 +24,7 @@ class ArteState extends State<Artes> {
   var position;
 
   getLocation() async {
-    var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    var p = await getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     setState(() {
       position = p;
@@ -48,8 +47,7 @@ class ArteState extends State<Artes> {
     var endLat = position.latitude;
     var endLong = position.longitude;
 
-    double distanceInMeters = await Geolocator()
-        .distanceBetween(startLat, startLong, endLat, endLong);
+    double distanceInMeters = await distanceBetween(startLat, startLong, endLat, endLong);
     return distanceInMeters.toInt();
   }
 

@@ -24,8 +24,7 @@ class MateriaiState extends State<Materiais> {
   var position;
 
 getLocation() async {
-    var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var p = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     print('position');
     print(p);

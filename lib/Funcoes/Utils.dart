@@ -97,8 +97,11 @@ dialogoAlerta(String msg, context,{ bool loading = true}) {
 
 
   getLocation() async {
-    var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // await checkGeolocationPermissionStatus();
+    // await checkPermission();
+    // await requestPermission();
+
+    var p = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     print('p');
     print(p);

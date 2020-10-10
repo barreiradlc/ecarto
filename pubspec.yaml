@@ -19,7 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: any
+  flutter_map: 0.10.1+1
   provider: ^3.0.0+1
   flutter_slidable: ^0.5.3
   moor: any # use the latest version
@@ -37,9 +37,9 @@ dependencies:
   path:
   url_launcher: 5.4.2
   get: 3.10.2
-  geolocator: 5.3.2+2
+  geolocator: 6.0.0+4
   splashscreen: ^1.2.0
-  transparent_image: ^0.1.0
+  transparent_image: ^1.0.0
   flutter_image_compress: ^0.7.0
   path_provider: 1.6.11
   barcode_scan: ^3.0.1

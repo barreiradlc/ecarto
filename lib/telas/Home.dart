@@ -185,6 +185,7 @@ class CollapsingList extends State<HomeState> {
 
     if (!kReleaseMode) {
       return Card(
+        margin: EdgeInsets.all(0),
           child: DefaultTabController(
               length: 2,
               child: new Scaffold(

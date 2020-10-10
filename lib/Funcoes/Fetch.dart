@@ -77,7 +77,6 @@ Future register(usuario, email, senha, confirmaSenha) async {
         })
     );
 
-
     // const bool kIsWeb = identical(0, 0.0);
     var res = jsonDecode(response.body);
 
@@ -177,23 +176,22 @@ Future getHomeData() async {
     var location = await getLocation();
     var jwt = await void_getJWT();
 
-    String query = '?longitude=${location.longitude}&latitude=${location.latitude}';
+    String latitude = location.latitude.toStringAsFixed(4);
+    String longitude = location.longitude.toStringAsFixed(4);
+
+    String query = '?longitude=$longitude&latitude=$latitude';
 
     http.Response response = await  http.get(Uri.encodeFull('$host$endpoint$query'), headers: {
       "Authorization": 'Bearer $jwt'
     });
     
-    print(response);
-    print(response.statusCode);
-
     if(response.statusCode == 401 || response.statusCode == 503){
       return handleUnauthorized();
-    } 
+    }
 
     var res = jsonDecode(response.body);
     
     return res;
-    
 }
 
 Future fetchProfile(id) async {

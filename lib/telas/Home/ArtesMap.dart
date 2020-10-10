@@ -24,8 +24,7 @@ class ArteMapState extends State<ArtesMap> {
   var position;
 
   getLocation() async {
-    var p = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    var p = await getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     setState(() {
       position = p;

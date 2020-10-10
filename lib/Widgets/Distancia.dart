@@ -31,8 +31,7 @@ class _DistanciaState extends State<Distancia> {
     var endLat = widget.position.latitude;
     var endLong = widget.position.longitude;
 
-    double distanceInMeters = await Geolocator()
-        .distanceBetween(startLat, startLong, endLat, endLong);
+    double distanceInMeters = await distanceBetween(startLat, startLong, endLat, endLong);
 
     print('DISTANCIA');
     print(distanceInMeters);
@@ -54,14 +53,14 @@ class _DistanciaState extends State<Distancia> {
       getDistancia(widget.arte).then((d) {
       print('d');
       print(d);
-      if (d < 999) {
+      if (d < 1) {
         setState(() {
           distancia = 'A menos de um kilômetro de distância';
           load = false;
         });
       } else {
         setState(() {
-          distancia = 'A $d Km daqui';
+          distancia = 'A ${d.toStringAsFixed(0)} Km daqui';
           load = false;
         });
       }

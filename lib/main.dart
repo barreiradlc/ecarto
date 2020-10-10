@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecarto/telas/Chat.dart';
 import 'package:flutter/services.dart';
 
@@ -29,9 +31,20 @@ import 'telas/Perfil.dart';
 import 'telas/RecoverPassword.dart';
 import 'telas/ScanScreen.dart';
 
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
 void main() {
+  HttpOverrides.global = new MyHttpOverrides();
+
   // See https://github.com/flutter/flutter/wiki/Desktop-shells#target-platform-override
-  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  // debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+
   runApp(new MyApp());
 }
 

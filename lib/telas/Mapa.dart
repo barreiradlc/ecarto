@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 
 class Mapa extends StatefulWidget {
   Mapa({Key key}) : super(key: key);
@@ -11,14 +12,7 @@ class Mapa extends StatefulWidget {
 }
 
 class _MapaState extends State<Mapa> {
-  Completer<GoogleMapController> _controller = Completer();
-
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +20,31 @@ class _MapaState extends State<Mapa> {
           title: Text('Maps Sample App'),
           backgroundColor: Colors.green[700],
         ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
+        body: FlutterMap(
+    options: new MapOptions(
+      center: new LatLng(51.5, -0.09),
+      zoom: 13.0,
+    ),
+    layers: [
+      new TileLayerOptions(
+        urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        subdomains: ['a', 'b', 'c']
+      ),
+      new MarkerLayerOptions(
+        markers: [
+          new Marker(
+            width: 80.0,
+            height: 80.0,
+            point: new LatLng(51.5, -0.09),
+            builder: (ctx) =>
+            new Container(
+              child: new FlutterLogo(),
+            ),
           ),
-        ),     
+        ],
+      ),
+    ],
+  ) 
     );
   }
 }
