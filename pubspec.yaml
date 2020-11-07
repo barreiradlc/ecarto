@@ -19,6 +19,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # qrscan: ^0.2.17
+  # qr_code_scanner: 0.0.13
+  qrcode: ^1.0.4
   flutter_map: 0.10.1+1
   provider: ^3.0.0+1
   flutter_slidable: ^0.5.3

@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/material.dart';
+import 'package:qrcode/qrcode.dart';
+// import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './Home/Wikis.dart';
@@ -15,6 +17,9 @@ import './Home/Materiais.dart';
 import './Home/Artes.dart';
 
 import '../Funcoes/UserData.dart';
+// import 'package:qrscan/qrscan.dart' as scanner;
+
+// List<RScanCameraDescription> rScanCameras;
 
 class Tabs extends StatefulWidget {
   var tema = 0;
@@ -22,6 +27,7 @@ class Tabs extends StatefulWidget {
   final user;
   final artes;
   final materiais;
+
   Tabs(this.user, this.artes, this.materiais);
 
   @override
@@ -29,6 +35,9 @@ class Tabs extends StatefulWidget {
 }
 
 class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
+  QRCaptureController _captureController = QRCaptureController();
+  bool _isTorchOn = false;
+
   final List<Tab> myTabs = <Tab>[
     Tab(
         icon: Icon(Icons.brush),
@@ -77,7 +86,26 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     });
   }
 
+  // _scan() async {
+  //   // String barcode2 = await scanner.scanPhoto();
+  //   // String barcode = await scanner.scan();
+
+  //   // print(barcode);
+  //   // print(barcode2);
+  //   // String barcode = await scanner.scanPath(path);
+
+  // }
+
   _scan() async {
+    Get.toNamed('/scan');
+    //  final content = await QrUtils.scanQR;
+
+    //
+  }
+
+  _scan2() async {
+    return;
+
     var options = ScanOptions(
       strings: {
         "cancel": "Cancelar",
@@ -119,6 +147,10 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _captureController.onCapture((data) {
+      print('onCapture----$data');
+    });
+
     _tabController = TabController(vsync: this, length: myTabs.length);
     if (mounted) {
       if (widget.user['image'] != null && widget.user['image'] != "") {
@@ -197,7 +229,7 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
               Navigator.pushNamed(context, '/estoque');
             },
           ),
-          ListTile( 
+          ListTile(
             title: Text('Chat'),
             onTap: () {
               const chatId = '';
@@ -216,7 +248,8 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
                       backgroundColor: Colors.transparent,
                       content: Card(
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal:10),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
@@ -256,6 +289,9 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
     // if (id != null) {
     //   goToProfile(context);
     // }
+
+    // child: _buildToolBar(),
+    // child: _buildToolBar(),
 
     return Theme(
         data: ThemeData(
@@ -346,4 +382,19 @@ Widget tabs() {
       Tab(icon: Icon(Icons.extension), child: Text('Materiais')),
     ],
   );
+}
+
+class OpenPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint1 = Paint()
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.miter
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke;
+    canvas.drawRect(Offset(100, 100) & const Size(200, 200), paint1);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

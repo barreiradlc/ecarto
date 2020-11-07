@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecarto/Funcoes/ConvertDate.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
@@ -5,6 +6,9 @@ import 'package:ecarto/Recursos/DB/moor_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'dart:ui';
+import 'dart:ui' as ui;
 
 class ListChatRoom extends StatefulWidget {
   final id;
@@ -23,6 +27,32 @@ class ListChatRoom extends StatefulWidget {
 }
 
 class _ListChatRoomsStat extends State<ListChatRoom> {
+  String imgUrl = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getThumb();
+  }
+
+  getThumb() async {
+    var url = 'https://source.unsplash.com/random/?craft';
+    // var url = 'https://dog.ceo/api/breeds/image/random';
+
+    Dio dio = new Dio();
+
+    var response = await dio.get(url);
+
+    print('realUri');
+    print(response.realUri);
+
+    setState(() {
+      imgUrl = response.realUri.toString();
+    });
+
+    return response.realUri;
+  }
+
   @override
   Widget build(BuildContext context) {
     var localId = widget.id;
@@ -47,6 +77,14 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
       return;
     }
 
+    if (imgUrl == "") {
+      return Scaffold(
+          appBar: AppBar(
+            brightness: Brightness.dark,
+            iconTheme: new IconThemeData(color: Colors.white),
+      ));
+    }
+
     return Scaffold(
         appBar: AppBar(
           brightness: Brightness.dark,
@@ -55,15 +93,37 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                padding: EdgeInsets.only(right: 35),                
-                child: chatRoomouterPhoto != "" || chatRoomouterPhoto != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(200.0),
-                        child: Image.network(chatRoomouterPhoto, width: 50,
-                height: 50,))
-                    : Icon(Icons.person),
-              ),
+              // Container(
+              //   padding: EdgeInsets.only(right: 35),
+              //   child: chatRoomouterPhoto != "" || chatRoomouterPhoto != null
+              //       ? ClipRRect(
+              //           borderRadius: BorderRadius.circular(250.0),
+              //           child: Image.network(chatRoomouterPhoto, width: 0,
+              //   height: 40,))
+              //       : Icon(Icons.person),
+              // ),
+
+            
+                  imgUrl != ''
+                          ? Container(
+                            padding: EdgeInsets.only(right: 15),
+                            child: new CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                radius:
+25,
+                                backgroundImage: NetworkImage(
+                                    chatRoomouterPhoto == null ||
+                                            chatRoomouterPhoto == ''
+                                        ? imgUrl
+                                        : chatRoomouterPhoto),
+                              ),
+                          )
+                          : Container(
+                              height: 205,
+                              width: 205,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 5,
+                              )),
               Text(
                 '$chatRoomuOter',
                 style: TextStyle(color: Colors.white),

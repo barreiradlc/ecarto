@@ -403,6 +403,7 @@ class _PerfilState extends State<Perfil> {
                       Padding(
                         padding: EdgeInsets.all(5),
                       ),
+                      profile['phone'] != null && profile['phone'] != "" ?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -417,10 +418,11 @@ class _PerfilState extends State<Perfil> {
                                 color: Colors.white),
                           ),
                         ],
-                      ),
+                      ) : Container(),
                       Padding(
                         padding: EdgeInsets.all(5),
                       ),
+                      profile['instagram'] != null && profile['instagram'] != "" ?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -435,7 +437,7 @@ class _PerfilState extends State<Perfil> {
                                 color: Colors.white),
                           ),
                         ],
-                      ),
+                      ) : Container(),
 
                       new Padding(
                         padding: new EdgeInsets.only(
@@ -445,7 +447,7 @@ class _PerfilState extends State<Perfil> {
                         child: new Text(
                           profile['about'] != null
                               ? profile['about']
-                              : 'Sobre mim... ',
+                              : '',
                           style: new TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: _width / 25,

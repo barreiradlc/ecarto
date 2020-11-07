@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ecarto/telas/Chat.dart';
+import 'package:ecarto/telas/Scanner.dart';
 import 'package:flutter/services.dart';
 
 import 'package:ecarto/telas/DetailScreen.dart';
@@ -31,14 +32,15 @@ import 'telas/Perfil.dart';
 import 'telas/RecoverPassword.dart';
 import 'telas/ScanScreen.dart';
 
-
-class MyHttpOverrides extends HttpOverrides{
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext context){
+  HttpClient createHttpClient(SecurityContext context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
 
@@ -155,13 +157,11 @@ class _HomeScreen extends State<HomeScreen> {
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: this.homePage,
-      
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
         // '/home': (context) => inicio,
 
         // When navigating to the "/second" route, build the SecondScreen widget.
-
 
         '/details': (context) => detalhes,
         '/item': (context) => item,
@@ -183,10 +183,11 @@ class _HomeScreen extends State<HomeScreen> {
       },
       getPages: [
         GetPage(name: '/home', page: () => Home()),
-        GetPage(name: '/login', page: () => Login() ),        
-        GetPage(name: '/perfil/:id', page: () => Perfil() ),
-        GetPage(name: '/chat/:id', page: () => ChatRoom() ),
-        GetPage(name: '/chat', page: () => Chat() )
+        GetPage(name: '/login', page: () => Login()),
+        GetPage(name: '/perfil/:id', page: () => Perfil()),
+        GetPage(name: '/chat/:id', page: () => ChatRoom()),
+        GetPage(name: '/chat', page: () => Chat()),
+        GetPage(name: '/scan', page: () => Scanner())
       ],
     );
   }
@@ -232,7 +233,8 @@ Widget _introScreen() {
               //   fit: BoxFit.contain,
               // ),
             ),
-            child: Image.asset("assets/logo.png")),
+            child:
+                Hero(tag: "LogoHome", child: Image.asset("assets/logo.png"))),
       )
     ],
   );

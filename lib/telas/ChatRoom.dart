@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/LocalStorage.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
@@ -23,12 +24,32 @@ class _ChatRoomState extends State<ChatRoom> {
 
   String chatRoomOuter;
   String chatRoomouterPhoto;
+  String imgUrl;
 
   @override
   void initState() {
     super.initState();
 
     getChatRoomData();
+    getThumb();
+  }
+
+  getThumb() async {
+    var url = 'https://source.unsplash.com/random/?craft';
+    // var url = 'https://dog.ceo/api/breeds/image/random';
+
+    Dio dio = new Dio();
+
+    var response = await dio.get(url);
+
+    print('realUri');
+    print(response.realUri);
+
+    setState(() {
+      imgUrl = response.realUri.toString();
+    });
+
+    return response.realUri;
   }
 
   getChatRoomData() async{

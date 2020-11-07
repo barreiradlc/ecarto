@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecarto/Funcoes/ConvertDate.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
@@ -19,6 +20,35 @@ class ListChat extends StatefulWidget {
 }
 
 class _ListChatsStat extends State<ListChat> {
+
+  String imgUrl;
+
+  @override
+  void initState() { 
+    super.initState();
+    
+    getThumb();
+  }
+
+
+  getThumb() async {
+    var url = 'https://source.unsplash.com/random/?craft';
+    // var url = 'https://dog.ceo/api/breeds/image/random';
+
+    Dio dio = new Dio();
+
+    var response = await dio.get(url);
+
+    print('realUri');
+    print(response.realUri);
+
+    setState(() {
+      imgUrl = response.realUri.toString();
+    });
+
+    return response.realUri;
+  }
+
   @override
   Widget build(BuildContext context) {
     var localId = widget.id;
@@ -39,7 +69,7 @@ class _ListChatsStat extends State<ListChat> {
         ),
         body: Column(
           children: <Widget>[
-            Expanded(child: _buildChatList(context, localId)),            
+            Expanded(child: _buildChatList(context, localId, imgUrl)),            
             // NewTaskInput(),
           ],
         ));
@@ -47,7 +77,7 @@ class _ListChatsStat extends State<ListChat> {
 }
 
 StreamBuilder<List<Chat>> _buildChatList(
-    BuildContext context, String localId) {
+    BuildContext context, String localId, String imgUrl) {
   final database = Provider.of<AppDatabase>(context);
   return StreamBuilder(
     stream: database.watchAllChats(),
@@ -59,14 +89,14 @@ StreamBuilder<List<Chat>> _buildChatList(
         itemCount: chats.length,
         itemBuilder: (s_, index) {
           final itemTask = chats[index];
-          return _buildListItem(itemTask, database, localId);
+          return _buildListItem(itemTask, database, localId, imgUrl);
         },
       );
     },
   );
 }
 
-Widget _buildListItem(Chat itemChat, AppDatabase database, String localId) {
+Widget _buildListItem(Chat itemChat, AppDatabase database, String localId, String imgUrl) {
   bool self = true;
 
   print('self?');
@@ -79,17 +109,28 @@ Widget _buildListItem(Chat itemChat, AppDatabase database, String localId) {
     );
   }
 
-  return Card(    
-    color: Colors.white,
-    margin:
-        EdgeInsets.only(left: 10, right: 10, top: 15),
-    child: Container(      
-      padding: EdgeInsets.symmetric(vertical: 5),
-      child: ListTile(
-        onTap: () {
-          Get.toNamed('/chat/${itemChat.id}?de=${itemChat.de}&photofrom=${itemChat.photofrom}', arguments: itemChat );
-        },     
-        leading: itemChat.photofrom != "" || null ? Image.network(itemChat.photofrom, ) : Icon(Icons.person),
+  
+    return Card(    
+      color: Colors.white,
+      margin:
+          EdgeInsets.only(left: 10, right: 10, top: 15),
+      child: Container(      
+        padding: EdgeInsets.symmetric(vertical: 5),
+        child: ListTile(
+          onTap: () {
+            Get.toNamed('/chat/${itemChat.id}?de=${itemChat.de}&photofrom=${itemChat.photofrom}', arguments: itemChat );
+          },     
+  
+          leading: CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  radius:
+  25,
+                                  backgroundImage: NetworkImage(
+                                      itemChat.photofrom == null ||
+                                              itemChat.photofrom == ''
+                                          ? imgUrl
+                                        : itemChat.photofrom),
+                              ),
         title: Text(itemChat.de,
             style: TextStyle(color: Colors.black),
             textAlign: TextAlign.start),

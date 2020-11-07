@@ -312,12 +312,9 @@ class DetailItems extends State<DetailItemScreen> {
       context: context,
       builder: (context) {
         return Card(            
-
             color: Colors.transparent,
             child: AlertDialog(
-
             content: Container(
-          
             child: Container(
               height: MediaQuery.of(context).size.height / 2,
               child: Column(
@@ -328,7 +325,7 @@ class DetailItems extends State<DetailItemScreen> {
               Divider(),
               ListTile(
                 onTap: () => profileMgsModal(autor['_id']) ,
-                title: Text(autor['name'] != '' || autor['name'] != null ? autor['name'] : autor['username'],
+                title: Text(autor['name'] != '' && autor['name'] != null ? autor['name'] : autor['username'],
                     style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
@@ -339,7 +336,7 @@ class DetailItems extends State<DetailItemScreen> {
                 color: dividerColor,
                 thickness: 3,
               ),
-              autor['phone'] != ""
+              autor['phone'] != "" && autor['phone'] != null
                   ? ListTile(
                       onTap: () => launch(
                           "https://wa.me/55${autor['phone']}?text=Olá%20te%20Encontrei%20no%20Ecarto%20pelo post: ${item.title}"),
@@ -347,7 +344,7 @@ class DetailItems extends State<DetailItemScreen> {
                     )
                   : Container(),
               Divider(),
-              autor['email'] != ""
+              autor['email'] != "" && autor['email'] != null
                   ? ListTile(
                       onTap: () => launch(
                           "mailto:${autor['email']}?subject=Contato do app Ecarto sobre a publicação: ${item.title}"),
@@ -356,7 +353,7 @@ class DetailItems extends State<DetailItemScreen> {
                   : Container(),
               Divider(),
               // Divider(height: dividerHeigth),
-              autor['instagram'] != ""
+              autor['instagram'] != "" && autor['instagram'] != null
                   ? ListTile(
                       onTap: () =>
                           launch("https://instagram.com/${autor['instagram']}"),

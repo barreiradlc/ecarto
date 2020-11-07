@@ -6,6 +6,7 @@ import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:ecarto/Parcial/citacoes.dart';
 import 'package:ecarto/Recursos/Api.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -164,8 +165,19 @@ class CollapsingList extends State<HomeState> {
                 width: 75,
                 child: CircularProgressIndicator(
                   strokeWidth: 10,
-                ),
+                ),                
               ),
+
+              // Container(                
+              //   child: Hero(
+              //     tag: "LogoHome",
+              //     child: Image.asset(
+              //       'assets/logo.png',
+              //       fit: BoxFit.contain,
+              //     )
+              //   )
+              // ),
+
               Container(height: 20),
               Wrap(
                 children: <Widget>[
@@ -189,9 +201,11 @@ class CollapsingList extends State<HomeState> {
           child: DefaultTabController(
               length: 2,
               child: new Scaffold(
-                  body: TabBarView(children: [
+                  body: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
                     Tabs(user, artes, materiais),
-                    Mapa(),
+                    Mapa(user, artes, materiais),
                   ]),
                   bottomNavigationBar: new TabBar(tabs: [
                     Tab(

@@ -645,7 +645,7 @@ packages:
       name: protobuf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.1.0"
   provider:
     dependency: "direct main"
     description:
@@ -681,6 +681,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.0"
+  qrcode:
+    dependency: "direct main"
+    description:
+      name: qrcode
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   quiver:
     dependency: transitive
     description:
