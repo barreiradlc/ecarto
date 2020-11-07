@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:barcode_scan/barcode_scan.dart';
+// import 'package:barcode_scan/barcode_scan.dart';
 import 'package:ecarto/Construtores/UserArguments.dart';
 import 'package:ecarto/Funcoes/UserPreferences.dart';
 import 'package:flutter/services.dart';
@@ -104,44 +104,44 @@ class TabsState extends State<Tabs> with SingleTickerProviderStateMixin {
   }
 
   _scan2() async {
-    return;
+    // return;
 
-    var options = ScanOptions(
-      strings: {
-        "cancel": "Cancelar",
-        "flash_on": "Habilitar flash",
-        "flash_off": "Desabilitar flash",
-      },
-    );
+    // var options = ScanOptions(
+    //   strings: {
+    //     "cancel": "Cancelar",
+    //     "flash_on": "Habilitar flash",
+    //     "flash_off": "Desabilitar flash",
+    //   },
+    // );
 
-    // return Get.toNamed('/perfil/5f4067fab504e91ce49ca9e9');
+    // // return Get.toNamed('/perfil/5f4067fab504e91ce49ca9e9');
 
-    try {
-      var barcode = await BarcodeScanner.scan(options: options);
-      if (barcode.rawContent.contains("ecartoQR:")) {
-        String qrCode = barcode.rawContent.replaceAll("ecartoQR:", "");
-        // setState(() => id = barcode.rawContent);
-        Get.toNamed('/perfil/${qrCode}');
-        // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);
-      } else {
-        if (barcode.rawContent != '') {
-          _scan();
-        }
-      }
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.cameraAccessDenied) {
-        setState(() {
-          error = 'The user dids not grant the camera permission!';
-        });
-      } else {
-        setState(() => error = 'Unknown error: $e');
-      }
-    } on FormatException {
-      setState(() => error =
-          'null (User returned using the "back"-button before scanning anything. Result)');
-    } catch (e) {
-      setState(() => error = 'Unknown error: $e');
-    }
+    // try {
+    //   var barcode = await BarcodeScanner.scan(options: options);
+    //   if (barcode.rawContent.contains("ecartoQR:")) {
+    //     String qrCode = barcode.rawContent.replaceAll("ecartoQR:", "");
+    //     // setState(() => id = barcode.rawContent);
+    //     Get.toNamed('/perfil/${qrCode}');
+    //     // Navigator.pushNamed(context, '/perfil', arguments: barcode.rawContent);
+    //   } else {
+    //     if (barcode.rawContent != '') {
+    //       _scan();
+    //     }
+    //   }
+    // } on PlatformException catch (e) {
+    //   if (e.code == BarcodeScanner.cameraAccessDenied) {
+    //     setState(() {
+    //       error = 'The user dids not grant the camera permission!';
+    //     });
+    //   } else {
+    //     setState(() => error = 'Unknown error: $e');
+    //   }
+    // } on FormatException {
+    //   setState(() => error =
+    //       'null (User returned using the "back"-button before scanning anything. Result)');
+    // } catch (e) {
+    //   setState(() => error = 'Unknown error: $e');
+    // }
   }
 
   @override

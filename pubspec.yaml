@@ -45,7 +45,7 @@ dependencies:
   transparent_image: ^1.0.0
   flutter_image_compress: ^0.7.0
   path_provider: 1.6.11
-  barcode_scan: ^3.0.1
+  # barcode_scan: ^3.0.1
   qr_flutter: ^3.2.0
   wc_flutter_share: 0.2.2
 
