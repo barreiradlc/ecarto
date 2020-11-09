@@ -26,13 +26,14 @@ class _ArteCardState extends State<ArteCard> {
     var fit = BoxFit.cover;
     var alignment = Alignment.topCenter;
     var placeholder = Image.asset("assets/logo.png",fit: fit, alignment: alignment);
+    var thumbnail = Image.network(arte['image'],fit: fit, alignment: alignment, width: 350, height: 350, colorBlendMode: BlendMode.srcOver, color: Colors.black45);
 
     if (arte['image'] != null) {
       if (arte['image'] == null) {
         bg = placeholder;
         // bg = AssetImage("assets/logo.png");
       } else {
-        bg = Image.network(arte['image'],fit: fit, alignment: alignment, width: 350, height: 350);
+        bg = thumbnail;
         // bg = NetworkImage(arte['image']);
       }
     } else {
@@ -44,16 +45,20 @@ class _ArteCardState extends State<ArteCard> {
 
     return Container( 
       decoration: BoxDecoration(          
-          borderRadius: BorderRadius.all(Radius.circular(2)),
+          borderRadius: BorderRadius.all(Radius.circular(5)),          
+
       ),
+      
       margin: EdgeInsets.only(right: 25),
       child: Stack(      
         overflow: Overflow.clip,
       children: [
-        ClipPath(child: 
-          Hero(tag: 'Thumbnail${arte['_id']}', child: bg),        
+        ClipPath(          
+          child: 
+            Hero(
+              tag: 'Thumbnail${arte['_id']}', child: bg),        
         ),
-        RaisedButton(
+        FlatButton(
             padding: EdgeInsets.all(0),
             color: Colors.white12,
             onPressed: () {
@@ -97,14 +102,16 @@ class _ArteCardState extends State<ArteCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             
-                            Text(
-                              widget.arte['title'],
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                            Expanded(
+                              child: Text(
+                                widget.arte['title'],
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             
@@ -120,7 +127,7 @@ class _ArteCardState extends State<ArteCard> {
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                                 ),
                               ),

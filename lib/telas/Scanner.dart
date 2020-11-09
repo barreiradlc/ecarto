@@ -78,7 +78,8 @@ class _ScannerState extends State<Scanner> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        bottomOpacity: 0.0,        
+        bottomOpacity: 0.0,      
+        title: Text("Posicione seu código ao centro")  
       ),
       body: Stack(
         alignment: Alignment.center,

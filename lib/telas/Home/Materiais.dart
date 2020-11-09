@@ -79,7 +79,7 @@ getLocation() async {
               
               return new Container(
                   margin: EdgeInsets.all(5),
-                  child: RaisedButton(
+                  child: FlatButton(
                       padding: EdgeInsets.all(0),
                       color: Colors.white,
                       onPressed: () {
@@ -114,65 +114,65 @@ getLocation() async {
                               image: bg,
                               fit: BoxFit.cover,
                               colorFilter: new ColorFilter.mode(
-                                  Colors.white.withOpacity(0.3),
+                                  Colors.black.withOpacity(0.4),
                                   BlendMode.srcOver),
                             ),
                           ),
                           child: new Container(
-                            padding: EdgeInsets.all(5),
-                            child: new Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text(
-                                          widget.materiais[index]['title'],
-                                          textAlign: TextAlign.start,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).accentColor),
+                              padding: EdgeInsets.all(5),
+                              child: new Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text(
+                                            widget.materiais[index]['title'],
+                                            textAlign: TextAlign.start,
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                          padding: const EdgeInsets.all(2),
                                         ),
-                                        padding: const EdgeInsets.all(2),
-                                      ),
-                                       Column(
-                                          mainAxisSize: MainAxisSize.min,
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               child: 
                                                 Distancia(widget.materiais[index], position),
-                                              padding: const EdgeInsets.only(left: 20, bottom:5),
+                                              padding: const EdgeInsets.only(left: 0, bottom:5),
                                             ),
-                                            
                                             Container(
                                               child: Text(
                                                 'R\$ ${widget.materiais[index]['price'].toString()}',
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context).accentColor
-                                                  ),
+                                                    color: Colors.white
+                                                ),
                                               ),
-                                              padding: const EdgeInsets.only(left: 20, bottom:15),
+                                              padding: const EdgeInsets.only(left: 0, bottom:15),
                                             ),
-
                                           ],
                                         )
-                                    ],
-                                  ),
-                                )
-                                // Text(widget.materiais[index]['description'])
-                              ],
-                            ),
-                          ))));
+                                      ],
+                                    ),
+                                  )
+                                  // Text(widget.artes[index]['description'])
+                                ],
+                              ),
+                            ))));
             },
           )),
       // floatingActionButton: FloatingActionButton(

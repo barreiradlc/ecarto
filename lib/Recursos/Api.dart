@@ -2,7 +2,7 @@
 String host = 'https://ecarto.herokuapp.com';
 
 // LOCAL
-// String host = 'https://192.168.0.104:3333';
+// String host = 'https://192.168.0.109:3333';
 // String host = 'https://192.168.0.21:3333';
 // String host = 'https://192.168.1.211:3333';
 
@@ -16,5 +16,5 @@ String host = 'https://ecarto.herokuapp.com';
 // LOCAL
 // String hostImg = 'http://192.168.100.5:3000';
 
-// CLOUD
+// CLOUD˝˝˝˝˝
 String hostImg = 'https://ecarto-image-provider.herokuapp.com';

@@ -134,7 +134,7 @@ class ArteState extends State<Artes> {
                       )
                     ),
                     margin: EdgeInsets.all(5),
-                    child: RaisedButton(
+                    child: FlatButton(
                         padding: EdgeInsets.all(0),
                         color: Colors.white,
                         onPressed: () {
@@ -163,7 +163,7 @@ class ArteState extends State<Artes> {
                                 image: bg,
                                 fit: BoxFit.cover,
                                 colorFilter: new ColorFilter.mode(
-                                    Colors.white.withOpacity(0.3),
+                                    Colors.black.withOpacity(0.4),
                                     BlendMode.srcOver),
                               ),
                             ),
@@ -185,22 +185,22 @@ class ArteState extends State<Artes> {
                                           child: Text(
                                             widget.artes[index]['title'],
                                             textAlign: TextAlign.start,
-                                            overflow: TextOverflow.ellipsis,
+                                            overflow: TextOverflow.clip,
                                             style: TextStyle(
-                                                fontSize: 20,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.bold,
-                                                color: Theme.of(context).accentColor),
+                                                color: Colors.white),
                                           ),
                                           padding: const EdgeInsets.all(2),
                                         ),
                                         Column(
-                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               child: 
                                                 Distancia(widget.artes[index], position),
-                                              padding: const EdgeInsets.only(left: 20, bottom:5),
+                                              padding: const EdgeInsets.only(left: 0, bottom:5),
                                             ),
                                             Container(
                                               child: Text(
@@ -208,10 +208,10 @@ class ArteState extends State<Artes> {
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context).accentColor
+                                                    color: Colors.white
                                                 ),
                                               ),
-                                              padding: const EdgeInsets.only(left: 20, bottom:15),
+                                              padding: const EdgeInsets.only(left: 0, bottom:15),
                                             ),
                                           ],
                                         )

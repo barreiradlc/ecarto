@@ -199,16 +199,21 @@ class CollapsingList extends State<HomeState> {
       return Card(
         margin: EdgeInsets.all(0),
           child: DefaultTabController(
+
               length: 2,
               child: new Scaffold(
                   body: TabBarView(
                     physics: NeverScrollableScrollPhysics(),
+                     
                     children: [
                     Tabs(user, artes, materiais),
                     Mapa(user, artes, materiais),
                   ]),
-                  bottomNavigationBar: new TabBar(tabs: [
+                  bottomNavigationBar: new TabBar(
+                    indicatorColor: Colors.black,
+                    tabs: [
                     Tab(
+
                         icon: new Column(children: <Widget>[
                       Icon(Icons.home),
                       Text('Inicio')

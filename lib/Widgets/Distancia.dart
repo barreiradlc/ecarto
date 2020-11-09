@@ -43,7 +43,35 @@ class _DistanciaState extends State<Distancia> {
   void initState() {
     super.initState();
     
-    
+    setDistancia();  
+  }
+
+  setDistancia(){
+    if(distancia == '' && widget.position != null ){
+      getDistancia(widget.arte).then((d) {
+      print('d');
+      print(d);
+      if (d < 1) {
+        setState(() {
+          distancia = 'A menos de um kilômetro de distância';
+          load = false;
+        });
+      } else {
+        setState(() {
+          distancia = 'A ${d.toStringAsFixed(0)} Km daqui';
+          load = false;
+        });
+      }
+      print(distancia);
+      print('dist');
+    }).catchError((e) {
+      print(e);
+    });
+
+    print('distancia');
+    print(distancia == '');
+    }
+
   }
 
   @override
@@ -78,10 +106,10 @@ class _DistanciaState extends State<Distancia> {
 
     if (load) {
       return Container(
-        child: Text('Calculando distância...', style: TextStyle(color: Colors.black),)
+        child: Text('Calculando distância...', style: TextStyle(color: Colors.white, fontSize: 10),)
       );
     }
 
-    return Text(distancia, style: TextStyle(color: Colors.black));
+    return Text(distancia, style: TextStyle(color: Colors.white, fontSize: 10));
   }
 }
