@@ -25,6 +25,9 @@ class _MapaState extends State<Mapa> {
   List<Marker> artesMarker = <Marker>[];
   List<Marker> materiaisMarker = <Marker>[];
 
+  var showArtes = true;
+  var showMateriais = true;
+
   @override
   void initState() {
     getInitialData();
@@ -45,9 +48,28 @@ class _MapaState extends State<Mapa> {
     getMarkers();
   }
 
-  getMarkers() {
+
+
+  List <Marker> getMateriaisMarkers() {
+    List <Marker> materiaisMarkers = <Marker>[];
+
+    for (var i = 0; i < widget.materiais.length; i++) {
+      materiaisMarkers.add(new Marker(
+          width: 120.0,
+          height: 120.0,
+          point: new LatLng(widget.materiais[i]['location']['coordinates'][1],
+              widget.artes[i]['location']['coordinates'][0]),
+          builder: (ctx) => markerContainer(widget.materiais[i], i)));
+    }
+
+    return materiaisMarkers;
+  }
+
+  List <Marker> getArtesMarkers() {
+    List <Marker> artesMarkers = <Marker>[];
+
     for (var i = 0; i < widget.artes.length; i++) {
-      markers.add(new Marker(
+      artesMarkers.add(new Marker(
           width: 80.0,
           height: 80.0,
           point: new LatLng(widget.artes[i]['location']['coordinates'][1],
@@ -55,14 +77,53 @@ class _MapaState extends State<Mapa> {
           builder: (ctx) => markerContainer(widget.artes[i], i)));
     }
 
-    for (var i = 0; i < widget.materiais.length; i++) {
-      markers.add(new Marker(
-          width: 120.0,
-          height: 120.0,
-          point: new LatLng(widget.materiais[i]['location']['coordinates'][1],
-              widget.artes[i]['location']['coordinates'][0]),
-          builder: (ctx) => markerContainer(widget.materiais[i], i)));
+    return  artesMarkers;
+  }
+
+  getMarkers() {
+      toggleMarkersFilter("ALL");
+  }
+
+  toggleMarkersFilter(String type){
+
+    switch (type) {
+      case "ARTE":
+        setState(() {
+          showArtes = !showArtes;
+        });
+        break;
+      case "MATERIAL":
+        setState(() {
+          showMateriais = !showMateriais;
+
+        });
+        break;
+      default:
+        print("ALL");
     }
+
+    
+    Future.delayed(const Duration(milliseconds: 5), () {
+      List <Marker> localMarkers = <Marker>[];
+
+      print("active");
+      print(showArtes);
+      print(showMateriais);
+
+      if(showArtes) {
+        List <Marker> artesMarkers = getArtesMarkers();
+        localMarkers.addAll(artesMarkers);
+      }
+      if(showMateriais) {
+        List <Marker> materiaisMarkers = getMateriaisMarkers();
+        localMarkers.addAll(materiaisMarkers);
+      }
+
+      setState(() {
+        markers = localMarkers;
+      });
+    });
+
   }
 
   void _goToSingle(dynamic item, index) {
@@ -148,8 +209,41 @@ class _MapaState extends State<Mapa> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('${markers.length} itens ao seu alcance', style: TextStyle(color: Colors.white)),
+        appBar: PreferredSize(
+          preferredSize: const Size(40, 100),
+          child: AppBar(
+            title: Text('${markers.length} ite${markers.length != 1 ? 'ns' : 'm'} ao seu alcance',
+                style: TextStyle(color: Colors.white)),
+            bottom: PreferredSize(
+              preferredSize: const Size(20, 90),
+              child: Row(
+                children: [
+                  FlatButton(
+                    onPressed: () => toggleMarkersFilter("MATERIAL"),
+                    child: Chip(
+                      backgroundColor: showMateriais ? Colors.white : Colors.black12,
+                      avatar: CircleAvatar(
+                          backgroundColor: Colors.white.withOpacity(0),
+                          child:
+                              Icon(Icons.extension, color: showMateriais ? Color(0xff558b2f) : Colors.black38)),
+                      label: Text('Materiais', style: TextStyle(fontWeight: showMateriais ? FontWeight.bold : FontWeight.normal)),
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () => toggleMarkersFilter("ARTE"),
+                    child: Chip(
+                      backgroundColor: showArtes ?  Colors.white : Colors.black12,
+                      avatar: CircleAvatar(
+                          backgroundColor: Colors.white.withOpacity(0),
+                          child:
+                              Icon(Icons.brush, color: showArtes ? Color(0xff42A5F5) : Colors.black38)),
+                      label: Text('Artes', style: TextStyle(fontWeight: showArtes ? FontWeight.bold : FontWeight.normal)),
+                    ),
+                  ),                  
+                ],
+              ),
+            ),
+          ),
         ),
         body: FlutterMap(
           options: new MapOptions(

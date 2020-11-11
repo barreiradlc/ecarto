@@ -19,6 +19,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_socket_io: ^0.6.0 # Add this dependency
   # qrscan: ^0.2.17
   # qr_code_scanner: 0.0.13
   qrcode: ^1.0.4

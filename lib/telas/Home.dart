@@ -195,7 +195,7 @@ class CollapsingList extends State<HomeState> {
           ));
     }
 
-    if (!kReleaseMode) {
+
       return Card(
         margin: EdgeInsets.all(0),
           child: DefaultTabController(
@@ -222,7 +222,7 @@ class CollapsingList extends State<HomeState> {
                         icon: new Column(
                             children: <Widget>[Icon(Icons.map), Text('Mapa')])),
                   ]))));
-    }
+    
 
     return CustomScrollView(
       slivers: <Widget>[
