@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/io.dart';
 
 class ChatRoom extends StatefulWidget {
   ChatRoom({Key key}) : super(key: key);
@@ -17,7 +18,7 @@ class ChatRoom extends StatefulWidget {
   _ChatRoomState createState() => _ChatRoomState();
 }
 
-class _ChatRoomState extends State<ChatRoom> {
+class _ChatRoomState extends State<ChatRoom> {  
   var chatRoomData;
   var chatRoom;
   var id;

@@ -3,6 +3,7 @@ import 'package:ecarto/Funcoes/ConvertDate.dart';
 import 'package:ecarto/Funcoes/Fetch.dart';
 import 'package:ecarto/Funcoes/UserData.dart';
 import 'package:ecarto/Recursos/DB/moor_database.dart';
+import 'package:ecarto/Widgets/ChatStream.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -93,6 +94,7 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              
               // Container(
               //   padding: EdgeInsets.only(right: 35),
               //   child: chatRoomouterPhoto != "" || chatRoomouterPhoto != null
@@ -138,31 +140,8 @@ class _ListChatRoomsStat extends State<ListChatRoom> {
               margin: EdgeInsets.symmetric(vertical: 10),
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width - 100,
-                        child: TextField(
-                          textInputAction: TextInputAction.newline,
-
-                          // textInputAction: TextInputAction.send,
-                          // onSubmitted: () => print('alou'),//submitMessage(), // move focus to next
-                          controller: newMessage,
-                          decoration: InputDecoration(
-                            labelText: 'Mensagem',
-                          ),
-                        ),
-                      ),
-                      FlatButton(
-                          onPressed: submitMessage,
-                          child: Icon(
-                            Icons.send,
-                            size: 25,
-                          ))
-                    ],
-                  )),
+                  child: ChatStream(chatRoom) 
+              ),
             )
             // NewTaskInput(),
           ],
